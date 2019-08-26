@@ -78,7 +78,7 @@ class FieldContact extends FieldObject {
         result.firstLetters = result.firstName.substr(0, 1).toUpperCase() + '.'
       }
       if (result.middleName && result.firstLetters.length) {
-        result.firstLetters += result.middleName.substr(0, 1).toUpperCase() + result.middleName.indexOf('.') !== 1;
+        result.firstLetters += result.middleName.substr(0, 1).toUpperCase() + '.';
       }
     }
     this.copyFieldsToResult(result, data, ['fullName']);
