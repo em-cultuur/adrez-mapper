@@ -3,7 +3,7 @@
  */
 const Chai = require('chai');
 const assert = Chai.assert;
-const Logger = require('../field/logger');
+const Logger = require('logger');
 const Record = require('../field/record').AdrezRecord;
 
 describe('record', () => {
