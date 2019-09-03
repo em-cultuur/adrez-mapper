@@ -15,7 +15,8 @@ class FieldComposed extends FieldObject {
       type: new FieldText(),        // the name of the code
       typeId: new FieldGuid(),      // the id, overrules the type
       value: options.valueType ? options.valueType : new FieldText(),  // the field to store
-      _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
+      _source: new FieldText({emptyAllow: true}),      // textual version of the sourceId. Overrulde if _sourceId is set
+      _sourceId: new FieldText({emptyAllow: true}),    // the codeId to sync with. if not storage space, places in typeId
     }
   }
 }
