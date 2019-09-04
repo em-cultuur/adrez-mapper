@@ -32,5 +32,22 @@ describe('record', () => {
       let r = await rec.convert('rec', {telephone: [{telephoneInt: '0123456789'}]}, logger);
       assert(r.telephone[0].value === '+31 (12) 3456789', 'did the convert')
     });
+  });
+  describe('lookup composed type', () => {
+    logger.clear();
+    let rec = new Record({
+      email: {
+        lookup: function(value, baseType, fields, data) {
+          return 1234;
+        }
+      }
+    });
+    it('convert fields', async () => {
+      let r = await rec.convert('rec', {email: [{email: 'info@test.com', type: 'work'}]}, logger);
+      assert.equal(r.email[0].value,'info@test.com', 'did the convert');
+      assert.isUndefined(r.email[0].type, 'removed type');
+      assert.isDefined(r.email[0].typeId, 'changed to number');
+      assert.equal(r.email[0].typeId, 1234, 'did read it');
+    });
   })
 });

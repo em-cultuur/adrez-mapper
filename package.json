@@ -1,6 +1,6 @@
 {
   "name": "adrez-mapper",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Map objects in to the AdreZ format",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,8 @@
   "author": "Jaap van der Kreeft",
   "license": "MIT",
   "dependencies": {
-    "google-libphonenumber": "^3.2.3",
+    "error-types": "git+https://github.com/toxus/error-types.git",
+    "google-libphonenumber": "^3.2.4",
     "lodash": "^4.17.15",
     "logger": "git+https://github.com/toxus/logger.git",
     "parse-full-name": "github:toxus/parse-full-name"

@@ -4,14 +4,7 @@
 
 const Field = require('./field').Field;
 const _ = require('lodash');
-
-class ErrorFieldNotAllowed extends Error {
-  constructor(fields, message = false) {
-    super(message ? message : `field${fields.length > 1 ? 's' : ''} "${fields.join(', ')}" not defined`);
-    this.type = 'ErrorFieldNotAllowed';
-    this.fields = fields
-  }
-}
+const ErrorFieldNotAllowed = require('error-types').ErrorFieldNotAllowed;
 
 class FieldObject extends Field {
 
@@ -85,7 +78,7 @@ class FieldObject extends Field {
       let subName = fieldName + '.' + name;
       try {
         let fieldDefinition = fields[name];
-        result[name] = await fieldDefinition.convert(fieldName, data[name], logger);
+        result[name] = await fieldDefinition.convert(subName, data[name], logger);
       } catch (e) {
         this.log(logger,'error', subName, e.message);
       }
@@ -124,7 +117,7 @@ class FieldObject extends Field {
       for (let key in fields) {
         if (!fields.hasOwnProperty(key)) { continue }
         if (fields[key].emptyAllow === undefined || fields[key] .emptyAllow === false) {
-          return this.processKeys(fieldName, fields, data, logger).then((rec) => {
+          return this.processKeys(`${fieldName}`, fields, data, logger).then((rec) => {
             return Promise.resolve(rec)
           })
         }
@@ -135,4 +128,3 @@ class FieldObject extends Field {
 }
 
 module.exports.FieldObject = FieldObject;
-module.exports.ErrorFieldNotAllowed = ErrorFieldNotAllowed;

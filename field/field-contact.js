@@ -81,8 +81,12 @@ class FieldContact extends FieldObject {
         result.firstLetters += result.middleName.substr(0, 1).toUpperCase() + '.';
       }
     }
-    this.copyFieldsToResult(result, data, ['fullName']);
-    return result;
+    return super.processKeys(fieldName, fields, data, logger).then( () => {
+      this.copyFieldsToResult(result, data, ['fullName']);
+      return Promise.resolve(this.copyFieldsToResult(result, data, ['email'])).then(() => {
+        return result;
+      })
+    })
   }
 }
 

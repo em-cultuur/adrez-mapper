@@ -12,24 +12,27 @@ const FieldEmail = require('./field-email').FieldEmail;
 const FieldTelephone = require('./field-telephone').FieldTelephone;
 const FieldCode = require('./field-code').FieldCode;
 const FieldMemo = require('./field-memo').FieldMemo;
-
+const _ = require('lodash');
 
 class AdrezRecord extends FieldObject {
 
   constructor(options = {}){
+    if (!options) { options = {}}
     super(options);
     this._name = 'record';
+    this._lookup = options.lookup;
+
     this._fields = {
       id: new FieldGuid(),
-      sync: new FieldText({emptyAllow: true}),
-      sourceId: new FieldText({emptyAllow: true}),
+//      sync: new FieldText({emptyAllow: true}),
+//      sourceId: new FieldText({emptyAllow: true}),
 
-      contact:      new FieldArray( { type: new FieldContact() }),
-      email:        new FieldArray( { type: new FieldEmail() }),
-      telephone:    new FieldArray( { type: new FieldTelephone() } ),
-      location:     new FieldArray( { type: new FieldLocation() }),
-      code:         new FieldArray( { type: new FieldCode() }),
-      memo:         new FieldArray( { type: new FieldMemo()} )
+      contact:      new FieldArray( { type: new FieldContact(_.merge({lookup: this._lookup}, options.contact)) }),
+      email:        new FieldArray( { type: new FieldEmail(_.merge({lookup: this._lookup}, options.email)) }),
+      telephone:    new FieldArray( { type: new FieldTelephone(_.merge({lookup: this._lookup}, options.telephone)) } ),
+      location:     new FieldArray( { type: new FieldLocation(_.merge({lookup: this._lookup}, options.location)) }),
+      code:         new FieldArray( { type: new FieldCode(_.merge({lookup: this._lookup}, options.code)) }),
+      memo:         new FieldArray( { type: new FieldMemo(_.merge({lookup: this._lookup}, options.memo)) } )
     }
   }
 
