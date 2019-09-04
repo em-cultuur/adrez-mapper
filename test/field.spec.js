@@ -321,28 +321,28 @@ describe('field',  () => {
     logger.clear();
     it('fullname', async () => {
       let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
-      assert(r.firstName === 'Jan' && r.lastName === 'Hond' && r.namePrefix === 'de' , 'got all');
+      assert(r.firstName === 'Jan' && r.name === 'Hond' && r.namePrefix === 'de' , 'got all');
       r = await f.convert('contact', {fullName: 'dr. J. de Hond'}, logger);
-      assert(r.title === 'dr.' && r.firstName === undefined && r.firstLetters === 'J.' && r.lastName === 'Hond' && r.namePrefix === 'de' , 'got all');
+      assert(r.title === 'dr.' && r.firstName === undefined && r.firstLetters === 'J.' && r.name === 'Hond' && r.namePrefix === 'de' , 'got all');
       r = await f.convert('contact', {fullName: 'Jan Willem de Boer'}, logger);
-      assert(r.firstLetters = 'J.W.' && r.firstName === 'Jan' && r.middleName === 'Willem' && r.lastName === 'Boer' && r.namePrefix === 'de' , 'got all');
+      assert(r.firstLetters = 'J.W.' && r.firstName === 'Jan' && r.middleName === 'Willem' && r.name === 'Boer' && r.namePrefix === 'de' , 'got all');
       r = await f.convert('contact', {fullName: 'Jack (mojo) Man'}, logger);
-      assert(r.firstName === 'Jack' && r.lastName === 'Man' && r.firstLetters === 'J.' && r.nickName === 'mojo' , 'got all');
+      assert(r.firstName === 'Jack' && r.name === 'Man' && r.firstLetters === 'J.' && r.nickName === 'mojo' , 'got all');
       r = await f.convert('contact', {fullName: 'Jan Willem Overmars'}, logger);
-      assert(r.firstName === 'Jan' && r.middleName === 'Willem' && r.firstLetters === 'J.W.' && r.lastName === 'Overmars' , 'got all');
+      assert(r.firstName === 'Jan' && r.middleName === 'Willem' && r.firstLetters === 'J.W.' && r.name === 'Overmars' , 'got all');
 
       r = await f.convert('contact', {fullName: 'sergeant majoor Bert de Vries'}, logger);
-      assert(r.firstName === 'Bert' && r.lastName === 'Vries' && r.firstLetters === 'B.' && r.title === 'sergeant majoor' , 'got all');
+      assert(r.firstName === 'Bert' && r.name === 'Vries' && r.firstLetters === 'B.' && r.title === 'sergeant majoor' , 'got all');
       r = await f.convert('contact', {fullName: 'Abt Jan'}, logger);
-      assert(r.lastName === 'Jan' && r.title === 'Abt' , 'got all');
+      assert(r.name === 'Jan' && r.title === 'Abt' , 'got all');
       r = await f.convert('contact', {fullName: 'Familie E. de Boer-Brenninkmeijer'}, logger);
-      assert(r.lastName === 'Boer-Brenninkmeijer' && r.firstLetters === 'E.' && r.namePrefix === 'de' , 'got all');
+      assert(r.name === 'Boer-Brenninkmeijer' && r.firstLetters === 'E.' && r.namePrefix === 'de' , 'got all');
       r = await f.convert('contact', {fullName: 'Vera de Boer-van Woerdens'}, logger);
-      assert(r.lastName === 'Woerdens' && r.firstLetters === 'V.B.' && r.middleName === 'Boer-van' , 'got all');
+      assert(r.name === 'Woerdens' && r.firstLetters === 'V.B.' && r.middleName === 'Boer-van' , 'got all');
       r = await f.convert('contact', {fullName: 'Jaap-Wieger van der Kreeft'}, logger);
-      assert(r.lastName === 'Kreeft' && r.firstLetters === 'J.' && r.namePrefix === 'van der' && r.firstName === 'Jaap-Wieger' , 'got all')
+      assert(r.name === 'Kreeft' && r.firstLetters === 'J.' && r.namePrefix === 'van der' && r.firstName === 'Jaap-Wieger' , 'got all');
       r = await f.convert('contact', {fullName: 'Jaap Wieger van der Kreeft'}, logger);
-      assert(r.lastName === 'Kreeft' && r.firstLetters === 'J.W.' && r.namePrefix === 'van der' && r.firstName === 'Jaap' && r.middleName === 'Wieger', 'got all')
+      assert(r.name === 'Kreeft' && r.firstLetters === 'J.W.' && r.namePrefix === 'van der' && r.firstName === 'Jaap' && r.middleName === 'Wieger', 'got all')
 
 
     });

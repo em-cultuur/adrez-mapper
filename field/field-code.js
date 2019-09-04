@@ -29,10 +29,21 @@ class FieldCode extends FieldComposed {
       if (fields.codeId) {
         data.value = await this._fields.codeId.convert(fieldName, data.codeId, logger)
       } else if (fields.code) {
-        data.value = await this._fields.code.convert(fieldName, data.code, logger)
+        if (this._lookup) {
+          data.codeId = this._lookup(data.code, 'tbl:code', fields, data);
+          // data.value = await this._fields.code.convert(fieldName, data.code, logger)
+          // delete data.code;
+        } else {
+        }
+      } else {
+        this.log(logger, 'warn', fieldName, 'no code or codeId. record skipped')
       }
     }
-    return Promise.resolve(this.copyFieldsToResult(result, data, ['code']))
+    return Promise.resolve(this.copyFieldsToResult(result, data, ['code'])).then( (res) => {
+      return super.processKeys(fieldName, fields, res, logger).then( (newRes) => {
+        return Promise.resolve(newRes);
+      })
+    })
   }
 }
 

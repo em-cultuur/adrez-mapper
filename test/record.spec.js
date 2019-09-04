@@ -49,5 +49,24 @@ describe('record', () => {
       assert.isDefined(r.email[0].typeId, 'changed to number');
       assert.equal(r.email[0].typeId, 1234, 'did read it');
     });
+  });
+
+  describe('lookup code.code', () => {
+    logger.clear();
+    let rec = new Record({
+      lookup: function(value, baseType, fields, data) {
+        if (baseType.substr(0,4) === 'tbl:') {
+          return 33
+        }
+        return 1234;
+      }
+    });
+    it('convert fields', async () => {
+      let r = await rec.convert('rec', {code: [{code: 'newsletter', type: 'mailint'}]}, logger);
+      assert.equal(r.code[0].codeId, 33, 'did the convert');
+      assert.isUndefined(r.code[0].type, 'removed type');
+      assert.isDefined(r.code[0].typeId, 'changed to number');
+      assert.equal(r.code[0].typeId, 1234, 'did read it');
+    });
   })
 });

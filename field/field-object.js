@@ -61,6 +61,19 @@ class FieldObject extends Field {
     }
     return result;
   }
+
+  /**
+   * returns the new definition from the data
+   * @param data
+   */
+  remapFields(data) {
+    let currentFields = {};
+    for (let key in data) {
+      if (!data.hasOwnProperty(key)) { continue }
+      currentFields[key] = this._fields[key];
+    }
+    return currentFields;
+  }
   /**
    * just process all keys individual
    *

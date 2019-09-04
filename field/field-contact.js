@@ -55,7 +55,7 @@ class FieldContact extends FieldObject {
         this.log(logger, 'warn', fieldName + 'fullName', parsed.error.join(', ') );
       }
       const mapping = {
-        last : 'lastName',
+        last : 'name',
         first: 'firstName',
         middle: 'middleName',
         nick: 'nickName',
@@ -81,12 +81,15 @@ class FieldContact extends FieldObject {
         result.firstLetters += result.middleName.substr(0, 1).toUpperCase() + '.';
       }
     }
-    return super.processKeys(fieldName, fields, data, logger).then( () => {
-      this.copyFieldsToResult(result, data, ['fullName']);
-      return Promise.resolve(this.copyFieldsToResult(result, data, ['email'])).then(() => {
-        return result;
-      })
-    })
+    this.copyFieldsToResult(result, data, ['fullName']);
+    // the fields have be changed / remove / added. So rebuild
+    // let currentFields = {};
+    // for (let key in result) {
+    //   if (!result.hasOwnProperty(key)) { continue }
+    //   currentFields[key] = this._fields[key];
+    // }
+    let currentFields = this.remapFields(result);
+    return super.processKeys(fieldName, currentFields, result, logger);
   }
 }
 

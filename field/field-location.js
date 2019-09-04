@@ -102,9 +102,8 @@ class FieldLocation extends FieldObject {
         this.log(logger, 'error', fieldName + '.zipcode', e.message);
       }
     }
-
-
-    return Promise.resolve(result);
+    let cFields = this.remapFields(result);
+    return super.processKeys(fieldName, cFields, result, logger);
   }
 
 }

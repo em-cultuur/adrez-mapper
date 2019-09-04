@@ -31,7 +31,11 @@ class FieldTelephone extends FieldComposed {
         data.value = await this._fields.telephone.convert(fieldName, data.telephone, logger)
       }
     }
-    return Promise.resolve(this.copyFieldsToResult(result, data, ['telephone', 'telephoneInt']))
+    return Promise.resolve(this.copyFieldsToResult(result, data, ['telephone', 'telephoneInt'])).then( (res) => {
+      return super.processKeys(fieldName, fields, data, logger).then( () => {
+        return res;
+      })
+    })
   }
 }
 
