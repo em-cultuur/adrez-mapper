@@ -9,9 +9,9 @@ const Record = require('adrez-mapper').Record;
 const Logger = require('logger');
 
 let logger = new Logger({toConsole: false});
-const findInCodes = function(value, baseType, fields, data) {
+const findInCodes = async function(value, baseType, fields, data) {
   // lookup the value to translate it into a id
-  return 12345;  
+  return Promise.resolve(12345);  
 }
 const options = {
   // the default lookup
@@ -43,6 +43,28 @@ console.log(result)
     }
 
 ````
+
+## lookup function
+
+The folling **baseType** can be expected:
+- contact - value is **text** of type, result is the **typeId**
+- telephone - value is **text**, result is the **id**
+- email - value is **text**, result is the **id**
+- code - value is **text**, result is the **id**
+- extra - value is **text**, result is the **id**
+- memo - value is **text**, result is the **id**
+
+- country - value is the name of the country, result is the **countryId** 
+- country.zipcode - value is the zipcode. Try to find a country for it. return **countryId** or **undefined**
+- country.numberRight - value is the countryId. **true** if number is on the right.
+- street - value is the Object: {zipcode, number, countryId}, result: the name of the **street**
+- zipcode - value is the Object: {street, number, city, countryId}, result: the name of the **zipcode**
+- zipcode - value is **zipcode**, try to find the country, returns the **countryId** or **undefined**
+   
+- gender - value is object {**firstName**, **title**, **subName**}, returns the **typeId**. It's allowed to modify the
+**data** object to reflect the gender change. Return **false** or **undefined** if no change is needed. Overrules the 
+record defined **typeId**, so **typeId** will be the default.
+
 
 
 (c) MIT 2019 Toxus

@@ -11,6 +11,7 @@ const FieldLocation = require('./field-location').FieldLocation;
 const FieldEmail = require('./field-email').FieldEmail;
 const FieldTelephone = require('./field-telephone').FieldTelephone;
 const FieldCode = require('./field-code').FieldCode;
+const FieldExtra = require('./field-extra').FieldExtra;
 const FieldMemo = require('./field-memo').FieldMemo;
 const _ = require('lodash');
 
@@ -32,7 +33,9 @@ class AdrezRecord extends FieldObject {
       telephone:    new FieldArray( { type: new FieldTelephone(_.merge({lookup: this._lookup}, options.telephone)) } ),
       location:     new FieldArray( { type: new FieldLocation(_.merge({lookup: this._lookup}, options.location)) }),
       code:         new FieldArray( { type: new FieldCode(_.merge({lookup: this._lookup}, options.code)) }),
+      extra:        new FieldArray( { type: new FieldExtra(_.merge({lookup: this._lookup}, options.extra))}),
       memo:         new FieldArray( { type: new FieldMemo(_.merge({lookup: this._lookup}, options.memo)) } )
+
     }
   }
 

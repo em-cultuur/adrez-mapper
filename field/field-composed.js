@@ -19,7 +19,7 @@ class FieldComposed extends FieldObject {
       _source: new FieldText({emptyAllow: true}),      // textual version of the sourceId. Overrulde if _sourceId is set
       _sourceId: new FieldText({emptyAllow: true}),    // the codeId to sync with. if not storage space, places in typeId
     };
-    this._lookup = options.lookup;
+    // this._lookup = options.lookup;
   }
 
   /**
@@ -31,7 +31,11 @@ class FieldComposed extends FieldObject {
    */
   _baseType(name) {
     let index = name.indexOf('[');
-    return name.substr(4, index - 4)
+    if (index > -1) {
+      return name.substr(4, index - 4)
+    } else {
+      return name;
+    }
   }
   /**
    * must translate type into typeId
@@ -44,7 +48,7 @@ class FieldComposed extends FieldObject {
   async processKeys(fieldName, fields, data, logger) {
     if (! (fields['typeId'] && ! fields['typeId'].isEmpty(data['typeId']))) {
       if (this._lookup) {
-        data['typeId'] = this._lookup(data['type'], this._baseType(fieldName), fields, data);
+        data['typeId'] = await this._lookup(data['type'], this._baseType(fieldName), fields, data);
       } else {
         this.log(logger, 'warn', fieldName, `lookup for email, marking unknown`)
         data['typeId'] = TYPE_UNKNOWN;
@@ -54,7 +58,8 @@ class FieldComposed extends FieldObject {
       data['typeId'] = TYPE_UNKNOWN;
     }
     delete data.type;
-    return Promise.resolve(data);
+    let cFields = this.remapFields(data);
+    return super.processKeys(fieldName, cFields, data, logger);
   }
 }
 

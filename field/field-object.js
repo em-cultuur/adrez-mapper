@@ -13,6 +13,7 @@ class FieldObject extends Field {
     this._name = 'object';
     // add here the fieldName: fieldDefinition
     this._fields = options.fields !== undefined ? options.fields : {};
+    this._lookup = options.lookup;
   }
 
 
@@ -62,6 +63,12 @@ class FieldObject extends Field {
     return result;
   }
 
+  async lookup(value, baseType, fields, data, logger, defaults = false) {
+    if (this._lookup) {
+      return await this._lookup(value, baseType, fields, data, defaults);
+    }
+    return defaults;
+  }
   /**
    * returns the new definition from the data
    * @param data
@@ -122,7 +129,7 @@ class FieldObject extends Field {
       }
     }
     if (isValid.length > 0) {
-      return Promise.reject(new ErrorFieldNotAllowed(isValid));
+      return Promise.resolve(new ErrorFieldNotAllowed(isValid));
     } else if (_.isEmpty(fields)) {
       return Promise.resolve({});
     } else {

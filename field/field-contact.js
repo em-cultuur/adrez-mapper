@@ -9,14 +9,16 @@
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldGuid;
 
-const FieldObject = require('./field-object').FieldObject;
+// const FieldObject = require('./field-object').FieldObject;
+const FieldComposed = require('./field-composed').FieldComposed;
 const NameParse = require('../lib/name-parser').ParseFullName;
+const _ = require('lodash');
 
-class FieldContact extends FieldObject {
+class FieldContact extends FieldComposed {
 
   constructor(options = {}) {
     super(options);
-    this._fields = {
+    this._fields = _.merge(this._fields, {
       // fields for the database
       subName: new FieldText(),        // the name of the code
       firstName: new FieldText(),      // the id, overrules the type
@@ -28,13 +30,17 @@ class FieldContact extends FieldObject {
       name: new FieldText(),
       nameSuffix: new FieldText(),
 
+      search: new FieldText(),
+
       // used to for calculations
       fullName: new FieldText(),
       organization: new FieldText({emptyAllow: true}),
       organizationId: new FieldGuid({emptyAllow: true}),
 
       _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
-    };
+    });
+    // the contact does not know about values
+    delete this._fields.value;
     this._parser = new NameParse();
   }
 
@@ -66,20 +72,24 @@ class FieldContact extends FieldObject {
       };
       for (let field in mapping) {
         if (parsed[field].length) {
-          result[mapping[field]] = parsed[field];
+          data[mapping[field]] = parsed[field];
         }
       }
     }
-    if (fields.firstLetters === undefined && result.firstName) {
-      if (result.firstName.indexOf('.') > 0) {  // so not J. but Jaap
-        result.firstLetters = result.firstName;
-        delete result.firstName;
+    if (fields.firstLetters === undefined && data.firstName) {
+      if (data.firstName.indexOf('.') > 0) {  // so not J. but Jaap
+        data.firstLetters = data.firstName;
+        delete data.firstName;
       } else {
-        result.firstLetters = result.firstName.substr(0, 1).toUpperCase() + '.'
+        data.firstLetters = data.firstName.substr(0, 1).toUpperCase() + '.'
       }
-      if (result.middleName && result.firstLetters.length) {
-        result.firstLetters += result.middleName.substr(0, 1).toUpperCase() + '.';
+      if (data.middleName && data.firstLetters.length) {
+        data.firstLetters += data.middleName.substr(0, 1).toUpperCase() + '.';
       }
+    }
+    let typeId = await this.lookup({firstName: data.firstName, title: data.title, subName: data.subName}, 'gender', fields, data, logger, undefined);
+    if (typeId) {
+      data.typeId = typeId;
     }
     this.copyFieldsToResult(result, data, ['fullName']);
     // the fields have be changed / remove / added. So rebuild

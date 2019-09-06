@@ -17,16 +17,13 @@ describe('record', () => {
     });
     it('unknown fields', async () => {
       let r;
-      try {
-        r = await rec.convert('rec', {test: '123'}, logger);
-        assert(false, 'should throw error')
-      } catch (e) {
-        assert(e.type === 'ErrorFieldNotAllowed', 'got the error');
-        assert(logger.hasErrors(), 'something is wrong');
-        assert(logger.errors.length === 1, 'one error');
-        assert(logger.errors[0].message === 'field does not exist', 'not found');
-        assert(logger.errors[0].fieldName === 'rec.test', 'defined the field')
-      }
+      r = await rec.convert('rec', {test: '123'}, logger);
+      assert.isDefined(r.name, 'got result')
+      assert.equal(r.type, 'ErrorFieldNotAllowed', 'got the error')
+      assert(logger.hasErrors(), 'something is wrong');
+      assert(logger.errors.length === 1, 'one error');
+      assert(logger.errors[0].message === 'field does not exist', 'not found');
+      assert(logger.errors[0].fieldName === 'rec.test', 'defined the field')
     });
     it('convert fields', async () => {
       let r = await rec.convert('rec', {telephone: [{telephoneInt: '0123456789'}]}, logger);
@@ -37,8 +34,8 @@ describe('record', () => {
     logger.clear();
     let rec = new Record({
       email: {
-        lookup: function(value, baseType, fields, data) {
-          return 1234;
+        lookup: async function(value, baseType, fields, data) {
+          return Promise.resolve(1234);
         }
       }
     });
@@ -54,19 +51,28 @@ describe('record', () => {
   describe('lookup code.code', () => {
     logger.clear();
     let rec = new Record({
-      lookup: function(value, baseType, fields, data) {
-        if (baseType.substr(0,4) === 'tbl:') {
-          return 33
-        }
-        return 1234;
+      lookup: async function(value, baseType, fields, data) {
+        return 33
       }
     });
     it('convert fields', async () => {
-      let r = await rec.convert('rec', {code: [{code: 'newsletter', type: 'mailint'}]}, logger);
+      let r = await rec.convert('rec', {code: [{code: 'newsletter'}]}, logger);
       assert.equal(r.code[0].codeId, 33, 'did the convert');
-      assert.isUndefined(r.code[0].type, 'removed type');
-      assert.isDefined(r.code[0].typeId, 'changed to number');
-      assert.equal(r.code[0].typeId, 1234, 'did read it');
+    });
+  });
+  describe('extra field', () => {
+    logger.clear();
+    let rec = new Record({
+      lookup: async function(value, baseType, fields, data) {
+        return 33
+      }
+    });
+    it('convert fields', async () => {
+      let r = await rec.convert('rec', {extra: [{type: 'has newsletter', boolean: '0'}]}, logger);
+      assert.equal(r.extra[0].typeId, 33, 'did the convert');
+      assert.equal(r.extra[0].text, "0", 'did the convert');
     });
   })
+
+
 });

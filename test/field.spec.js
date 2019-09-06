@@ -11,8 +11,9 @@ const FieldTextBoolean = require('../field/field-text-boolean').FieldTextBoolean
 const FieldTextEmail = require('../field/field-text-email').FieldTextEmail;
 const FieldTextTelephone = require('../field/field-text-telephone').FieldTextTelephone;
 const FieldTextZipcode = require('../field/field-text-zipcode').FieldTextZipcode;
-const FieldMemo = require('../field/field-memo').FieldMemo
-const Countries = require('../lib/lookup').Countries;
+const Countries = require('../field/field-text-zipcode').Countries;
+const FieldMemo = require('../field/field-memo').FieldMemo;
+// const Countries = require('../lib/lookup').Countries;
 const FieldObject = require('../field/field-object').FieldObject;
 const FieldArray = require('../field/field-array').FieldArray;
 const FieldComposed = require('../field/field-composed').FieldComposed;
@@ -70,9 +71,9 @@ describe('field',  () => {
     it('validate', () => {
       assert(f.validate('bool', true, logger) === true, 'bool is valid');
       assert(!logger.hasMessages(), 'no messages');
-      assert(f.validate('bool', false, logger) === true, 'bool is valid');
+      assert.isTrue(f.validate('bool', false, logger), 'bool is valid');
       assert(f.validate('bool', 'test', logger) === true, 'string is valid');
-      assert(f.validate('bool', 0, logger) === true, 'number is valid');
+      assert.isTrue(f.validate('bool', 0, logger), 'number is valid');
       assert(f.validate('bool', {}, logger) === false, 'object not valid');
       assert(f.validate('bool', [], logger) === false, 'array not valid');
       assert(f.isEmpty(0) === false, 'values are allowed');
@@ -119,22 +120,35 @@ describe('field',  () => {
   });
 
   describe('zipcode', () => {
-    let f = new FieldTextZipcode();
+    let f = new FieldTextZipcode({
+      lookup: function(value, definition) {
+        if (definition === 'zipcode.country') {
+          if (value === '12345678') {
+            return 1234
+          }
+        }
+        return undefined;
+      }
+    });
     logger.clear();
     it('can change', async () => {
-      assert(f.value('2011 BS') === '2011 BS', 'no changes on valid');
-      assert(f.value('b-2011') === '2011', 'belgium');
-      assert(f.value('b 2011') === '2011', 'belgium');
+      assert(await f.value('2011 BS') === '2011 BS', 'no changes on valid');
+      assert(await f.value('b-2011') === '2011', 'belgium');
+      assert(await f.value('b 2011') === '2011', 'belgium');
     });
     it('country', async () => {
-      assert(f.countryId('2011 BS') === Countries.nl, 'NL');
-      assert(f.countryId('B2011') === Countries.be, 'BE');
-      assert(f.countryId('B-2011') === Countries.be, 'BE');
-      assert(f.countryId('B 2011') === Countries.be, 'BE');
-      assert(f.countryId('20115') === Countries.de, 'D');
-      assert(f.countryId('') === Countries.unknown, 'empty');
-      assert(f.countryId() === Countries.unknown, 'empty');
+      assert.equal(await f.countryId('2011 BS'), Countries.nl, 'NL');
+      assert(await f.countryId('B2011') === Countries.be, 'BE');
+      assert(await f.countryId('B-2011') === Countries.be, 'BE');
+      assert(await f.countryId('B 2011') === Countries.be, 'BE');
+      assert(await f.countryId('20115') === Countries.de, 'D');
+      assert(await f.countryId('') === Countries.unknown, 'empty');
+      assert(await f.countryId() === Countries.unknown, 'empty');
     });
+    it('zipcode', async () => {
+      assert.equal(await f.countryId('12345678'), 1234, 'did translate')
+    })
+
   });
 
   describe('object', () => {
@@ -203,14 +217,11 @@ describe('field',  () => {
       assert(_.isEmpty(r), 'empty');
     });
     it('not valid field', async () => {
-      try {
-        let r = await f.convert('composed', {unknownField: 'test'}, logger);
-        assert(false, 'should fail, unknown field');
-      } catch (e) {
-        assert(e.type === 'ErrorFieldNotAllowed', 'right version');
-        assert(e.fields.length === 1, 'one field');
-        assert(e.fields[0] === 'unknownField', 'the name');
-      }
+      let r = await f.convert('composed', {unknownField: 'test'}, logger);
+      assert.isDefined(r.type, 'should hava an error');
+      assert.equal(r.type, 'ErrorFieldNotAllowed');
+      assert(r.fields.length === 1, 'one field');
+      assert(r.fields[0] === 'unknownField', 'the name');
     });
     it('remove empty fields', async () => {
       let r = await f.convert('composed', {type: '', value:'some value', _source: '123'}, logger);
@@ -260,7 +271,7 @@ describe('field',  () => {
     });
     it('select field', async () => {
       let r = await f.convert('code', {code: 'test', codeId: '1234', _source: 'master'}, logger);
-      assert(r.value === '1234', 'select code Id');
+      assert(r.codeId === '1234', 'select code Id');
     });
   });
 
@@ -279,7 +290,24 @@ describe('field',  () => {
   });
 
   describe('location',  () => {
-    let f = new FieldLocation();
+    let f = new FieldLocation({
+      lookup : async function(value, baseType, fields, data, logger, defaults) {
+        switch(baseType) {
+          case 'country' :
+            if (value.toLowerCase() === 'nederland') { return 500 }
+            if (value.toLowerCase() === 'belgië') { return 501}
+            if (value.toLowerCase() === 'engeland') { return 502}
+            break;
+          case 'country.numberRight':
+            return [502].indexOf(value) >= 0;
+          case 'street':
+            return `${value.zipcode}:${value.number}`;
+          case 'zipcode':
+            return `${value.city}:${value.street}:${value.number}`;
+        }
+        return defaults;
+      }
+    });
     logger.clear();
     it('empty', async () => {
       let r = await f.convert('location', {street: '', city: '', zipcode: '', country: '',  _source: 'master'}, logger);
@@ -287,9 +315,12 @@ describe('field',  () => {
     });
     it('find country', async() => {
       let r = await f.convert('location', {street: '', city: 'Amsterdam', zipcode: '', country: 'nederland',  _source: 'master'}, logger);
-      assert(r.countryId === Countries.nl, 'found us');
-      r = await f.convert('location', {street: '', city: 'Amsterdam', zipcode: '', country: 'België',  _source: 'master'}, logger);
-      assert(r.countryId === Countries.be, 'found');
+      assert.equal(r.countryId, 500, 'found us');
+      r = await f.convert('location', {street: '', city: 'Brussel', zipcode: '', country: 'België',  _source: 'master'}, logger);
+      assert.equal(r.countryId, 501, 'found');
+      r = await f.convert('location', {street: '12 test street 99', city: 'London', zipcode: '', country: 'Engeland',  _source: 'master'}, logger);
+      assert.equal(r.countryId, 502, 'found');
+      assert.equal(r.street, '12 test street 99', 'did not change the street');
       r = await f.convert('location', {street: '', city: 'Amsterdam', zipcode: 'B-1234',  _source: 'master'}, logger);
       assert(r.countryId === Countries.be, 'found');
       r = await f.convert('location', {street: '', city: 'Amsterdam', zipcode: '12345',  _source: 'master'}, logger);
@@ -304,20 +335,36 @@ describe('field',  () => {
       }, logger);
       assert(r.street === 'Westerstraat', 'found');
       assert(r.number === '12', 'found');
+      assert.equal(r.zipcode, 'Amsterdam:Westerstraat:12', 'did a lookup');
       assert(r._source === 'master', 'no process but still there')
     });
     it('lookup street from zipcode', async() => {
       let r = await f.convert('location', { street: '', city: 'Amsterdam', number: '67', zipcode: '1017 TE', country: 'nederland', _source: 'master'}, logger);
-      assert(r.street === 'damrak', 'found');
-    });
-    it('lookup zipcode from street', async() => {
-      let r = await f.convert('location', { street: 'Damrak', city: 'Amsterdam', number: '67', country: 'nederland', _source: 'master'}, logger);
-      assert(r.zipcode === '1001 ML', 'found');
+      assert.equal(r.street, '1017 TE:67', 'found');
     });
   });
 
   describe('contact',  () => {
-    let f = new FieldContact();
+    let f = new FieldContact({
+      lookup : async function(value, reason, fields, data, logger, defaults) {
+        switch(reason) {
+          case 'contact':
+            const types = [{ name: 'instituut', value: 101}, { name: 'man', value: 102}, { name: 'vrouw', value: 103}];
+            let id = _.find( types, (t) => {return t.name === value});
+            if (id) {
+              return id.value
+            }
+            return 105;
+          case 'gender':
+            if (value.title === 'mevrouw') {
+              delete data.title;
+              return 103
+            }
+            return defaults;
+        }
+        return defaults;
+      }
+    });
     logger.clear();
     it('fullname', async () => {
       let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
@@ -343,9 +390,21 @@ describe('field',  () => {
       assert(r.name === 'Kreeft' && r.firstLetters === 'J.' && r.namePrefix === 'van der' && r.firstName === 'Jaap-Wieger' , 'got all');
       r = await f.convert('contact', {fullName: 'Jaap Wieger van der Kreeft'}, logger);
       assert(r.name === 'Kreeft' && r.firstLetters === 'J.W.' && r.namePrefix === 'van der' && r.firstName === 'Jaap' && r.middleName === 'Wieger', 'got all')
-
-
     });
+    it('type', async () => {
+      let r = await f.convert('contact', {fullName: 'Jan de Hond', typeId: 101}, logger);
+      assert.equal(r.typeId, 101, 'leave it');
+      r = await f.convert('contact', {fullName: 'Jan de Hond', type: 'man'}, logger);
+      assert.equal(r.typeId, 102, 'changed');
+      r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
+      assert.equal(r.typeId, 105, 'add it if unknown');
+    });
+    it('gender', async () => {
+      let r = await f.convert('contact', {fullName: 'mevrouw Clara de Hond', typeId: 105}, logger);
+      assert.equal(r.typeId, 103, 'did genderize on title');
+      r = await f.convert('contact', {fullName: 'dr Clara de Hond', typeId: 102}, logger);
+      assert.equal(r.typeId, 102, 'did genderize, result default')
+    })
 
   });
 });

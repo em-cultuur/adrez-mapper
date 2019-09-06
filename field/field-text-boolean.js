@@ -26,8 +26,7 @@ class FieldTextBoolean extends Field {
         return false;
       }
     }
-    data = !!data;
-    return true;
+    return true// !!data;
   }
 
   isEmpty(data) {
