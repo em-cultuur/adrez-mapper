@@ -16,7 +16,9 @@ class FieldObject extends Field {
     this._lookup = options.lookup;
   }
 
-
+  get lookup() {
+    return this._lookup;
+  }
   /**
    *
    * @param fieldName
@@ -63,12 +65,13 @@ class FieldObject extends Field {
     return result;
   }
 
-  async lookup(value, baseType, fields, data, logger, defaults = false) {
-    if (this._lookup) {
-      return await this._lookup(value, baseType, fields, data, defaults);
-    }
-    return defaults;
-  }
+  // async lookup(value, baseType, fields, data, logger, defaults = false) {
+  //   // TODO adust to class
+  //   // if (this._lookup) {
+  //   //   return await this._lookup(value, baseType, fields, data, defaults);
+  //   // }
+  //   return defaults;
+  // }
   /**
    * returns the new definition from the data
    * @param data

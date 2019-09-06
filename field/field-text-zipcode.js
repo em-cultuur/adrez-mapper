@@ -30,7 +30,6 @@ class FieldTextZipcode extends FieldText {
   constructor(options = {}){
     super(options);
     this._name = 'zipcode';
-    this._lookup = options.lookup;
   }
 
   /**
@@ -51,7 +50,7 @@ class FieldTextZipcode extends FieldText {
     return code;
   }
 
-  async countryId(code, standard = Countries.unknown) {
+  async countryId(code) {
     if (typeof code === 'string') {
       let upper = code.toUpperCase();
       if (upper.substr(0, 2) === 'B-' || upper.substr(0, 1) === 'B') {
@@ -73,15 +72,8 @@ class FieldTextZipcode extends FieldText {
       if (code.match(/^(\d{5}([\-]\d{4})?)$/)) {
         return Countries.us
       }
-      if (this._lookup) {
-        let c = await this._lookup(code, 'zipcode.country')
-        if (c) {
-          return c;
-        }
-      }
     }
-
-    return standard;
+    return false;
   }
 
 }

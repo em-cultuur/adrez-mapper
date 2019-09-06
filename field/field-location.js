@@ -47,20 +47,16 @@ class FieldLocation extends FieldObject {
 
     if (!data.countryId) {
       if  (data.country) {
-        lookup = { baseType: 'country', value: data.country }
+        data.countryId = await this.lookup.country(fieldName, data.country, false, data)
       } else if (data.zipcode) {
         result.countryId = await this._fields.zipcode.countryId(data.zipcode, false);
         if (result.countryId === false) {
-          lookup = { baseType: 'country.zipcode', value: data.zipcode }
+          let countryId = await this.lookup.zipcode2Country(fieldName, data.zipcode, 0, data);
         }
-      }
-      if (lookup && this._lookup) {
-        data.countryId = await this.lookup(lookup.value, lookup.baseType, fields, data, logger, undefined);
       }
     }
 
-    let countryNumberRight = data.countryId === undefined || // the default
-      (await this.lookup(data.countryId, 'country.numberRight', fields, data, logger, true));
+    let countryNumberRight = await this.lookup.countryStreetNumberRight(fieldName, data.countryId, true, data);
 
     // streetNumber can be split if street and number do NOT exist
     if (data.street === undefined || data.number === undefined) {
@@ -87,10 +83,10 @@ class FieldLocation extends FieldObject {
 
     if (data.zipcode && !data.street) {
       // do a lookup on zipcode for nl && b
-      data.street = await this.lookup({ zipcode: data.zipcode, number: data.number, countryId: data.countryId}, 'street', fields, data, logger, undefined )
+      data.street = await this.lookup.street(fieldName, { zipcode: data.zipcode, number: data.number, countryId: data.countryId}, undefined, data)
     }
     if (!data.zipcode && (data.street && data.number && data.city)) {
-      data.zipcode = await this.lookup({ street: data.street, number: data.number, city: data.city, countryId: data.countryId}, 'zipcode', fields, data, logger,undefined )
+      data.zipcode = await this.lookup.zipcode(fieldName, { street: data.street, number: data.number, city: data.city, countryId: data.countryId}, undefined, data)
     }
 
     this.copyFieldsToResult(result, data, ['country', 'streetNumber']);

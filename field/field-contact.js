@@ -87,7 +87,7 @@ class FieldContact extends FieldComposed {
         data.firstLetters += data.middleName.substr(0, 1).toUpperCase() + '.';
       }
     }
-    let typeId = await this.lookup({firstName: data.firstName, title: data.title, subName: data.subName}, 'gender', fields, data, logger, undefined);
+    let typeId = await this.lookup.gender(fieldName, {firstName: data.firstName, title: data.title, subName: data.subName, type: data.type}, data.typeId ? data.typeId : 105, data);
     if (typeId) {
       data.typeId = typeId;
     }

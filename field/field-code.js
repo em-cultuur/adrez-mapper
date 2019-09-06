@@ -31,17 +31,11 @@ class FieldCode extends FieldObject {
     if (fields.codeId) {
       data.codeId = await this._fields.codeId.convert(fieldName, data.codeId, logger)
     } else if (fields.code) {
-      if (this._lookup) {
-        data.codeId = await this._lookup(data.code, 'code', fields, data);
-        // data.value = await this._fields.code.convert(fieldName, data.code, logger)
-        // delete data.code;
-      } else {
-        this.log(logger, 'warn', fieldName, 'missing lookup for code. record skipped')
-      }
+      data.codeId = await this.lookup.code(fieldName, data.code, data);
     } else {
       this.log(logger, 'warn', fieldName, 'no code or codeId. record skipped')
     }
-    this.copyFieldsToResult(result, data, ['code'])
+    this.copyFieldsToResult(result, data, ['code']);
     // recalculate the available fields
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger).then( (newRes) => {

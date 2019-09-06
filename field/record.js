@@ -14,6 +14,7 @@ const FieldCode = require('./field-code').FieldCode;
 const FieldExtra = require('./field-extra').FieldExtra;
 const FieldMemo = require('./field-memo').FieldMemo;
 const _ = require('lodash');
+const Lookup = require('../lib/lookup');
 
 class AdrezRecord extends FieldObject {
 
@@ -21,7 +22,7 @@ class AdrezRecord extends FieldObject {
     if (!options) { options = {}}
     super(options);
     this._name = 'record';
-    this._lookup = options.lookup;
+    this._lookup = options.lookup ? options.lookup : new Lookup();
 
     this._fields = {
       id: new FieldGuid(),

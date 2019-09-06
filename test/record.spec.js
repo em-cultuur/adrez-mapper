@@ -5,6 +5,7 @@ const Chai = require('chai');
 const assert = Chai.assert;
 const Logger = require('logger');
 const Record = require('../field/record').AdrezRecord;
+const Lookup = require('../lib/lookup');
 
 describe('record', () => {
   let logger = new Logger({toConsole: false});
@@ -32,11 +33,19 @@ describe('record', () => {
   });
   describe('lookup composed type', () => {
     logger.clear();
+    class ComposedLookup extends Lookup {
+      async email(fieldName, value, defaults, data) {
+        return 1234
+        // return super.code(fieldName, value, defaults, data);
+      }
+    }
+
     let rec = new Record({
       email: {
-        lookup: async function(value, baseType, fields, data) {
-          return Promise.resolve(1234);
-        }
+        lookup: new ComposedLookup()
+        // lookup: async function(value, baseType, fields, data) {
+        //   return Promise.resolve(1234);
+        // }
       }
     });
     it('convert fields', async () => {
@@ -50,10 +59,16 @@ describe('record', () => {
 
   describe('lookup code.code', () => {
     logger.clear();
-    let rec = new Record({
-      lookup: async function(value, baseType, fields, data) {
-        return 33
+    class CodeLookup extends Lookup {
+      async code(fieldName, value, defaults, data) {
+        return 33;
       }
+    }
+    let rec = new Record({
+      lookup: new CodeLookup()
+      // lookup: async function(value, baseType, fields, data) {
+      //   return 33
+      // }
     });
     it('convert fields', async () => {
       let r = await rec.convert('rec', {code: [{code: 'newsletter'}]}, logger);
@@ -62,10 +77,13 @@ describe('record', () => {
   });
   describe('extra field', () => {
     logger.clear();
-    let rec = new Record({
-      lookup: async function(value, baseType, fields, data) {
+    class ExtraLookup extends Lookup {
+      async extra(fieldName, value, defaults, data) {
         return 33
       }
+    }
+    let rec = new Record({
+      lookup: new ExtraLookup()
     });
     it('convert fields', async () => {
       let r = await rec.convert('rec', {extra: [{type: 'has newsletter', boolean: '0'}]}, logger);
