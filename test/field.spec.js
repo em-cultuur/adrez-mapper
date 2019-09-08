@@ -205,11 +205,15 @@ describe('field',  () => {
       assert(_.isEmpty(r), 'empty');
     });
     it('not valid field', async () => {
-      let r = await f.convert('composed', {unknownField: 'test'}, logger);
-      assert.isDefined(r.type, 'should hava an error');
-      assert.equal(r.type, 'ErrorFieldNotAllowed');
-      assert(r.fields.length === 1, 'one field');
-      assert(r.fields[0] === 'unknownField', 'the name');
+      try {
+        let r = await f.convert('composed', {unknownField: 'test'}, logger);
+        assert.fail('field not defined');
+      } catch (e) {
+        assert.isDefined(e.type, 'should hava an error');
+        assert.equal(e.type, 'ErrorFieldNotAllowed');
+        assert(e.fields.length === 1, 'one field');
+        assert(e.fields[0] === 'unknownField', 'the name');
+      }
     });
     it('remove empty fields', async () => {
       let r = await f.convert('composed', {type: '', value:'some value', _source: '123'}, logger);

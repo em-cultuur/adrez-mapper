@@ -132,7 +132,7 @@ class FieldObject extends Field {
       }
     }
     if (isValid.length > 0) {
-      return Promise.resolve(new ErrorFieldNotAllowed(isValid));
+      return Promise.reject(new ErrorFieldNotAllowed(isValid));
     } else if (_.isEmpty(fields)) {
       return Promise.resolve({});
     } else {

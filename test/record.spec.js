@@ -22,13 +22,17 @@ describe('record', () => {
 
     it('unknown fields', async () => {
       let r;
-      r = await rec.convert('rec', {test: '123'}, logger);
-      assert.isDefined(r.name, 'got result')
-      assert.equal(r.type, 'ErrorFieldNotAllowed', 'got the error')
-      assert(logger.hasErrors(), 'something is wrong');
-      assert(logger.errors.length === 1, 'one error');
-      assert(logger.errors[0].message === 'field does not exist', 'not found');
-      assert(logger.errors[0].fieldName === 'rec.test', 'defined the field')
+      try {
+        r = await rec.convert('rec', {test: '123'}, logger);
+        assert.fail('field does not exist')
+      } catch (e) {
+        assert.isDefined(e.name, 'got result')
+        assert.equal(e.type, 'ErrorFieldNotAllowed', 'got the error')
+        assert(logger.hasErrors(), 'something is wrong');
+        assert(logger.errors.length === 1, 'one error');
+        assert(logger.errors[0].message === 'field does not exist', 'not found');
+        assert(logger.errors[0].fieldName === 'rec.test', 'defined the field')
+      }
     });
     it('convert fields', async () => {
       let r = await rec.convert('rec', {telephone: [{telephoneInt: '0123456789'}]}, logger);
