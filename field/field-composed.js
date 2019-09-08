@@ -47,9 +47,14 @@ class FieldComposed extends FieldObject {
    */
   async processKeys(fieldName, fields, data, logger) {
     if (! (fields['typeId'] && ! fields['typeId'].isEmpty(data['typeId']))) {
-      data.typeId = await this.lookup[this._baseType(fieldName)](fieldName, data.type, 0, data);
+      let baseType = this._baseType(fieldName);
+      if (this.lookup[baseType]) {
+        data.typeId = await this.lookup[baseType](fieldName, data.type, 0, data);
+      } else {
+        this.log(logger, 'error', fieldName, `there is no lookup definition for ${this._baseType(fieldName)}`);
+      }
     } else if (!fields.typeId) {
-      this.log(logger, 'warn', fieldName, `no type or typeId set. marking unknown`)
+      this.log(logger, 'warn', fieldName, `no type or typeId set. marking unknown`);
       data['typeId'] = TYPE_UNKNOWN;
     }
     delete data.type;

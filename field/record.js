@@ -40,6 +40,10 @@ class AdrezRecord extends FieldObject {
     }
   }
 
+  get lookup() {
+    return this._lookup;
+  }
+
 }
 
 module.exports.AdrezRecord = AdrezRecord;

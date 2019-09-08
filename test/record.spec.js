@@ -10,6 +10,15 @@ const Lookup = require('../lib/lookup');
 describe('record', () => {
   let logger = new Logger({toConsole: false});
 
+
+  describe('multikey', () => {
+    let rec = new Record();
+    it('more keys', async () => {
+      let r = await rec.convert('rec', {contact: [{name: 'test'}], telephone: [{telephone: '1234124'}]}, logger);
+      assert(Object.keys(r).length === 2, 'both exist')
+    });
+
+  });
   describe('convert', () => {
     let rec = new Record();
     it('empty', async () => {
