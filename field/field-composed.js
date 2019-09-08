@@ -32,7 +32,8 @@ class FieldComposed extends FieldObject {
   _baseType(name) {
     let index = name.indexOf('[');
     if (index > -1) {
-      return name.substr(4, index - 4)
+      let start = name.indexOf('.') + 1;
+      return name.substr(start, index - start)
     } else {
       return name;
     }

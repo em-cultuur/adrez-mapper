@@ -11,20 +11,15 @@ describe('record', () => {
   let logger = new Logger({toConsole: false});
 
 
-  describe('multikey', () => {
-    let rec = new Record();
-    it('more keys', async () => {
-      let r = await rec.convert('rec', {contact: [{name: 'test'}], telephone: [{telephone: '1234124'}]}, logger);
-      assert(Object.keys(r).length === 2, 'both exist')
-    });
 
-  });
   describe('convert', () => {
     let rec = new Record();
     it('empty', async () => {
       let r = await rec.convert('rec', {}, logger);
       assert(Object.keys(r).length === 0, 'nothing created')
     });
+
+
     it('unknown fields', async () => {
       let r;
       r = await rec.convert('rec', {test: '123'}, logger);
@@ -99,7 +94,22 @@ describe('record', () => {
       assert.equal(r.extra[0].typeId, 33, 'did the convert');
       assert.equal(r.extra[0].text, "0", 'did the convert');
     });
+  });
+  describe('multikey', () => {
+    let rec = new Record();
+    it('more keys', async () => {
+      let r = await rec.convert('rec', {contact: [{name: 'test'}], telephone: [{telephone: '1234124'}]}, logger);
+      assert(Object.keys(r).length === 2, 'both exist')
+    });
+  });
+
+  describe('fieldName or rec', () => {
+
+    let rec = new Record();
+    it('name is longer', async () => {
+      logger.clear();
+      let r = await rec.convert('theLongName', {contact: [{name: 'test'}], telephone: [{telephone: '1234124'}]}, logger);
+      assert.isFalse(logger.hasErrors(), 'no errors')
+    })
   })
-
-
 });
