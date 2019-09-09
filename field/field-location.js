@@ -62,6 +62,7 @@ class FieldLocation extends FieldObject {
     if (data.street === undefined || data.number === undefined) {
       if (data.streetNumber) {
         if (countryNumberRight) {
+          // ToDo: better implementation: https://www.rosettacode.org/wiki/Separate_the_house_number_from_the_street_name
           const re = /^(\d*[\wäöüß\d '\-\.]+)[,\s]+(\d+)\s*([\wäöüß\d\-\/]*)$/i;
           let match = data.streetNumber.match(re);
           if (match) {

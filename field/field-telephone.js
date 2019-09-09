@@ -32,9 +32,7 @@ class FieldTelephone extends FieldComposed {
       }
     }
     return Promise.resolve(this.copyFieldsToResult(result, data, ['telephone', 'telephoneInt'])).then( (res) => {
-      return super.processKeys(fieldName, fields, data, logger).then( () => {
-        return res;
-      })
+      return super.processKeys(fieldName, fields, data, logger);
     })
   }
 }
