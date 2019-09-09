@@ -38,9 +38,7 @@ class FieldCode extends FieldObject {
     this.copyFieldsToResult(result, data, ['code']);
     // recalculate the available fields
     let cFields = this.remapFields(result);
-    return super.processKeys(fieldName, cFields, result, logger).then( (newRes) => {
-      return Promise.resolve(newRes);
-    })
+    return super.processKeys(fieldName, cFields, result, logger);
   }
 }
 

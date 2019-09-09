@@ -28,9 +28,9 @@ class FieldEmail extends FieldComposed {
         data.value = await this._fields.email.convert(fieldName, data.email, logger)
       }
     }
-    return super.processKeys(fieldName, fields, data, logger).then( () => {
-      return Promise.resolve(this.copyFieldsToResult(result, data, ['email']))
-    })
+    this.copyFieldsToResult(result, data, ['email']);
+    let cFields = this.remapFields(result);
+    return super.processKeys(fieldName, cFields, result, logger);
   }
 }
 
