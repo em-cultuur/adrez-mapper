@@ -5,19 +5,23 @@ npm install https://github.com/toxus/adrez-mapper.git --save
 Convert a raw address record into the workable version for the AdreZ api
 
 ````javascript
-const Record = require('adrez-mapper').Record;
+const Record = require('adrez-mapper').AdrezRecord;
 const Logger = require('logger');
+const Lookup = require('adrez-mapper').Lookup;
 
-let logger = new Logger({toConsole: false});
-const findInCodes = async function(value, baseType, fields, data) {
-  // lookup the value to translate it into a id
-  return Promise.resolve(12345);  
+
+class LocalLookup extends Lookup {
+   // see Lookup for more options   
+   async gender(fieldName, contactObj, defaults, data) {
+     // do anything to data and return the type of address
+     return 105;
+   }
 }
+let logger = new Logger({toConsole: false});
+
 const options = {
   // the default lookup
-  lookup : findInCodes,
-  // change the look on a per type basis
-  email: { lookup : findInEmail }
+  lookup : new LocalLookup(),
 }
 
 let upd = new Record(options);
@@ -28,7 +32,6 @@ const fieldData = {
     {typeId: 2314, telephone: '021030120123012'}
     ]
 }
-
 
 let result = upd.convert('rec', fieldData, logger);
 console.log(result)
@@ -43,6 +46,8 @@ console.log(result)
     }
 
 ````
+
+[class Lookup](lookup.md)
 
 ## lookup function
 

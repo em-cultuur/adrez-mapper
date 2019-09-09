@@ -14,7 +14,7 @@ class FieldObject extends Field {
     // add here the fieldName: fieldDefinition
     this._fields = options.fields !== undefined ? options.fields : {};
     this._lookup = options.lookup;
-    this._removeEmpty = options.removeEmpty ? options.removeEmpty : true;
+    this._removeEmpty = options.removeEmpty !== undefined ? options.removeEmpty : true;
   }
 
   get lookup() {
