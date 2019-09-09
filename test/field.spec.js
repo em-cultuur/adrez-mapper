@@ -224,21 +224,6 @@ describe('field',  () => {
 
 
 
-  describe('email',  () => {
-    let f = new FieldEmail({lookup: new Lookup()});
-    logger.clear();
-    it('empty', async () => {
-      let r = await f.convert('email', {email: '', _source: 'master'}, logger);
-      assert(_.isEmpty(r), 'should clear a empty record')
-    });
-    it('select field', async () => {
-      let r = await f.convert('email', {email: 'INFO@test.com', _source: 'master'}, logger);
-      assert(r.value === 'info@test.com', 'select email en convert');
-      r = await f.convert('email', {email: 'INFO@test.com', value: 'test@test.com', _source: 'master'}, logger);
-      assert(r.value === 'test@test.com', 'select value not email');
-    });
-  });
-
   describe('code',  () => {
     let f = new FieldCode();
     logger.clear();

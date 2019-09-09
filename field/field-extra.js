@@ -29,7 +29,6 @@ class FieldExtra extends FieldComposed { // FieldCode {
       this.log(logger, 'warn',fieldName, 'no data found')
     }
 
-
     this.copyFieldsToResult(result, data, ['boolean']);
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);

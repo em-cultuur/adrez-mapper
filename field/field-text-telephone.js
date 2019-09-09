@@ -65,7 +65,7 @@ class FieldTextTelephone extends FieldText {
   adjust(fieldName, telephone, logger = false) {
 
     if (telephone === undefined || telephone.length === 0) {
-      return undefined;
+      return Promise.resolve(telephone);
     }
     let tel = this._phoneUtil.parse(telephone, this._country); // this._defaultCountryCode());
     let format = this._format;

@@ -55,8 +55,11 @@ class FieldObject extends Field {
   copyFieldsToResult(result, data, skip = []) {
     for (let key in data) {
       if (!data.hasOwnProperty(key)) { continue }
-      if (result[key] === undefined && data[key] !== undefined && skip.indexOf(key) < 0) {
-        result[key] = data[key]
+      if (result[key] === undefined && skip.indexOf(key) < 0) {
+        // only overwrite if it does not exist
+        if (this._removeEmpty === false || data[key] !== undefined )  {
+          result[key] = data[key]
+        }
       }
     }
     // remove the skipped fields
@@ -134,7 +137,7 @@ class FieldObject extends Field {
     }
     if (isValid.length > 0) {
       return Promise.reject(new ErrorFieldNotAllowed(isValid));
-    } else if (_.isEmpty(fields)) {
+    } else if (this._removeEmpty && _.isEmpty(fields)) {
       return Promise.resolve({});
     } else {
       // check the emptyAllow isn't set for all

@@ -24,4 +24,12 @@ describe('telephone',  () => {
     assert.isUndefined(r.telephone, 'removed unneeded fields');
     assert.isUndefined(r.telephoneInt, 'removed unneeded fields');
   });
+
+  it('leave empty field', async () => {
+    let f2 = new FieldTelephone({ lookup: new Lookup(), removeEmpty : false});
+    let r = await f2.convert('telephone', {telephone: ''}, logger);
+    assert.isDefined(r.value, 'still there');
+    assert.equal(r.value, '', 'and empty')
+  })
+
 });

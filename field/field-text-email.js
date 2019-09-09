@@ -28,7 +28,7 @@ class FieldTextEmail extends FieldText {
   adjust(fieldName, email, logger = false) {
 
     if (email === undefined || email.length === 0) {
-      return undefined;
+      return Promise.resolve(email);
     }
     email = _.replace(email, /</g, '');
     email = _.replace(email, />/g, '');
