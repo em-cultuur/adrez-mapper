@@ -14,6 +14,7 @@ class FieldObject extends Field {
     // add here the fieldName: fieldDefinition
     this._fields = options.fields !== undefined ? options.fields : {};
     this._lookup = options.lookup;
+    this._removeEmpty = options.removeEmpty ? options.removeEmpty : true;
   }
 
   get lookup() {
@@ -126,7 +127,7 @@ class FieldObject extends Field {
       if (fieldDefinition === undefined) {
         this.log(logger, 'error', subName, 'field does not exist');
         isValid.push(name);
-      } else if (!fieldDefinition.isEmpty(data[name])) {
+      } else if (this._removeEmpty === false || !fieldDefinition.isEmpty(data[name])) {
         // empty fields are removed
         fields[name] = this._fields[name];
       }
@@ -139,7 +140,7 @@ class FieldObject extends Field {
       // check the emptyAllow isn't set for all
       for (let key in fields) {
         if (!fields.hasOwnProperty(key)) { continue }
-        if (fields[key].emptyAllow === undefined || fields[key] .emptyAllow === false) {
+        if (fields[key].emptyAllow === undefined || fields[key].emptyAllow === false) {
           return this.processKeys(`${fieldName}`, fields, data, logger).then((rec) => {
             return Promise.resolve(rec)
           })

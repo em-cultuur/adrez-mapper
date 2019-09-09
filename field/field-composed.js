@@ -14,8 +14,8 @@ class FieldComposed extends FieldObject {
   constructor(options = {}) {
     super(options);
     this._fields = {
-      type: new FieldText(),        // the name of the code
-      typeId: new FieldGuid(),      // the id, overrules the type
+      type: new FieldText({emptyAllow: true}),        // the name of the code
+      typeId: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
       value: options.valueType ? options.valueType : new FieldText(),  // the field to store
       isDefault: new FieldBoolean(),
       _source: new FieldText({emptyAllow: true}),      // textual version of the sourceId. Overrulde if _sourceId is set

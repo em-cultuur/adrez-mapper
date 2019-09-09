@@ -110,10 +110,28 @@ describe('record', () => {
   describe('fieldName or rec', () => {
 
     let rec = new Record();
-    it('name is longer', async () => {
+    it('name is long string', async () => {
       logger.clear();
       let r = await rec.convert('theLongName', {contact: [{name: 'test'}], telephone: [{telephone: '1234124'}]}, logger);
       assert.isFalse(logger.hasErrors(), 'no errors')
     })
+  });
+
+  describe('empty remove', () => {
+    it('remove empty', async () => {
+      let rec = new Record({removeEmpty: true});
+      let result = await rec.convert('name', {telephone: [{telephone: '123', typeId: 456}, { telephone: '', typeId: '789'}]});
+      assert.equal(result.telephone.length, 1, 'remove second, typeId not used in empty calc')
+    });
+    it('leave empty', async () => {
+      let rec = new Record({removeEmpty: false});
+      let result = await rec.convert('name', {telephone: [{telephone: '123', typeId: 456}, { telephone: '', typeId: '789'}]});
+      assert.equal(result.telephone.length, 2, 'both remain')
+    });
+    it('leave empty', async () => {
+      let rec = new Record({removeEmpty: false});
+      let result = await rec.convert('name', {telephone: [{ telephone: '', typeId: '789'}]});
+      assert.equal(result.telephone.length, 1, 'one remain')
+    });
   })
 });

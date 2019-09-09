@@ -26,16 +26,14 @@ class AdrezRecord extends FieldObject {
 
     this._fields = {
       id: new FieldGuid(),
-//      sync: new FieldText({emptyAllow: true}),
-//      sourceId: new FieldText({emptyAllow: true}),
 
-      contact:      new FieldArray( { type: new FieldContact(_.merge({lookup: this._lookup}, options.contact)) }),
-      email:        new FieldArray( { type: new FieldEmail(_.merge({lookup: this._lookup}, options.email)) }),
-      telephone:    new FieldArray( { type: new FieldTelephone(_.merge({lookup: this._lookup}, options.telephone)) } ),
-      location:     new FieldArray( { type: new FieldLocation(_.merge({lookup: this._lookup}, options.location)) }),
-      code:         new FieldArray( { type: new FieldCode(_.merge({lookup: this._lookup}, options.code)) }),
-      extra:        new FieldArray( { type: new FieldExtra(_.merge({lookup: this._lookup}, options.extra))}),
-      memo:         new FieldArray( { type: new FieldMemo(_.merge({lookup: this._lookup}, options.memo)) } )
+      contact:      new FieldArray( { type: new FieldContact(_.merge({lookup: this._lookup}, options.contact)) }, options),
+      email:        new FieldArray( { type: new FieldEmail(_.merge({lookup: this._lookup}, options.email)) }, options),
+      telephone:    new FieldArray( { type: new FieldTelephone(_.merge({lookup: this._lookup}, options.telephone)) } , options),
+      location:     new FieldArray( { type: new FieldLocation(_.merge({lookup: this._lookup}, options.location)) }, options),
+      code:         new FieldArray( { type: new FieldCode(_.merge({lookup: this._lookup}, options.code)) }, options),
+      extra:        new FieldArray( { type: new FieldExtra(_.merge({lookup: this._lookup}, options.extra))}, options),
+      memo:         new FieldArray( { type: new FieldMemo(_.merge({lookup: this._lookup}, options.memo)) }, options )
 
     }
   }

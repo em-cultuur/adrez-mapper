@@ -18,7 +18,7 @@ const FieldMemo = require('../field/field-memo').FieldMemo;
 const FieldObject = require('../field/field-object').FieldObject;
 const FieldArray = require('../field/field-array').FieldArray;
 const FieldComposed = require('../field/field-composed').FieldComposed;
-const FieldTelephone = require('../field/field-telephone').FieldTelephone;
+
 const FieldCode = require('../field/field-code').FieldCode;
 const FieldEmail = require('../field/field-email').FieldEmail;
 const FieldLocation = require('../field/field-location').FieldLocation;
@@ -222,22 +222,7 @@ describe('field',  () => {
     });
   });
 
-  describe('telephone',  () => {
-    let f = new FieldTelephone({ lookup: new Lookup()});
-    logger.clear();
-    it('empty', async () => {
-      let r = await f.convert('telephone', {telephone: '', _source: 'master'}, logger);
-      assert(_.isEmpty(r), 'should clear a empty record')
-    });
-    it('select field', async () => {
-      let r = await f.convert('telephone', {telephone: '0123456789', _source: 'master'}, logger);
-      assert(r.value === '012-3456789', 'select tel en convert');
-      r = await f.convert('telephone', {telephone: '0123456789', telephoneInt: '0123456789', _source: 'master'}, logger);
-      assert(r.value === '+31 (12) 3456789', 'select tel international');
-      r = await f.convert('telephone', {value: '09876543210', telephone: '0123456789', telephoneInt: '0123456789', _source: 'master'}, logger);
-      assert(r.value === '09876543210', 'value is most favor');
-    });
-  });
+
 
   describe('email',  () => {
     let f = new FieldEmail({lookup: new Lookup()});
