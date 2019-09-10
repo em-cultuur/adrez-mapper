@@ -23,11 +23,14 @@ class FieldExtra extends FieldComposed {
   async processKeys(fieldName, fields, data, logger) {
     let result = {};
     if (fields.boolean) {
-      result.text = this._fields.boolean.validate(fieldName, data.boolean, logger) ? '0' : '1';
-    } else if (field.text) {
-      result.text = this._fields.text.validate(fieldName, data.text, logger);
-    } else if (field.description) {
-      result.description = this._fields.description.validate(fieldName, data.description, logger);
+      result.text = await this._fields.boolean.convert(fieldName, data.boolean, logger) ? '1' : '0';
+      result._type = 'boolean';
+    } else if (fields.description) {
+      result.description = await this._fields.description.convert(fieldName, data.description, logger);
+      result._type = 'memo';
+    } else if (fields.text) {
+      result.text = await this._fields.text.convert(fieldName, data.text, logger);
+      result._type = 'text';
     } else {
       this.log(logger, 'warn',fieldName, 'no data found')
     }

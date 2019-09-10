@@ -19,8 +19,8 @@ const FieldObject = require('../field/field-object').FieldObject;
 const FieldArray = require('../field/field-array').FieldArray;
 const FieldComposed = require('../field/field-composed').FieldComposed;
 
-const FieldCode = require('../field/field-code').FieldCode;
-const FieldEmail = require('../field/field-email').FieldEmail;
+// const FieldCode = require('../field/field-code').FieldCode;
+// const FieldEmail = require('../field/field-email').FieldEmail;
 const FieldLocation = require('../field/field-location').FieldLocation;
 const FieldContact = require('../field/field-contact').FieldContact;
 
