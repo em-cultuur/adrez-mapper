@@ -224,18 +224,6 @@ describe('field',  () => {
 
 
 
-  describe('code',  () => {
-    let f = new FieldCode();
-    logger.clear();
-    it('empty', async () => {
-      let r = await f.convert('code', {code: '', codeId: '', _source: 'master'}, logger);
-      assert(_.isEmpty(r), 'should clear a empty record')
-    });
-    it('select field', async () => {
-      let r = await f.convert('code', {code: 'test', codeId: '1234', _source: 'master'}, logger);
-      assert(r.codeId === '1234', 'select code Id');
-    });
-  });
 
   describe('Memo',  () => {
     let f = new FieldMemo();

@@ -4,11 +4,12 @@ const FieldComposed = require('./field-composed').FieldComposed;
 const FieldText = require('./field-text').FieldText;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
 
-class FieldExtra extends FieldComposed { // FieldCode {
+class FieldExtra extends FieldComposed {
   constructor(options) {
     super(options);
     this._fields.text = new FieldText();
     this._fields.boolean = new FieldBoolean();
+    this._fields.description = new FieldText();
   }
 
   /**
@@ -24,7 +25,9 @@ class FieldExtra extends FieldComposed { // FieldCode {
     if (fields.boolean) {
       result.text = this._fields.boolean.validate(fieldName, data.boolean, logger) ? '0' : '1';
     } else if (field.text) {
-      result.text = this._fields.text.validate(fieldName, data.boolean, logger);
+      result.text = this._fields.text.validate(fieldName, data.text, logger);
+    } else if (field.description) {
+      result.description = this._fields.description.validate(fieldName, data.description, logger);
     } else {
       this.log(logger, 'warn',fieldName, 'no data found')
     }
