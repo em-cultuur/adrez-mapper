@@ -80,7 +80,7 @@ describe('record', () => {
     });
     it('convert fields', async () => {
       let r = await rec.convert('rec', {code: [{code: 'newsletter'}]}, logger);
-      assert.equal(r.code[0].codeId, 33, 'did the convert');
+      assert.equal(r.code[0].typeId, 33, 'did the convert');
     });
   });
   describe('extra field', () => {
