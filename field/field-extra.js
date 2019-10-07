@@ -3,6 +3,10 @@ const FieldCode = require('./field-code').FieldCode;
 const FieldComposed = require('./field-composed').FieldComposed;
 const FieldText = require('./field-text').FieldText;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
+const FieldNumber = require('./field-text').FieldText;
+
+/** FIX VALUE DEFINDED IN ADREZ */
+const CODE_TYPE_EXTRA = 11;
 
 class FieldExtra extends FieldComposed {
   constructor(options) {
@@ -10,6 +14,7 @@ class FieldExtra extends FieldComposed {
     this._fields.text = new FieldText();
     this._fields.boolean = new FieldBoolean();
     this._fields.description = new FieldText();
+    this._fields.number = new FieldNumber();
   }
 
   /**
@@ -34,11 +39,12 @@ class FieldExtra extends FieldComposed {
     } else {
       this.log(logger, 'warn',fieldName, 'no data found')
     }
-
+    if (data.group === undefined) {
+      result.group = CODE_TYPE_EXTRA;
+    }
     this.copyFieldsToResult(result, data, ['boolean']);
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);
-
   }
 }
 

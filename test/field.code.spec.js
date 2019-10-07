@@ -5,6 +5,7 @@ const Logger = require('logger');
 const Lookup = require('../lib/lookup');
 const FieldCode = require('../field/field-code').FieldCode;
 const Record = require('../field/record').AdrezRecord;
+
 describe('field.code', () => {
 
   let logger = new Logger({toConsole: false});
@@ -32,7 +33,7 @@ describe('field.code', () => {
       assert.isDefined(r._remove, 'has remove');
       assert.equal(r._remove, 1, 'is true');
     });
-  })
+  });
   describe('in record', async () => {
     let rec = new Record({removeEmpty: false});
     it('list code', async () => {
@@ -41,5 +42,21 @@ describe('field.code', () => {
       assert.equal(r.code.length, 1, 'one code');
       assert.isDefined(r.code[0].typeId, 'has id')
     })
+  });
+  describe('lookup access', async () => {
+    let called = false;
+
+    class TestLookup extends Lookup {
+      async code(fieldName, value, defaults, data) {
+        called = true;
+        return super.code(fieldName, value, defaults, data);
+      }
+    }
+    let rec = new Record({removeEmpty: false, lookup: new TestLookup()});
+    it('is it called', async () => {
+      assert.isFalse(called, 'should call the code func');
+      let r = await rec.convert('rec', { code: [{code: 'testing'}]});
+      assert.isTrue(called, 'should call the code func');
+    });
   })
 })

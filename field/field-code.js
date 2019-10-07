@@ -10,11 +10,15 @@ const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldGuid;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
 
+
+/** FIX VALUE DEFINDED IN ADREZ */
+const CODE_TYPE_CODE = 10;
 class FieldCode extends FieldObject {
   constructor(options = {}) {
     super(options);
     this._fields.code = new FieldText();
     this._fields.codeId = new FieldGuid();
+    this._fields.groupId = new FieldGuid();
     this._fields.typeId = new FieldGuid();                          // same as code id.
     this._fields._remove = new FieldBoolean();                     // set to true to remove it
     this._fields._source = new FieldText({emptyAllow: true});      // textual version of the sourceId. Overrulde if _sourceId is set
@@ -45,7 +49,11 @@ class FieldCode extends FieldObject {
     if (data._remove) {
       result._remove = 1;
     }
-
+    if (data.group) {
+      result.group = data.group;
+    } else {
+      result.group = CODE_TYPE_CODE;
+    }
     this.copyFieldsToResult(result, data, ['code', 'codeId']);
     // recalculate the available fields
     let cFields = this.remapFields(result);

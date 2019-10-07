@@ -83,22 +83,7 @@ describe('record', () => {
       assert.equal(r.code[0].typeId, 33, 'did the convert');
     });
   });
-  describe('extra field', () => {
-    logger.clear();
-    class ExtraLookup extends Lookup {
-      async extra(fieldName, value, defaults, data) {
-        return 33
-      }
-    }
-    let rec = new Record({
-      lookup: new ExtraLookup()
-    });
-    it('convert fields', async () => {
-      let r = await rec.convert('rec', {extra: [{type: 'has newsletter', boolean: '0'}]}, logger);
-      assert.equal(r.extra[0].typeId, 33, 'did the convert');
-      assert.equal(r.extra[0].text, "0", 'did the convert');
-    });
-  });
+
   describe('multikey', () => {
     let rec = new Record();
     it('more keys', async () => {
