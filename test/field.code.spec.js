@@ -4,6 +4,7 @@ const _ = require('lodash');
 const Logger = require('logger');
 const Lookup = require('../lib/lookup');
 const FieldCode = require('../field/field-code').FieldCode;
+const CODE_TYPE_CODE = require('../field/field-code').FIELD_GROUP_TYPE_CODE;
 const Record = require('../field/record').AdrezRecord;
 
 describe('field.code', () => {
@@ -33,6 +34,19 @@ describe('field.code', () => {
       assert.isDefined(r._remove, 'has remove');
       assert.equal(r._remove, 1, 'is true');
     });
+    it('create default groupId', async () => {
+      let f2 = new FieldCode({ lookup: new Lookup(), removeEmpty : false});
+      let r = await f2.convert('code', {code: 'test', _remove:true}, logger);
+      assert.isDefined(r.groupId, 'Has groupId');
+      assert.equal(r.groupId, CODE_TYPE_CODE, 'did default value')
+    });
+    it('set groupId', async () => {
+      let f2 = new FieldCode({ lookup: new Lookup(), removeEmpty : false});
+      let r = await f2.convert('code', {code: 'test', groupId: '123'}, logger);
+      assert.isDefined(r.groupId, 'Has groupId');
+      assert.equal(r.groupId, '123', 'did set')
+    })
+
   });
   describe('in record', async () => {
     let rec = new Record({removeEmpty: false});

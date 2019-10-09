@@ -8,6 +8,7 @@ const Logger = require('logger');
 const Lookup = require('../lib/lookup');
 const Field = require('../field/field').Field;
 const FieldText = require('../field/field-text').FieldText;
+const FieldNumber = require('../field/field-text-number').FieldNumber;
 const FieldTextBoolean = require('../field/field-text-boolean').FieldTextBoolean;
 const FieldTextEmail = require('../field/field-text-email').FieldTextEmail;
 const FieldTextTelephone = require('../field/field-text-telephone').FieldTextTelephone;
@@ -51,6 +52,34 @@ describe('field',  () => {
 
     it('validate', () => {
       assert(f.validate('name', 'value', logger) === true, 'string is valid');
+      assert(!logger.hasMessages(), 'no messages');
+      assert(f.validate('name', {test: 'value'}, logger) === false, 'object not valid');
+      assert(logger.hasErrors(), 'error');
+      assert(logger.errors.length === 1, 'the error');
+      assert(logger.errors[0].fieldName === 'name', 'the field');
+      assert(logger.errors[0].message === 'must be string or number', 'the error');
+      logger.clear();
+      assert(f.validate('name', undefined, logger) === true, 'no value is allowed');
+      assert(logger.hasErrors() === false, 'no error');
+      return f.convert('master', 'value', logger).then( (r) => {
+        assert(r === 'value', 'did return')
+      })
+    })
+  });
+
+  describe('number', () => {
+    let f = new FieldNumber();
+    logger.clear();
+    it('empty', () => {
+      assert(f.isEmpty('') === true, 'none');
+      assert(f.isEmpty(undefined) === true, 'none');
+      assert(f.isEmpty('   ') === true, 'spaces');
+      assert(f.isEmpty('a') === false, 'text');
+      assert(f.isEmpty(0) === false, 'number');
+    });
+
+    it('validate', () => {
+      assert(f.validate('name', '123', logger) === true, 'string number is valid');
       assert(!logger.hasMessages(), 'no messages');
       assert(f.validate('name', {test: 'value'}, logger) === false, 'object not valid');
       assert(logger.hasErrors(), 'error');

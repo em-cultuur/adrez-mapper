@@ -1,9 +1,10 @@
 
-const FieldCode = require('./field-code').FieldCode;
+// const FieldCode = require('./field-code').FieldCode;
+const FieldGuid = require('./field-text').FieldGuid;
 const FieldComposed = require('./field-composed').FieldComposed;
 const FieldText = require('./field-text').FieldText;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
-const FieldNumber = require('./field-text').FieldText;
+const FieldNumber = require('./field-text-number').FieldNumber;
 
 /** FIX VALUE DEFINDED IN ADREZ */
 const CODE_TYPE_EXTRA = 11;
@@ -15,6 +16,7 @@ class FieldExtra extends FieldComposed {
     this._fields.boolean = new FieldBoolean();
     this._fields.description = new FieldText();
     this._fields.number = new FieldNumber();
+    this._fields.groupId = new FieldGuid();
   }
 
   /**
@@ -36,11 +38,16 @@ class FieldExtra extends FieldComposed {
     } else if (fields.text) {
       result.text = await this._fields.text.convert(fieldName, data.text, logger);
       result._type = 'text';
+    } else if (fields.number) {
+      result.text = await this._fields.number.convert(fieldName, data.number, logger);
+      result._type = 'number';
     } else {
       this.log(logger, 'warn',fieldName, 'no data found')
     }
-    if (data.group === undefined) {
-      result.group = CODE_TYPE_EXTRA;
+    if (data.groupId === undefined) {
+      result.groupId = CODE_TYPE_EXTRA;
+    } else {
+      result.groupId = data.groupId;
     }
     this.copyFieldsToResult(result, data, ['boolean']);
     let cFields = this.remapFields(result);
@@ -49,3 +56,4 @@ class FieldExtra extends FieldComposed {
 }
 
 module.exports.FieldExtra = FieldExtra;
+module.exports.FIELD_GROUP_TYPE_EXTRA = CODE_TYPE_EXTRA;

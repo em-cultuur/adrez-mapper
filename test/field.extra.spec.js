@@ -4,6 +4,7 @@ const _ = require('lodash');
 const Logger = require('logger');
 const Lookup = require('../lib/lookup');
 const FieldExtra = require('../field/field-extra').FieldExtra;
+const CODE_TYPE_EXTRA = require('../field/field-extra').FIELD_GROUP_TYPE_EXTRA;
 const Record = require('../field/record').AdrezRecord;
 
 describe('field.extra', () => {
@@ -32,7 +33,24 @@ describe('field.extra', () => {
       assert.equal(r.text, '1', 'place in text');
       assert.isDefined(r.typeId, 'has type id');
     });
+    it('number field', async () => {
+      let r = await f.convert('extra', {number: 123, type: 'master'}, logger);
+      assert.equal(r.text, 123, 'place in text');
+      assert.isDefined(r.typeId, 'has type id');
+    });
+    it('has groupId', async() => {
+      let r = await f.convert('extra', {number: 123, type: 'master'}, logger);
+      assert.isDefined(r.groupId,  'has groupId');
+      assert.equal(r.groupId, CODE_TYPE_EXTRA, 'is extra');
+    });
+    it('set groupId', async() => {
+      let r = await f.convert('extra', {number: 123, type: 'master', groupId: 123}, logger);
+      assert.isDefined(r.groupId,  'has groupId');
+      assert.equal(r.groupId, 123, 'is set');
+    })
+
   });
+
 
   describe('in record', async () => {
     let rec = new Record({removeEmpty: false});

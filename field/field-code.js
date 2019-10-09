@@ -49,10 +49,10 @@ class FieldCode extends FieldObject {
     if (data._remove) {
       result._remove = 1;
     }
-    if (data.group) {
-      result.group = data.group;
+    if (data.groupId) {
+      result.groupId = data.groupId;
     } else {
-      result.group = CODE_TYPE_CODE;
+      result.groupId = CODE_TYPE_CODE;
     }
     this.copyFieldsToResult(result, data, ['code', 'codeId']);
     // recalculate the available fields
@@ -62,3 +62,4 @@ class FieldCode extends FieldObject {
 }
 
 module.exports.FieldCode = FieldCode;
+module.exports.FIELD_GROUP_TYPE_CODE = CODE_TYPE_CODE;
