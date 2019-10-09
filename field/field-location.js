@@ -5,32 +5,31 @@
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldGuid;
 
-const FieldObject = require('./field-object').FieldObject;
+// const FieldObject = require('./field-object').FieldObject;
+const FieldComposed = require('./field-composed').FieldComposed;
 const FieldZipcode = require('./field-text-zipcode').FieldTextZipcode;
 
-// const Countries = require('../lib/lookup').Countries;
-//const countryNumberRightId = require('../lib/lookup').countryNumberRightId;
-// const Lookup = require('../lib/lookup');
 
-class FieldLocation extends FieldObject {
+class FieldLocation extends FieldComposed {
 
   constructor(options = {}) {
     super(options);
-    this._fields = {
-      type: new FieldText(),        // the name of the code
-      typeId: new FieldGuid(),      // the id, overrules the type
+    // this._fields = {
+    //   type: new FieldText(),        // the name of the code
+    //   typeId: new FieldGuid(),      // the id, overrules the type
 
-      street: new FieldText(),
-      number: new FieldText(),
-      suffix: new FieldText(),
-      streetNumber: new FieldText(),
-      zipcode: new FieldZipcode(options),
-      city: new FieldText(),
-      country: new FieldText({emptyAllow: true}),
-      countryId: new FieldGuid({emptyAllow: true}),
+    this._fields.street = new FieldText();
+    this._fields.number = new FieldText();
+    this._fields.suffix = new FieldText();
+    this._fields.streetNumber = new FieldText();
+    this._fields.zipcode = new FieldZipcode(options);
+    this._fields.city = new FieldText();
+    this._fields.country = new FieldText({emptyAllow: true});
+    this._fields.countryId = new FieldGuid({emptyAllow: true});
+    delete this._fields.value;
 
-      _source: new FieldText({ emptyAllow: true }),      // the ref to only update our own info
-    }
+      // _source: new FieldText({ emptyAllow: true }),      // the ref to only update our own info
+    // }
   }
 
   /**

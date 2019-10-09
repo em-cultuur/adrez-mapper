@@ -69,7 +69,8 @@ The folling **baseType** can be expected:
 - gender - value is object {**firstName**, **title**, **subName**}, returns the **typeId**. It's allowed to modify the
 **data** object to reflect the gender change. Return **false** or **undefined** if no change is needed. Overrules the 
 record defined **typeId**, so **typeId** will be the default.
-
+- contactFunction - the value is the textual definition of the function, returns the id
+- contactSalutation the value is the salutation, returns the id
 
 
 (c) MIT 2019 Toxus

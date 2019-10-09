@@ -8,12 +8,16 @@
 
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldGuid;
+const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
 
 // const FieldObject = require('./field-object').FieldObject;
 const FieldComposed = require('./field-composed').FieldComposed;
 const NameParse = require('../lib/name-parser').ParseFullName;
 const _ = require('lodash');
 
+const DEFAULT_FUNCTION = 59470;
+const DEFAULT_SALUTATION = 890;
+const DEFAULT_ORGANISATION = 101;
 class FieldContact extends FieldComposed {
 
   constructor(options = {}) {
@@ -30,12 +34,27 @@ class FieldContact extends FieldComposed {
       name: new FieldText(),
       nameSuffix: new FieldText(),
 
+      functionId: new FieldGuid(),
+      function: new FieldText(),
+      salutationId: new FieldGuid(),
+      salutation: new FieldText(),
+      isDefault: new FieldBoolean(),
+
+      // if parentId is set, parent is ignored
+      parentId: new FieldGuid(),
+      parent: new FieldText(),   // the key from the other contact
+
       search: new FieldText(),
+
+      isOrganisation: new FieldBoolean({emptyAllow: true}),
+      organisation: new FieldText(),
+//      organizationId: new FieldGuid({emptyAllow: true}),
+      // key should an other contacts key
+      key: new FieldText({emptyAllow: true}),
+      contactId: new FieldGuid({emptyAllow: true}),
 
       // used to for calculations
       fullName: new FieldText(),
-      organization: new FieldText({emptyAllow: true}),
-      organizationId: new FieldGuid({emptyAllow: true}),
 
       _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
     });
@@ -54,53 +73,88 @@ class FieldContact extends FieldComposed {
    */
   async processKeys(fieldName, fields, data, logger) {
     let result = {};
-    if (fields.fullName && fields.name === undefined) {
-      // parse the fullname only if there isn't already a name
-      let parsed = this._parser.analyse(data.fullName);
-      if (parsed.error.length) {
-        this.log(logger, 'warn', fieldName + 'fullName', parsed.error.join(', ') );
+    if (data.isOrganisation || (data.organisation && data.organisation.length > 0)) {
+      if (data.organisation) {
+        result.name = data.organisation;
+      } else {
+        result.name = data.name;
       }
-      const mapping = {
-        last : 'name',
-        first: 'firstName',
-        middle: 'middleName',
-        nick: 'nickName',
-        // what to do with the middle name and nick
-        title: 'title',
-        prefix: 'namePrefix',
-        suffix: 'nameSuffix'
-      };
-      for (let field in mapping) {
-        if (parsed[field].length) {
-          data[mapping[field]] = parsed[field];
+      result.key = data.key;
+      result._source = data._source;
+      if (data.typeId === undefined) {
+        result.typeId = await this.lookup.contact(fieldName, {type: data.type}, DEFAULT_ORGANISATION, data)
+      } else {
+        result.typeId = data.typeId;
+      }
+      result.fullName = result.name;
+    } else {
+      if (fields.fullName && fields.name === undefined) {
+        // parse the fullname only if there isn't already a name
+        let parsed = this._parser.analyse(data.fullName);
+        if (parsed.error.length) {
+          this.log(logger, 'warn', fieldName + 'fullName', parsed.error.join(', '));
+        }
+        const mapping = {
+          last: 'name',
+          first: 'firstName',
+          middle: 'middleName',
+          nick: 'nickName',
+          // what to do with the middle name and nick
+          title: 'title',
+          prefix: 'namePrefix',
+          suffix: 'nameSuffix'
+        };
+        for (let field in mapping) {
+          if (parsed[field].length) {
+            data[mapping[field]] = parsed[field];
+          }
         }
       }
-    }
-    if (fields.firstLetters === undefined && data.firstName) {
-      if (data.firstName.indexOf('.') > 0) {  // so not J. but Jaap
-        data.firstLetters = data.firstName;
-        delete data.firstName;
-      } else {
-        data.firstLetters = data.firstName.substr(0, 1).toUpperCase() + '.'
+      if (fields.firstLetters === undefined && data.firstName) {
+        if (data.firstName.indexOf('.') > 0) {  // so not J. but Jaap
+          data.firstLetters = data.firstName;
+          delete data.firstName;
+        } else {
+          data.firstLetters = data.firstName.substr(0, 1).toUpperCase() + '.'
+        }
+        if (data.middleName && data.firstLetters.length) {
+          data.firstLetters += data.middleName.substr(0, 1).toUpperCase() + '.';
+        }
       }
-      if (data.middleName && data.firstLetters.length) {
-        data.firstLetters += data.middleName.substr(0, 1).toUpperCase() + '.';
+      let typeId = await this.lookup.gender(fieldName, {
+        firstName: data.firstName,
+        title: data.title,
+        subName: data.subName,
+        type: data.type
+      }, data.typeId ? data.typeId : 105, data);
+      if (typeId) {
+        data.typeId = typeId;
       }
+      if (data.functionId === undefined) {
+        if (data.function) {
+          data.functionId = await this.lookup.contactFunction(fieldName, {function: data.function}, DEFAULT_FUNCTION, data);
+        } else {
+          data.functionId = DEFAULT_FUNCTION
+        }
+      }
+      if (data.salutationId === undefined) {
+        if (data.salutation) {
+          data.salutationId = await this.lookup.contactSalutation(fieldName, {salutation: data.salutation}, DEFAULT_SALUTATION, data);
+        } else {
+          data.salutationId = DEFAULT_SALUTATION;
+        }
+      }
+
+      this.copyFieldsToResult(result, data, ['fullName', 'function', 'salutation']);
+      result.fullName = result.name + ', ' + (result.firstName ? result.firstName : result.firstLetters) + ' ' + result.namePrefix
     }
-    let typeId = await this.lookup.gender(fieldName, {firstName: data.firstName, title: data.title, subName: data.subName, type: data.type}, data.typeId ? data.typeId : 105, data);
-    if (typeId) {
-      data.typeId = typeId;
-    }
-    this.copyFieldsToResult(result, data, ['fullName']);
-    // the fields have be changed / remove / added. So rebuild
-    // let currentFields = {};
-    // for (let key in result) {
-    //   if (!result.hasOwnProperty(key)) { continue }
-    //   currentFields[key] = this._fields[key];
-    // }
+
     let currentFields = this.remapFields(result);
     return super.processKeys(fieldName, currentFields, result, logger);
   }
 }
 
 module.exports.FieldContact = FieldContact;
+module.exports.DEFAULT_FUNCTION = DEFAULT_FUNCTION;
+module.exports.DEFAULT_SALUTATION = DEFAULT_SALUTATION;
+module.exports.DEFAULT_ORGANISATION = DEFAULT_ORGANISATION;
