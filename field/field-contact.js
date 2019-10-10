@@ -40,17 +40,14 @@ class FieldContact extends FieldComposed {
       salutation: new FieldText(),
       isDefault: new FieldBoolean(),
 
-      // if parentId is set, parent is ignored
-      parentId: new FieldGuid(),
-      parent: new FieldText(),   // the key from the other contact
-
       search: new FieldText(),
 
       isOrganisation: new FieldBoolean({emptyAllow: true}),
       organisation: new FieldText(),
 //      organizationId: new FieldGuid({emptyAllow: true}),
       // key should an other contacts key
-      key: new FieldText({emptyAllow: true}),
+      _key: new FieldText({emptyAllow: true}),  // _parent is defined in the composed type
+      // if _key is defined the contactId is automatic set
       contactId: new FieldGuid({emptyAllow: true}),
 
       // used to for calculations
@@ -146,7 +143,16 @@ class FieldContact extends FieldComposed {
       }
 
       this.copyFieldsToResult(result, data, ['fullName', 'function', 'salutation']);
-      result.fullName = result.name + ', ' + (result.firstName ? result.firstName : result.firstLetters) + ' ' + result.namePrefix
+      let later = result.middleName && result.middleName.length ? (result.firstName + ' ' + result.middleName) : result.firstName && result.firstName.length ? result.firstName : result.firstLetters;
+      if (result.namePrefix) {
+        later += ' ' + result.namePrefix;
+      }
+      if (later) {
+        result.fullName = result.name + ', ' + later;
+      } else {
+        result.fullName = result.name;
+      }
+
     }
 
     let currentFields = this.remapFields(result);

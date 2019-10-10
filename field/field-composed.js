@@ -21,6 +21,7 @@ class FieldComposed extends FieldObject {
       _type: new FieldText({emptyAllow: true}),
       _source: new FieldText({emptyAllow: true}),      // textual version of the sourceId. Overrulde if _sourceId is set
       _sourceId: new FieldText({emptyAllow: true}),    // the codeId to sync with. if not storage space, places in typeId
+      _parent: new FieldText({emptyAllow: true}),      // where is this record linked to
     };
     // this._lookup = options.lookup;
   }

@@ -60,20 +60,24 @@ describe('field.contact', () => {
     it('fullname', async () => {
       let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
       assert(r.firstName === 'Jan' && r.name === 'Hond' && r.namePrefix === 'de', 'got all');
+      assert.equal(r.fullName, 'Hond, Jan de', 'did fix' );
       r = await f.convert('contact', {fullName: 'dr. J. de Hond'}, logger);
+      assert.equal(r.fullName, 'Hond, J. de', 'did it');
       assert(r.title === 'dr.' && r.firstName === undefined && r.firstLetters === 'J.' && r.name === 'Hond' && r.namePrefix === 'de', 'got all');
       r = await f.convert('contact', {fullName: 'Jan Willem de Boer'}, logger);
       assert(r.firstLetters = 'J.W.' && r.firstName === 'Jan' && r.middleName === 'Willem' && r.name === 'Boer' && r.namePrefix === 'de', 'got all');
-      assert.equal(r.fullName, 'Boer, Jan de', 'did generate');
+      assert.equal(r.fullName, 'Boer, Jan Willem de', 'did generate');
       r = await f.convert('contact', {fullName: 'Jack (mojo) Man'}, logger);
       assert(r.firstName === 'Jack' && r.name === 'Man' && r.firstLetters === 'J.' && r.nickName === 'mojo', 'got all');
       r = await f.convert('contact', {fullName: 'Jan Willem Overmars'}, logger);
+      assert.equal(r.fullName, 'Overmars, Jan Willem', 'did')
       assert(r.firstName === 'Jan' && r.middleName === 'Willem' && r.firstLetters === 'J.W.' && r.name === 'Overmars', 'got all');
 
       r = await f.convert('contact', {fullName: 'sergeant majoor Bert de Vries'}, logger);
       assert(r.firstName === 'Bert' && r.name === 'Vries' && r.firstLetters === 'B.' && r.title === 'sergeant majoor', 'got all');
       r = await f.convert('contact', {fullName: 'Abt Jan'}, logger);
       assert(r.name === 'Jan' && r.title === 'Abt', 'got all');
+      assert.equal(r.fullName, 'Jan', 'did')
       r = await f.convert('contact', {fullName: 'Familie E. de Boer-Brenninkmeijer'}, logger);
       assert(r.name === 'Boer-Brenninkmeijer' && r.firstLetters === 'E.' && r.namePrefix === 'de', 'got all');
       r = await f.convert('contact', {fullName: 'Vera de Boer-van Woerdens'}, logger);
@@ -83,6 +87,10 @@ describe('field.contact', () => {
       r = await f.convert('contact', {fullName: 'Jaap Wieger van der Kreeft'}, logger);
       assert(r.name === 'Kreeft' && r.firstLetters === 'J.W.' && r.namePrefix === 'van der' && r.firstName === 'Jaap' && r.middleName === 'Wieger', 'got all')
     });
+    it('specials', async () => {
+      r = await f.convert('contact', {"fullName" :  "Test Customer"}, logger);
+      assert.equal(r.fullName, 'Customer, Test', 'did change')
+    })
   });
   describe('type and lookup',  () => {
     logger.clear();
@@ -165,7 +173,20 @@ describe('field.contact', () => {
       assert.equal(r.fullName, 'Working it', 'got full name');
       assert.equal(r.name, 'Working it', 'got name');
     });
+  });
+  describe('key/parent', () => {
+    it('store the key', async () => {
+      let r = await f.convert('contact', {name: 'Working it', _key: 'theKey'}, logger);
+      assert.isDefined(r._key, 'got key');
+      assert.equal(r._key, 'theKey', 'and set');
+    });
+    it('store the parent', async () => {
+      let r = await f.convert('contact', {name: 'Working it', _parent: 'theKey'}, logger);
+      assert.isDefined(r._parent, 'got key');
+      assert.equal(r._parent, 'theKey', 'and set');
+    })
 
-  })
+  });
+
 })
 
