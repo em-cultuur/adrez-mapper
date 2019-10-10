@@ -48,6 +48,15 @@ describe('field.code', () => {
     })
 
   });
+  describe('key', () => {
+    let f = new FieldCode();
+    it('set', async () => {
+      let r = await f.convert('code', {code: 'Testing', _parent:'test'}, logger);
+      assert.isDefined(r._parent, 'has key');
+      assert.equal(r._parent, 'test', 'got value')
+    });
+  });
+
   describe('in record', async () => {
     let rec = new Record({removeEmpty: false});
     it('list code', async () => {
