@@ -185,8 +185,14 @@ describe('field.contact', () => {
       assert.isDefined(r._parent, 'got key');
       assert.equal(r._parent, 'theKey', 'and set');
     })
-
   });
 
+  describe('locator', () =>  {
+    it('parse', async () => {
+      let r = await f.convert('contact', {name: 'Working it', locator: { fullName: 'test' }}, logger);
+      assert.isDefined(r.locator, 'has locator');
+      assert.isDefined(r.locator.fullName, 'look for');
+    })
+  })
 })
 

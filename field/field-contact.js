@@ -9,7 +9,7 @@
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldGuid;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
-
+const FieldLocator = require('./field-locator').FieldLocator;
 // const FieldObject = require('./field-object').FieldObject;
 const FieldComposed = require('./field-composed').FieldComposed;
 const NameParse = require('../lib/name-parser').ParseFullName;
@@ -18,6 +18,7 @@ const _ = require('lodash');
 const DEFAULT_FUNCTION = 59470;
 const DEFAULT_SALUTATION = 890;
 const DEFAULT_ORGANISATION = 101;
+
 class FieldContact extends FieldComposed {
 
   constructor(options = {}) {
@@ -54,6 +55,7 @@ class FieldContact extends FieldComposed {
       fullName: new FieldText(),
 
       _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
+      locator: new FieldLocator()
     });
     // the contact does not know about values
     delete this._fields.value;
