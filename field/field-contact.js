@@ -78,7 +78,6 @@ class FieldContact extends FieldComposed {
       } else {
         result.name = data.name;
       }
-      // ??? result.key = data.key;
       result._key = data._key;
       result._source = data._source;
       if (data.typeId === undefined) {
@@ -155,9 +154,11 @@ class FieldContact extends FieldComposed {
       } else {
         result.fullName = result.name;
       }
-
     }
 
+    if (data.locator) {
+      result.locator = await fields.locator.convert(fieldName + '.locator', data.locator, logger);
+    }
     let currentFields = this.remapFields(result);
     return super.processKeys(fieldName, currentFields, result, logger);
   }
