@@ -15,7 +15,6 @@ class FieldLocator extends FieldObject {
       search: new FieldText(),
       typeId: new FieldText(),
       type: new FieldText(),
-      _source: new FieldText({emptyAllow: true}),
     });
   }
 }

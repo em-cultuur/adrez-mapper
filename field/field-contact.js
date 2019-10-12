@@ -78,7 +78,8 @@ class FieldContact extends FieldComposed {
       } else {
         result.name = data.name;
       }
-      result.key = data.key;
+      // ??? result.key = data.key;
+      result._key = data._key;
       result._source = data._source;
       if (data.typeId === undefined) {
         result.typeId = await this.lookup.contact(fieldName, {type: data.type}, DEFAULT_ORGANISATION, data)
