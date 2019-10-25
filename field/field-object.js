@@ -106,6 +106,9 @@ class FieldObject extends Field {
       try {
         let fieldDefinition = fields[name];
         result[name] = await fieldDefinition.convert(subName, data[name], logger);
+        if (result[name] === undefined) { // remove keys that are empty
+          delete result[name];
+        }
       } catch (e) {
         this.log(logger,'error', subName, e.message);
       }

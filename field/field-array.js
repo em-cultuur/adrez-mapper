@@ -57,6 +57,7 @@ class FieldArray extends Field {
    * @param fieldName String
    * @param data Object
    * @param logger Class logger
+   * @return Promise (array || undefined if no element)
    */
   async convert(fieldName, data, logger = false) {
     let result = [];
@@ -69,6 +70,9 @@ class FieldArray extends Field {
         if (this._removeEmpty === false || !fieldDefinition.isEmpty(elm)) {
           result.push(elm);
         }
+      }
+      if (result.length === 0) {
+        return Promise.resolve(undefined)
       }
     } else {
       this.log(logger, 'error', fieldName, 'field is not an array')

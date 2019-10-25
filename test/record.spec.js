@@ -118,5 +118,13 @@ describe('record', () => {
       let result = await rec.convert('name', {telephone: [{ telephone: '', typeId: '789'}]});
       assert.equal(result.telephone.length, 1, 'one remain')
     });
+  });
+
+  describe('telephone block remove', () => {
+    it('remove empty', async () => {
+      let rec = new Record({removeEmpty: true});
+      let result = await rec.convert('name', {telephone: [{type: "mobiel KRM",   _parent: "contact"}, { telephone: '', typeId: '789'}]});
+      assert.isUndefined(result.telephone, 'remove key if all is empty')
+    });
   })
 });

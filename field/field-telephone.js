@@ -9,7 +9,7 @@ class FieldTelephone extends FieldComposed {
   constructor(options = {}) {
     super(options);
     this._fields.telephone = new FieldTextTelephone();
-    this._fields.telephoneInt = new FieldTextTelephone({ countryCode :-1})     ; // force to international
+    this._fields.telephoneInt = new FieldTextTelephone({ countryCode: -1})     ; // force to international
   }
 
 

@@ -6,6 +6,7 @@ const Lookup = require('../lib/lookup');
 const FieldTelephone = require('../field/field-telephone').FieldTelephone;
 
 
+
 describe('telephone',  () => {
   let logger = new Logger({toConsole: false});
   let f = new FieldTelephone({ lookup: new Lookup()});
@@ -30,6 +31,14 @@ describe('telephone',  () => {
     let r = await f2.convert('telephone', {telephone: ''}, logger);
     assert.isDefined(r.value, 'still there');
     assert.equal(r.value, '', 'and empty')
-  })
+  });
 
+  it('process', async () => {
+    class TelLook extends Lookup {
+
+    }
+    let f2 = new FieldTelephone({ lookup: new TelLook(), removeEmpty : false});
+    let r = await f2.convert('telephone', {"type": "mobiel KRM",  "_parent": "contact"}, logger);
+    assert.isUndefined(r.value, 'No value');
+  })
 });
