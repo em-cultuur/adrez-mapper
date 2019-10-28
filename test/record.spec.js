@@ -126,5 +126,21 @@ describe('record', () => {
       let result = await rec.convert('name', {telephone: [{type: "mobiel KRM",   _parent: "contact"}, { telephone: '', typeId: '789'}]});
       assert.isUndefined(result.telephone, 'remove key if all is empty')
     });
-  })
+    it('contact - no tel', async () => {
+      let rec = new Record({removeEmpty: true});
+      let data = {
+        "contact": [
+          {"fullName": "Customer"}
+        ],
+        "telephone": [
+          {
+            "type": "mobiel KRM",
+            "_parent": "contact"
+          }
+        ]
+      };
+      let result = await rec.convert('name', data);
+      assert.isUndefined(result.telephone, 'remove key if all is empty')
+    });
+  });
 });

@@ -32,7 +32,7 @@ describe('field.location', () => {
     }
 
     async street(fieldName, locationObj, defaults, data) {
-      return `${locationObj.zipcode}:${locationObj.number}`;
+      return { street: `${locationObj.zipcode}:${locationObj.number}`, city: 'not'};
       //return super.street(fieldName, locationObj, defaults, data);
     }
 
@@ -109,6 +109,7 @@ describe('field.location', () => {
         _source: 'master'
       }, logger);
       assert.equal(r.street, '1017 TE:67', 'found');
+      assert.equal(r.city, 'not', 'and set the city');
     });
   });
   describe('is default', async() => {

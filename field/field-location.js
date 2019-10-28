@@ -83,7 +83,10 @@ class FieldLocation extends FieldComposed {
 
     if (data.zipcode && !data.street) {
       // do a lookup on zipcode for nl && b
-      data.street = await this.lookup.street(fieldName, { zipcode: data.zipcode, number: data.number, countryId: data.countryId}, undefined, data)
+      let d = await this.lookup.street(fieldName, { zipcode: data.zipcode, number: data.number, countryId: data.countryId}, {street: undefined, city: undefined}, data);
+      data.street = d.street;
+      data.city = d.city;
+
     }
     if (!data.zipcode && (data.street && data.number && data.city)) {
       data.zipcode = await this.lookup.zipcode(fieldName, { street: data.street, number: data.number, city: data.city, countryId: data.countryId}, undefined, data)
