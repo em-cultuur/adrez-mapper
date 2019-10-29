@@ -6,21 +6,21 @@
   "scripts": {
     "test": "node --expose-internals ./node_modules/.bin/mocha $(find test -name '*spec.js') --exit --recursive"
   },
-  "author": "Jaap van der Kreeft",
+  "author": "Jay Mc Anser",
   "license": "MIT",
   "dependencies": {
-    "error-types": "git+https://github.com/toxus/error-types.git",
-    "google-libphonenumber": "^3.2.5",
+    "error-types": "git+https://github.com/emcultuur/error-types.git",
+    "google-libphonenumber": "^3.2.6",
     "lodash": "^4.17.15",
-    "logger": "git+https://github.com/toxus/logger.git",
-    "parse-full-name": "github:toxus/parse-full-name"
+    "logger": "git+https://github.com/emcultuur/logger.git",
+    "parse-full-name": "github:emcultuur/parse-full-name"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.2.1"
+    "mocha": "^6.2.2"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/toxus/adrez-mapper.git"
+    "url": "git+https://github.com/emcultuur/adrez-mapper.git"
   }
 }
