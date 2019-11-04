@@ -4,10 +4,10 @@
 
 const Field = require('./field').Field;
 
-class FieldTextNumber extends Field {
+class FieldTextDate extends Field {
   constructor(options = {}){
     super(options);
-    this._name = 'number';
+    this._name = 'date';
   }
 
   isEmpty(data) {
@@ -35,4 +35,4 @@ class FieldTextNumber extends Field {
     }
   }
 }
-module.exports.FieldTextNumber = FieldTextNumber;
+module.exports.FieldTextDate = FieldTextDate;

@@ -36,4 +36,4 @@ class FieldText extends Field {
   }
 }
 module.exports.FieldText = FieldText;
-module.exports.FieldGuid = FieldText;
+module.exports.FieldTextGuid = FieldText;

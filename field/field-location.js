@@ -3,7 +3,7 @@
  */
 
 const FieldText = require('./field-text').FieldText;
-const FieldGuid = require('./field-text').FieldGuid;
+const FieldGuid = require('./field-text').FieldTextGuid;
 
 // const FieldObject = require('./field-object').FieldObject;
 const FieldComposed = require('./field-composed').FieldComposed;

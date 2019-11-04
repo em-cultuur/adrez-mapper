@@ -1,10 +1,10 @@
 
 // const FieldCode = require('./field-code').FieldCode;
-const FieldGuid = require('./field-text').FieldGuid;
+const FieldGuid = require('./field-text').FieldTextGuid;
 const FieldComposed = require('./field-composed').FieldComposed;
 const FieldText = require('./field-text').FieldText;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
-const FieldNumber = require('./field-text-number').FieldNumber;
+const FieldNumber = require('./field-text-number').FieldTextNumber;
 
 /** FIX VALUE DEFINDED IN ADREZ */
 const CODE_TYPE_EXTRA = 11;

@@ -7,7 +7,7 @@
 // const FieldComposed = require('./field-composed').FieldComposed;
 const FieldObject = require('./field-object').FieldObject;
 const FieldText = require('./field-text').FieldText;
-const FieldGuid = require('./field-text').FieldGuid;
+const FieldGuid = require('./field-text').FieldTextGuid;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
 
 

@@ -73,4 +73,10 @@ record defined **typeId**, so **typeId** will be the default.
 - contactSalutation the value is the salutation, returns the id
 
 
-(c) MIT 2019 Toxus
+- campaign - find the type of campaign 
+- campaignGroup - defines the group used in the campaign
+- campaignCode - translates the type to the codeId
+- campaignContact - translate the type in campaign-to-contact
+
+
+&copy; MIT 2019 Toxus
