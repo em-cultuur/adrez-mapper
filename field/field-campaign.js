@@ -7,6 +7,7 @@ const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldTextGuid;
 const FieldDate = require('./field-text-date').FieldTextDate;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
+const FieldLocatorCampaign = require('./field-locator-campaign').FieldLocatorCampaign;
 
 const DEFAULT_CAMPAIGN_TYPE = 492381;
 const DEFAULT_CAMPAIGN_GROUP = 2;
@@ -22,6 +23,8 @@ class FieldCampaign extends FieldComposed {
     this._fields.groupId = new FieldGuid();
 
     this._fields._key = new FieldText({emptyAllow: true});
+
+    this._fields.locator = new FieldLocatorCampaign();
   }
 
 

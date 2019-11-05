@@ -9,7 +9,7 @@
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldTextGuid;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
-const FieldLocator = require('./field-locator').FieldLocator;
+const FieldLocatorContact = require('./field-locator-contact').FieldLocatorContact;
 // const FieldObject = require('./field-object').FieldObject;
 const FieldComposed = require('./field-composed').FieldComposed;
 const NameParse = require('../lib/name-parser').ParseFullName;
@@ -55,7 +55,7 @@ class FieldContact extends FieldComposed {
       fullName: new FieldText(),
 
       _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
-      locator: new FieldLocator()
+      locator: new FieldLocatorContact()
     });
     // the contact does not know about values
     delete this._fields.value;
@@ -157,7 +157,12 @@ class FieldContact extends FieldComposed {
     }
 
     if (data.locator) {
-      result.locator = await fields.locator.convert(fieldName + '.locator', data.locator, logger);
+      if (fields.locator) {
+        result.locator = await fields.locator.convert(fieldName + '.locator', data.locator, logger);
+      } else {
+        // locator was removed because no valid field
+        this.log(logger, 'error', `locator ${fieldName}.locator is empty`);
+      }
     }
     let currentFields = this.remapFields(result);
     return super.processKeys(fieldName, currentFields, result, logger);
