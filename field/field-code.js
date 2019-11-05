@@ -24,6 +24,7 @@ class FieldCode extends FieldObject {
     this._fields._source = new FieldText({emptyAllow: true});      // textual version of the sourceId. Overrulde if _sourceId is set
     this._fields._sourceId = new FieldText({emptyAllow: true});    // the codeId to sync with. if not storage space, places in typeId
     this._fields._parent = new FieldGuid({emptyAllow: true})
+    this.lookupFunc = 'code'
   }
 
 
@@ -41,7 +42,7 @@ class FieldCode extends FieldObject {
     if (fields.codeId) {
       data.typeId = await this._fields.codeId.convert(fieldName, data.codeId, logger)
     } else if (fields.code) {
-      data.typeId = this.lookup ? await this.lookup.code(fieldName, data.code, 0, data) : 0;
+      data.typeId = this.lookup ? await this.lookup[this.lookupFunc](fieldName, data.code, 0, data) : 0;
     } else if (fields.typeId) {
       data.typeId = await this._fields.codeId.convert(fieldName, data.typeId, logger)
     } else  {

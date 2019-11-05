@@ -14,7 +14,8 @@ const FieldCode = require('./field-code').FieldCode;
 const FieldExtra = require('./field-extra').FieldExtra;
 const FieldMemo = require('./field-memo').FieldMemo;
 const FieldCampaign = require('./field-campaign').FieldCampaign;
-const FieldCampaignCodes = require('./field-campaign-code').FieldCampaignCode;
+const FieldCampaignCode = require('./field-campaign-code').FieldCampaignCode;
+const FieldCampaignContact = require('./field-campaign-contact').FieldCampaignContact;
 const _ = require('lodash');
 const Lookup = require('../lib/lookup');
 
@@ -36,8 +37,9 @@ class AdrezRecord extends FieldObject {
       code:         new FieldArray( { type: new FieldCode(_.merge({lookup: this._lookup}, options, options.code)) }, options),
       extra:        new FieldArray( { type: new FieldExtra(_.merge({lookup: this._lookup}, options, options.extra))}, options),
       memo:         new FieldArray( { type: new FieldMemo(_.merge({lookup: this._lookup}, options, options.memo)) }, options ),
-      campaign:     new FieldCampaign({ type: new FieldMemo(_.merge({lookup: this._lookup}, options, options.campaign)) }, options ),
-      campaignCode: new FieldCampaignCodes({ type: new FieldMemo(_.merge({lookup: this._lookup}, options, options.campaignCode)) }, options ),
+      campaign:     new FieldArray({ type: new FieldCampaign(_.merge({lookup: this._lookup}, options, options.campaign)) }, options ),
+      campaignCode: new FieldArray({ type: new FieldCampaignCode(_.merge({lookup: this._lookup}, options, options.campaignCode)) }, options ),
+      campaignContact: new FieldArray({ type: new FieldCampaignContact(_.merge({lookup: this._lookup}, options, options.campaignContact)) }, options ),
     }
   }
 
