@@ -6,21 +6,32 @@ const Lookup = require('../lib/lookup');
 const FieldCampaign = require('../field/field-campaign').FieldCampaign;
 const DEFAULT_CAMPAIGN_TYPE = require('../field/field-campaign').DEFAULT_CAMPAIGN_TYPE;
 const DEFAULT_CAMPAIGN_GROUP = require('../field/field-campaign').DEFAULT_CAMPAIGN_GROUP;
+const DEFAULT_CAMPAIGN_ACTION = require('../field/field-campaign').DEFAULT_CAMPAIGN_ACTION;
+
+
 describe('field.campaign', () => {
   let logger = new Logger({toConsole: false});
 
   class TypeLookup extends Lookup {
-    async campaign(fieldName, value, defaults, data) {
-      if (value.type === 'x') {
+    async campaign(fieldName, type, defaults, data) {
+      if (type === 'x') {
         return 123
       }
-      return super.contact(fieldName, value, defaults, data);
+      return super.campaign(fieldName, type, defaults, data);
     }
-    async campaignGroup(fieldName, value, defaults, data) {
-      if (value.group === 'xx') {
+    async campaignGroup(fieldName, group, defaults, data) {
+      if (group === 'xx') {
         return 123
       }
-      return super.contact(fieldName, value, defaults, data);
+      return super.campaignGroup(fieldName, group, defaults, data);
+    }
+
+    async campaignAction(fieldName, action, defaults, data) {
+      if (action === 'test') {
+        return 123
+      }
+      return super.campaignAction(fieldName, action, defaults, data);
+
     }
   }
 
@@ -53,4 +64,17 @@ describe('field.campaign', () => {
     });
   });
 
+  describe('action', () => {
+    logger.clear();
+    it('translate default', async () => {
+      let r = await f.convert('campaign', {title: 'zeeland'}, logger);
+      assert.equal(r.actionId, DEFAULT_CAMPAIGN_ACTION, 'found default')
+    });
+    it('translate value', async () => {
+      let r = await f.convert('campaign', {title: 'zeeland', action: 'test'}, logger);
+      assert.equal(r.actionId, 123, 'found group')
+    });
+  })
+
 });
+

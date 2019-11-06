@@ -11,6 +11,7 @@ const FieldLocatorCampaign = require('./field-locator-campaign').FieldLocatorCam
 
 const DEFAULT_CAMPAIGN_TYPE = 492381;
 const DEFAULT_CAMPAIGN_GROUP = 2;
+const DEFAULT_CAMPAIGN_ACTION = 9998;
 
 class FieldCampaign extends FieldComposed {
   constructor(options = {}) {
@@ -21,6 +22,9 @@ class FieldCampaign extends FieldComposed {
     this._fields.description = new FieldText();
     this._fields.group = new FieldText();
     this._fields.groupId = new FieldGuid();
+    // the action that added to campaignContact
+    this._fields.actionId = new FieldText();
+    this._fields.action = new FieldText();
 
     this._fields._key = new FieldText({emptyAllow: true});
 
@@ -40,18 +44,25 @@ class FieldCampaign extends FieldComposed {
     let result = {};
     // translate the type of campaign
     if (data.typeId === undefined) {
-      result.typeId = await this.lookup.campaign(fieldName, {type: data.type}, DEFAULT_CAMPAIGN_TYPE, data)
+      result.typeId = await this.lookup.campaign(fieldName, data.type, DEFAULT_CAMPAIGN_TYPE, data)
     } else {
       result.typeId = data.typeId;
     }
     if (data.groupId === undefined) {
-      result.groupId = await this.lookup.campaignGroup(fieldName, {group: data.group}, DEFAULT_CAMPAIGN_GROUP, data)
+      result.groupId = await this.lookup.campaignGroup(fieldName, data.group, DEFAULT_CAMPAIGN_GROUP, data)
     } else {
       result.groupId = data.groupId;
     }
-    result.campaignDate = data.campaignDate ? data.campaignDate : ('' + new Date())
+    if (data.actionId === undefined) {
+      result.actionId = await this.lookup.campaignAction(fieldName, data.action, DEFAULT_CAMPAIGN_ACTION, data);
+    } else {
+      result.actionId = data.actionId;
+    }
 
-    this.copyFieldsToResult(result, data, ['type', 'group']);
+
+    result.campaignDate = data.campaignDate ? data.campaignDate : ('' + new Date());
+
+    this.copyFieldsToResult(result, data, ['type', 'group', 'action']);
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);
   }
@@ -60,3 +71,4 @@ class FieldCampaign extends FieldComposed {
 module.exports.FieldCampaign = FieldCampaign;
 module.exports.DEFAULT_CAMPAIGN_TYPE = DEFAULT_CAMPAIGN_TYPE;
 module.exports.DEFAULT_CAMPAIGN_GROUP = DEFAULT_CAMPAIGN_GROUP;
+module.exports.DEFAULT_CAMPAIGN_ACTION = DEFAULT_CAMPAIGN_ACTION;

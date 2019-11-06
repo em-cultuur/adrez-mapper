@@ -38,6 +38,7 @@ describe('record', () => {
         ]
       };
       let result = await rec.convert('rec', data, logger);
+      console.log(logger.messages)
       assert.equal(logger.hasMessages(), false, 'no errors')
       assert.equal(result.id, '854785', 'got id');
       assert.isDefined(result.campaign, 'did get the campaign');

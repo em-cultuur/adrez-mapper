@@ -75,6 +75,7 @@ record defined **typeId**, so **typeId** will be the default.
 
 - campaign - find the type of campaign 
 - campaignGroup - defines the group used in the campaign
+- campaignAction - defines the action of the campaign contact
 - campaignCode - translates the type to the codeId
 - campaignContact - translate the type in campaign-to-contact
 
