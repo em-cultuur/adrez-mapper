@@ -1,6 +1,6 @@
 {
   "name": "adrez-mapper",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Map objects in to the AdreZ format",
   "main": "index.js",
   "scripts": {

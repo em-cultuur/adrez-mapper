@@ -16,6 +16,7 @@ const DEFAULT_CAMPAIGN_ACTION = 9998;
 class FieldCampaign extends FieldComposed {
   constructor(options = {}) {
     super(options);
+    // source / sourceId is stored in type / typeId
     this._fields.title = new FieldText();
     this._fields.campaignDate = new FieldDate();
     this._fields.isActive = new FieldBoolean();
@@ -45,11 +46,13 @@ class FieldCampaign extends FieldComposed {
     // translate the type of campaign
     if (data.typeId === undefined) {
       result.typeId = await this.lookup.campaign(fieldName, data.type, DEFAULT_CAMPAIGN_TYPE, data)
+      data.typeId = result.typeId;
     } else {
       result.typeId = data.typeId;
     }
     if (data.groupId === undefined) {
       result.groupId = await this.lookup.campaignGroup(fieldName, data.group, DEFAULT_CAMPAIGN_GROUP, data)
+      data.groupId = result.groupId;
     } else {
       result.groupId = data.groupId;
     }
