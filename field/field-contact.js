@@ -15,7 +15,7 @@ const FieldComposed = require('./field-composed').FieldComposed;
 const NameParse = require('../lib/name-parser').ParseFullName;
 const _ = require('lodash');
 
-const DEFAULT_FUNCTION = 59470;
+const DEFAULT_FUNCTION = 0;
 const DEFAULT_SALUTATION = 890;
 const DEFAULT_ORGANISATION = 101;
 
@@ -130,11 +130,12 @@ class FieldContact extends FieldComposed {
         data.typeId = typeId;
       }
       if (data.functionId === undefined) {
-        if (data.function) {
-          data.functionId = await this.lookup.contactFunction(fieldName, {function: data.function}, DEFAULT_FUNCTION, data);
-        } else {
-          data.functionId = DEFAULT_FUNCTION
-        }
+        // if (data.function) {
+        //   data.functionId = await this.lookup.contactFunction(fieldName, {function: data.function}, DEFAULT_FUNCTION, data);
+        // } else {
+        //   data.functionId = DEFAULT_FUNCTION
+        // }
+        data.functionId = await this.lookup.contactFunction(fieldName, {function: data.function}, DEFAULT_FUNCTION, data);
       }
       if (data.salutationId === undefined) {
         if (data.salutation) {
