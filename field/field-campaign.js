@@ -17,14 +17,15 @@ class FieldCampaign extends FieldComposed {
   constructor(options = {}) {
     super(options);
     // source / sourceId is stored in type / typeId
+    this._fields.guid = new FieldGuid();
     this._fields.title = new FieldText();
     this._fields.campaignDate = new FieldDate();
     this._fields.isActive = new FieldBoolean();
     this._fields.description = new FieldText();
-    this._fields.group = new FieldText();
+    this._fields.group = new FieldText({emptyAllow: true});
     this._fields.groupId = new FieldGuid();
     // the action that added to campaignContact
-    this._fields.actionId = new FieldText();
+    this._fields.actionId = new FieldText({emptyAllow: true});
     this._fields.action = new FieldText();
 
     this._fields._key = new FieldText({emptyAllow: true});
