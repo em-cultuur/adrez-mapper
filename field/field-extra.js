@@ -5,6 +5,7 @@ const FieldComposed = require('./field-composed').FieldComposed;
 const FieldText = require('./field-text').FieldText;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
 const FieldNumber = require('./field-text-number').FieldTextNumber;
+const FieldDate = require('./field-text-date').FieldTextDate;
 
 /** FIX VALUE DEFINDED IN ADREZ */
 const CODE_TYPE_EXTRA = 11;
@@ -17,6 +18,7 @@ class FieldExtra extends FieldComposed {
     this._fields.description = new FieldText();
     this._fields.number = new FieldNumber();
     this._fields.groupId = new FieldGuid();
+    this._fields.date = new FieldDate();
   }
 
   /**

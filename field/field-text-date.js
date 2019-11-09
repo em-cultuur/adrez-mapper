@@ -17,7 +17,7 @@ class FieldTextDate extends Field {
     return false;
   }
 
-  /**
+   /**
    * validate a fields properties (keys)
    * it ONLY checkes that the structure of data can be handled by this routine
    *
