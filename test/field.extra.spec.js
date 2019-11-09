@@ -21,7 +21,7 @@ describe('field.extra', () => {
       let r = await f.convert('extra', {text: 'info', type: 'master'}, logger);
       assert.equal(r.text, 'info', 'place in text');
       assert.isDefined(r.typeId, 'has type id');
-      assert.equal(r._type, 'text', 'set the type')
+      assert.equal(r._type, 'string', 'set the type')
     });
     it('description field', async () => {
       let r = await f.convert('extra', {description: 'info', type: 'master'}, logger);
@@ -60,5 +60,80 @@ describe('field.extra', () => {
       assert.equal(r.extra.length, 2, 'two fields');
       assert.isDefined(r.extra[0].typeId, 'has id')
     })
+  });
+
+  describe('_type', async() => {
+    let rec = new Record({removeEmpty: false});
+    it('extra (text/memo)', async () => {
+      let r = await rec.convert('rec', {
+        extra: [{text: 'testing', type: "work"}, {
+          description: 'some more text',
+          type: 'when'
+        }]
+      });
+      assert.isDefined(r.extra, 'should have fields');
+      assert.isTrue(Array.isArray(r.extra), 'returned array');
+      assert.equal(r.extra.length, 2, 'two elements');
+      assert.equal(r.extra[0]._type, 'string', 'is text');
+      assert.equal(r.extra[1]._type, 'memo', 'is memo');
+    });
+    it('extra (bool/number)', async () => {
+      let r = await rec.convert('rec', {
+        extra: [
+          {number: '123', type: "work"},
+          {boolean: 'ja',   type: 'when'}
+        ]
+      });
+      assert.isDefined(r.extra, 'should have fields');
+      assert.isTrue(Array.isArray(r.extra), 'returned array');
+      assert.equal(r.extra.length, 2, 'two elements');
+      assert.equal(r.extra[0]._type, 'integer', 'is nr');
+      assert.equal(r.extra[1]._type, 'boolean', 'is bool');
+      assert.equal(r.extra[1].text, '1', 'just true');
+    });
+    it('extra (date/dateTime)', async () => {
+      let r = await rec.convert('rec', {
+        extra: [
+          {date: '2019-05-12', type: "work"},
+          {dateTime: '2019-05-12 12:00:23',   type: 'when'}
+        ]
+      });
+      assert.isDefined(r.extra, 'should have fields');
+      assert.isTrue(Array.isArray(r.extra), 'returned array');
+      assert.equal(r.extra.length, 2, 'two elements');
+      assert.equal(r.extra[0]._type, 'date', 'is nr');
+      assert.equal(r.extra[1]._type, 'dateTime', 'is bool');
+    });
+
+    it('extra (money)', async () => {
+      let r = await rec.convert('rec', {
+        extra: [
+          {money: '12,50', type: "work"}
+
+        ]
+      });
+      assert.isDefined(r.extra, 'should have fields');
+      assert.isTrue(Array.isArray(r.extra), 'returned array');
+      assert.equal(r.extra.length, 1, 'one elements');
+      assert.equal(r.extra[0]._type, 'money', 'is nr');
+    });
+
+    it('extra (list/image)', async () => {
+      let r = await rec.convert('rec', {
+        extra: [
+          {list: 'a,b,c', type: "work"},
+          {image: 'me.png',   type: 'when'},
+          {multi: 'a;d;d;d', type:'new'}
+        ]
+      });
+      assert.isDefined(r.extra, 'should have fields');
+      assert.isTrue(Array.isArray(r.extra), 'returned array');
+      assert.equal(r.extra.length, 3, 'two elements');
+      assert.equal(r.extra[0]._type, 'list', 'is nr');
+      assert.equal(r.extra[1]._type, 'image', 'is image');
+      assert.equal(r.extra[2]._type, 'multi', 'is multi');
+    });
+
+
   })
 })

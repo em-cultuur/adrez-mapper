@@ -19,6 +19,12 @@ class FieldExtra extends FieldComposed {
     this._fields.number = new FieldNumber();
     this._fields.groupId = new FieldGuid();
     this._fields.date = new FieldDate();
+    this._fields.dateTime = new FieldDate();
+    this._fields.money = new FieldText();
+    // ToDo create some component for these types
+    this._fields.list = new FieldText();
+    this._fields.multi = new FieldText();
+    this._fields.image = new FieldText();
   }
 
   /**
@@ -39,10 +45,29 @@ class FieldExtra extends FieldComposed {
       result._type = 'memo';
     } else if (fields.text) {
       result.text = await this._fields.text.convert(fieldName, data.text, logger);
-      result._type = 'text';
+      result._type = 'string';
     } else if (fields.number) {
       result.text = await this._fields.number.convert(fieldName, data.number, logger);
-      result._type = 'number';
+      result._type = 'integer';
+    } else if (fields.date) {
+      result.text = await this._fields.date.convert(fieldName, data.date, logger);
+      result._type = 'date';
+    } else if (fields.dateTime) {
+      result.text = await this._fields.dateTime.convert(fieldName, data.dateTime, logger);
+      result._type = 'dateTime';
+    } else if (fields.money) {
+      result.text = await this._fields.money.convert(fieldName, data.money, logger);
+      result._type = 'money';
+    } else if (fields.list) {
+      result.text = await this._fields.list.convert(fieldName, data.list, logger);
+      result._type = 'list';
+    } else if (fields.image) {
+      result.text = await this._fields.image.convert(fieldName, data.image, logger);
+      result._type = 'image';
+    } else if (fields.multi) {
+      result.text = await this._fields.multi.convert(fieldName, data.multi, logger);
+      result._type = 'multi';
+
     } else {
       this.log(logger, 'warn',fieldName, 'no data found')
     }
