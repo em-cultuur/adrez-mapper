@@ -54,6 +54,7 @@ console.log(result)
 The folling **baseType** can be expected:
 - contact - value is **text** of type, result is the **typeId**
 - telephone - value is **text**, result is the **id**
+- url - value is **text** result is **id**
 - email - value is **text**, result is the **id**
 - code - value is **text**, result is the **id**
 - extra - value is **text**, result is the **id**
