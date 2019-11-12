@@ -67,7 +67,6 @@ class FieldExtra extends FieldComposed {
     } else if (fields.multi) {
       result.text = await this._fields.multi.convert(fieldName, data.multi, logger);
       result._type = 'multi';
-
     } else {
       this.log(logger, 'warn',fieldName, 'no data found')
     }

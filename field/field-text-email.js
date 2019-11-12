@@ -54,7 +54,7 @@ class FieldTextEmail extends FieldText {
       if (this.validate(fieldName, rec, logger)) {
         return Promise.resolve(rec)
       }
-      this.log(logger, 'error', fieldName, `${rec} is not a valid email`)
+      this.log(logger, 'warn', fieldName, `${rec} is not a valid email`)
       return Promise.resolve('' )
     })
   }
