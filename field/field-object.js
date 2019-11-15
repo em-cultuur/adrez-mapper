@@ -43,10 +43,14 @@ class FieldObject extends Field {
   }
 
   isEmpty(data) {
-    for (let key in this._fields) {
-      if (!this._fields.hasOwnProperty(key)) { continue}
-      if (!this._fields[key].isEmpty(data[key])) {
-        return false;
+    if (data !== undefined && _.isObject(data)) {
+      for (let key in this._fields) {
+        if (!this._fields.hasOwnProperty(key)) {
+          continue
+        }
+        if (!this._fields[key].isEmpty(data[key])) {
+          return false;
+        }
       }
     }
     return true;
