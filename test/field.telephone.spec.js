@@ -26,6 +26,16 @@ describe('telephone',  () => {
     assert.isUndefined(r.telephoneInt, 'removed unneeded fields');
   });
 
+  it('fill leading 0', async () => {
+    let r = await f.convert('telephone', {telephone10: '123456789', _source: 'master'}, logger);
+    assert.equal(r.value, '012-3456789', 'add 0 and convert');
+    r = await f.convert('telephone', {telephone10: '0123456789', _source: 'master'}, logger);
+    assert.equal(r.value, '012-3456789', 'add 0 and convert');
+    r = await f.convert('telephone', {telephone10Int: '123456789', _source: 'master'}, logger);
+    assert.equal(r.value, '+31 (12) 3456789', 'add 0 and convert');
+
+  });
+
   it('leave empty field', async () => {
     let f2 = new FieldTelephone({ lookup: new Lookup(), removeEmpty : false});
     let r = await f2.convert('telephone', {telephone: ''}, logger);

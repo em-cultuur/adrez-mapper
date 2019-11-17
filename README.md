@@ -1,6 +1,6 @@
 #adrez-mapp
 ```sh
-npm install https://github.com/toxus/adrez-mapper.git --save
+npm install https://github.com/em-cultuur/adrez-mapper.git --save
 ```
 Convert a raw address record into the workable version for the AdreZ api
 
@@ -45,6 +45,191 @@ console.log(result)
       ]
     }
 
+````
+
+## structure
+
+The adrezync record structure has the following properties:
+````javascript
+let record = {
+  contact: [
+    {
+      typeId: 'guid',
+      _source: 'string',
+      
+      title: 'string',
+      firstName: 'string',
+      firstLetters: 'string',
+      nickName: 'string',
+      middleName: 'string',
+      namePrefix: 'string',
+      name: 'string',
+      nameSuffix: 'string',
+
+      // fields that are split into the above fields
+      fullName: 'string',    // the fullName is recalucated to the "propper" value
+
+      isDefault: 'boolean',  // default contact for the organisation
+
+      functionId: 'guid',
+      function: 'string',
+      salutationId: 'guid',
+      salutation: 'string',
+
+      isOrganisation: 'boolean', // if true, organisation is place in name and type is set
+      organization: 'string',
+
+      _key: 'string',             // the key for this organisation
+      _parent: 'string',      // links the contact to the organisation by key      
+  
+      locator: {              // the lookup definition. The fields are AND
+        fullName: 'string',
+        search: 'string',
+        id: 'string',
+        typeId: 'string',
+        type: 'string'
+      }     
+    }
+  ],
+  telephone: [
+    {
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
+      type: 'string',
+      value: 'string',
+      isDefault: 'bool',
+      _source: 'string',
+      _parent: 'string',  // the contact it belongs to (contact._key)
+      
+      // fields recalculated
+      // make a fix layout of the telephone
+      telephone: 'string',
+      // make a fix international layout of the telephone
+      telephoneInt: 'string',
+      // add the missing 0 if it's a number
+      telephone10: 'string',
+      // and the internation version
+      telephone10Int: 'string'
+    }
+  ],
+  email: [
+    {
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
+      type: 'string',
+      value: 'string',
+      isDefault: 'bool',
+      _source: 'string',
+      _parent: 'string',  // the contact it belongs to (contact._key)
+      
+      // fields recalculated
+      // make a fix layout
+      email: 'string',
+    }
+  ],
+  location: [
+    {
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
+      type: 'string',     
+      street: 'string',
+      number: 'string',
+      suffix: 'string',
+      zipcode: 'string',
+      city: 'string',
+      countryId: 'string', // if countryId is given, country is ignored      
+      country: 'string',
+
+      _source: 'string',
+      _parent: 'string',  // the contact it belongs to (contact._key)
+
+      // if street or number are missing
+      streetNumber: 'string'
+    }    
+  ],
+  code: [
+    {        
+        typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId         
+        type: 'string',
+        value: 'string',
+        _source: 'string',
+        _parent: 'string',  // the contact it belongs to
+        groupId: 'guid'        
+    }
+  ],
+  memo: [
+    {
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId         
+      type: 'string',
+      description: 'string'
+    }
+  
+  ], 
+  extra: [
+    {
+        typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId         
+        type: 'string',
+        text: 'string',
+        description: 'string',
+        boolean: 'boolean',
+        number: 'number',
+        groupId: 'guid'
+    } 
+  ],
+  url: [
+    {
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
+      type: 'string',
+      value: 'string',
+      isDefault: 'bool',
+      _source: 'string',
+      _parent: 'string',  // the contact it belongs to (contact._key)
+      
+      // input: url: 'http://www.em-cultuur.com:81/test?x=2
+      // www.em-cultuur.com:81
+      url: 'string',
+      // http://www.em-cultuur.com:81/test?x=2
+      href: 'string',
+      // www.em-cultuur.com:81/test?x=2
+      hostPath: 'string',
+      // www.em-cultuur.com
+      origin: 'string'    
+    } 
+  ], 
+  campaign: [
+    { 
+      guid: 'string',
+      title: 'string',
+      campaignDate: 'string',
+      isActive: 'string',
+      description: 'string',
+      group: 'string',
+      groupId: 'number',
+    // the action that added to campaignContact
+      actionId : 'number',
+      action: 'string',
+
+      _key: 'string',
+      locator : {
+        title: 'string',
+        id: 'string'
+      }
+    } 
+  ],
+  campaignCode: [
+    {
+        typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId         
+        type: 'string',
+        value: 'string',
+        _source: 'string',
+        _parent: 'string',  // the contact it belongs to   
+    }
+  ],
+  campaignContact: [
+    {
+      text: 'string',
+      _campaign: 'string',
+      _contact: 'string'
+    }
+  ] 
+}
 ````
 
 [class Lookup](lookup.md)

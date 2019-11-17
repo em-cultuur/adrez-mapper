@@ -10,6 +10,8 @@ class FieldTelephone extends FieldComposed {
     super(options);
     this._fields.telephone = new FieldTextTelephone();
     this._fields.telephoneInt = new FieldTextTelephone({ countryCode: -1})     ; // force to international
+    this._fields.telephone10 = new FieldTextTelephone();
+    this._fields.telephone10Int = new FieldTextTelephone({ countryCode: -1})     ; // force to international
   }
 
 
@@ -27,6 +29,10 @@ class FieldTelephone extends FieldComposed {
     if (fields.value === undefined) {  // value overrules all
       if (fields.telephoneInt) {
         data.value = await this._fields.telephoneInt.convert(fieldName, data.telephoneInt, logger)
+      } else if (fields.telephone10) {
+        data.value = await this._fields.telephone10.convert(fieldName, data.telephone10.padStart(10, '0'), logger)
+      } else if (fields.telephone10Int) {
+        data.value = await this._fields.telephone10Int.convert(fieldName, data.telephone10Int.padStart(10, '0'), logger)
       } else if (fields.telephone) {
         data.value = await this._fields.telephone.convert(fieldName, data.telephone, logger)
       }
