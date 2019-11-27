@@ -32,6 +32,11 @@ describe('field.campaign-code', () => {
       let r = await f.convert('campaigncode', {code: 'uitnodiging'}, logger);
       assert.equal(r.typeId, '123', 'found default')
     });
+
+    it('use type', async () => {
+      let r = await f.convert('campaignCode',   { "_parent": "campaign", "code": "uitnodiging" });
+      assert.equal(r.typeId, '123', 'found default')
+    })
   });
 
 });
