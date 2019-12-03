@@ -49,6 +49,9 @@ class FieldTextTelephone extends FieldText {
 
     number.netCode = phoneInt.substring(phoneInt.indexOf(' ') + 1);
     number.netCode = number.netCode.replace(/-/g, ' ');
+    if (typeof number.netCode !== 'string') {
+      number.netCode = '';
+    }
     if (number.netCode.indexOf(' ') !== -1 && number.netCode.substring(number.netCode.indexOf(' ') + 1).length >= 7) {
       number.number = number.netCode.substring(number.netCode.indexOf(' ') + 1);
       number.netCode = number.netCode.substring(0, number.netCode.indexOf(' '));
@@ -69,11 +72,11 @@ class FieldTextTelephone extends FieldText {
     }
     let tel = this._phoneUtil.parse(telephone, this._country); // this._defaultCountryCode());
     let format = this._format;
-    let countryCode = tel.getCountryCode(); 
+    let countryCode = tel.getCountryCode();
     if (countryCode === this._countryCode) {
       format = this._formatLocal
     }
-    
+
     const phoneInt = this._phoneUtil.format(tel, this._PNF.INTERNATIONAL);
     const number = this._checkNetCodeAndNumber(phoneInt, countryCode);
 
