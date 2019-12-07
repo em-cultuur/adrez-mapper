@@ -37,7 +37,7 @@ class FieldTelephone extends FieldComposed {
         data.value = await this._fields.telephone.convert(fieldName, '' + data.telephone, logger)
       }
     }
-    this.copyFieldsToResult(result, data, ['telephone', 'telephoneInt']);
+    this.copyFieldsToResult(result, data, ['telephone', 'telephoneInt','telephone10', 'telephone10Int']);
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);
   }
