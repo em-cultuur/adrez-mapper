@@ -12,7 +12,7 @@ class FieldLocatorCampaign extends FieldLocator {
     this._fields = _.merge(this._fields, {
       title: new FieldText(),
       id: new FieldTextGuid(),
-      sync: new FieldTextGuid()
+      guid: new FieldTextGuid()
     });
   }
 }
