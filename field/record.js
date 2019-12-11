@@ -29,7 +29,10 @@ class AdrezRecord extends FieldObject {
     this._lookup = options.lookup ? options.lookup : new Lookup();
 
     this._fields = {
+      // id = synId
       id: new FieldGuid(),
+      // contactId is the true address id
+      contactId: new FieldGuid(),
 
       contact:      new FieldArray( { type: new FieldContact(_.merge({lookup: this._lookup}, options, options.contact)) }, options),
       email:        new FieldArray( { type: new FieldEmail(_.merge({lookup: this._lookup}, options, options.email)) }, options),
