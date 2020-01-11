@@ -80,9 +80,9 @@ describe('field.campaign', () => {
 
   describe('locator', () =>  {
     it('parse', async () => {
-      let r = await f.convert('campaign', {title: 'Working it', locator: { sync: 'c.123' }}, logger);
+      let r = await f.convert('campaign', {title: 'Working it', locator: { guid: 'c.123' }}, logger);
       assert.isDefined(r.locator, 'has locator');
-      assert.isDefined(r.locator.sync, 'c.123');
+      assert.isDefined(r.locator.guid, 'c.123');
     })
   })
 });
