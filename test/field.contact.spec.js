@@ -194,9 +194,10 @@ describe('field.contact', () => {
       assert.isDefined(r.locator.fullName, 'look for');
     });
     it('guid', async () => {
-      let r = await f.convert('contact', {name: 'Working it', locator: { guid: 'g.1' }}, logger);
+      let r = await f.convert('contact', {name: 'Working it', guid: 'g.1', locator: { guid: 'g.1' }}, logger);
       assert.isDefined(r.locator, 'has locator');
       assert.isDefined(r.locator.guid, 'look for');
+      assert.equal(r.guid, 'g.1', 'has guid')
     })
 
   })

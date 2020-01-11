@@ -25,6 +25,7 @@ class FieldContact extends FieldComposed {
     super(options);
     this._fields = _.merge(this._fields, {
       // fields for the database
+      guid: new FieldGuid(),
       subName: new FieldText(),        // the name of the code
       firstName: new FieldText(),      // the id, overrules the type
       middleName: new FieldText(),
