@@ -13,6 +13,7 @@ class FieldLocatorContact extends FieldLocator {
       // _sync : new FieldTextBoolean(),
       id: new FieldGuid(),
       fullName: new FieldText(),
+      guid: new FieldGuid(),
       search: new FieldText(),
       typeId: new FieldText(),
       type: new FieldText(),
