@@ -192,7 +192,13 @@ describe('field.contact', () => {
       let r = await f.convert('contact', {name: 'Working it', locator: { fullName: 'test' }}, logger);
       assert.isDefined(r.locator, 'has locator');
       assert.isDefined(r.locator.fullName, 'look for');
+    });
+    it('guid', async () => {
+      let r = await f.convert('contact', {name: 'Working it', locator: { guid: 'g.1' }}, logger);
+      assert.isDefined(r.locator, 'has locator');
+      assert.isDefined(r.locator.guid, 'look for');
     })
+
   })
-})
+});
 
