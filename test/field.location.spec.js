@@ -134,5 +134,19 @@ describe('field.location', () => {
       assert.isTrue(r.isDefault, 'and true')
     });
 
+    it('validate street', async () => {
+      let r = await f.convert('location', {
+        streetNumber: 'Wijnhaven 23',
+        city: 'Amsterdam',
+        zipcode: '',
+        countryId: '500',
+        _source: 'master',
+        isDefault: true
+      }, logger);
+      assert.equal(r.street, 'Wijnhaven', 'waarom geen bier');
+      assert.equal(r.number, '23', 'has number');
+      assert.equal(r.countryId, '500', 'has country');
+    });
+
   })
 });

@@ -39,6 +39,8 @@ describe('field.campaign', () => {
     lookup: new TypeLookup()
   });
 
+
+
   describe('type/source',  () => {
     logger.clear();
     it('translate default', async () => {
@@ -74,7 +76,14 @@ describe('field.campaign', () => {
       let r = await f.convert('campaign', {title: 'zeeland', action: 'test'}, logger);
       assert.equal(r.actionId, 123, 'found group')
     });
-  })
+  });
 
+  describe('locator', () =>  {
+    it('parse', async () => {
+      let r = await f.convert('campaign', {title: 'Working it', locator: { sync: 'c.123' }}, logger);
+      assert.isDefined(r.locator, 'has locator');
+      assert.isDefined(r.locator.sync, 'c.123');
+    })
+  })
 });
 

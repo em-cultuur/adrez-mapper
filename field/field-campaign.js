@@ -67,6 +67,15 @@ class FieldCampaign extends FieldComposed {
     result.campaignDate = data.campaignDate ? data.campaignDate : ('' + new Date());
 
     this.copyFieldsToResult(result, data, ['type', 'group', 'action']);
+    if (data.locator) {
+      if (fields.locator) {
+        result.locator = await fields.locator.convert(fieldName + '.locator', data.locator, logger);
+      } else {
+        // locator was removed because no valid field
+        this.log(logger, 'error', `locator ${fieldName}.locator is empty`);
+      }
+    }
+
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);
   }

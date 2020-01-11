@@ -209,7 +209,8 @@ let record = {
       _key: 'string',
       locator : {
         title: 'string',
-        id: 'string'
+        id: 'string',
+        sync: 'string'
       }
     } 
   ],
