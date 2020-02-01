@@ -11,6 +11,37 @@ describe('record', () => {
   let logger = new Logger({toConsole: false});
 
 
+  describe('url load remote config', () => {
+    it('load config with instagram', async () => {
+      let rec = new Record({removeEmpty: true,  url: {urls: [
+            { name: 'facebook', url: 'facebook\.com', typeId: 141},
+            { name: 'instagram',  url: 'instagram\.com', typeId: 154},
+            { name: 'linkedIn', url: 'www\.linkedin\.com\/in\/', typeId: 142},
+            { name: 'twitter', url: 'twitter\.com', typeId: 143 }
+          ]
+        }});
+      //{url: 'http://www.facebook.com'}
+      let result = await rec.convert('remoteConfig', {url: [{url: 'http://www.instagram.com'}, { url: 'www.linkedin.com/in/jaap'}]});
+      assert.equal(result.url.length, 2,'2 urls');
+      assert.equal(result.url[0].typeId, 154, 'did set the type');
+    });
+    it('contact - no tel', async () => {
+      let rec = new Record({removeEmpty: true});
+      let data = {
+        "contact": [
+          {"fullName": "Customer"}
+        ],
+        "telephone": [
+          {
+            "type": "mobiel KRM",
+            "_parent": "contact"
+          }
+        ]
+      };
+      let result = await rec.convert('name', data);
+      assert.isUndefined(result.telephone, 'remove key if all is empty')
+    });
+  });
 
   describe('convert', () => {
     let rec = new Record();
@@ -143,6 +174,9 @@ describe('record', () => {
       assert.isUndefined(result.telephone, 'remove key if all is empty')
     });
   });
+
+
+
 
 
 });

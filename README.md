@@ -185,9 +185,7 @@ let record = {
       // input: url: 'http://www.em-cultuur.com:81/test?x=2
       // www.em-cultuur.com:81
       url: 'string',
-      // http://www.em-cultuur.com:81/test?x=2
-      href: 'string',
-      // www.em-cultuur.com:81/test?x=2
+      // http://www.em-cultuur.com:81/test?x=2   
       hostPath: 'string',
       // www.em-cultuur.com
       origin: 'string'    
@@ -233,6 +231,29 @@ let record = {
 }
 ````
 
+## url
+The url definition of the parser can be configured so it automatically analyses the type of url send. This option
+makes it possible to identify facebook, linkedIn and twitter accounts. The list of urls to recognize can be
+adjusted by adding options to the initial creation of the record.
+
+example:
+```javascript
+let rec = new Record({removeEmpty: true,  url: {
+    urls: [
+      { name: 'facebook', url: 'facebook\.com', typeId: 141},
+      { name: 'instagram',  url: 'instagram\.com', typeId: 154},
+      { name: 'linkedIn', url: 'www\.linkedin\.com\/in\/', type: 'Instagram'}
+   ]
+   }});
+```
+properties:
+- name: the identifies the parser. If the parser already exist the existing one is overwritten
+- url; the regEx for analysing the url
+- typeId: defines the type of record it will become
+- type: if defined and typeId is **not** defined it can be used to create new codes
+
+
+
 [class Lookup](lookup.md)
 
 ## lookup function
@@ -267,4 +288,4 @@ record defined **typeId**, so **typeId** will be the default.
 - campaignContact - translate the type in campaign-to-contact
 
 
-&copy; MIT 2019 Toxus
+&copy; MIT 2019-2020 Toxus

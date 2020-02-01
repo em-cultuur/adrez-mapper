@@ -15,7 +15,7 @@ const URL = require('url');
 class FieldTextUrl extends FieldText {
   constructor(options = {}){
     super(options);
-    this._part = options.part === undefined ? 'hostname' : options.part;
+    this._part = options.part === undefined ? 'href' : options.part;
     this._name = 'url';
   }
 
@@ -27,6 +27,12 @@ class FieldTextUrl extends FieldText {
       switch (this._part) {
         case 'href':
           result = parsed.href;
+          if (parsed.protocol === null) {
+            parsed.protocol = '';
+          }
+          if (result.substr(0, parsed.protocol.length) === parsed.protocol) {
+            result = result.substr(parsed.protocol.length + 2);
+          }
           break;
         case 'hostPath':
           result = parsed.host + parsed.path;
