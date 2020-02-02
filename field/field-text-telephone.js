@@ -70,7 +70,13 @@ class FieldTextTelephone extends FieldText {
     if (telephone === undefined || telephone.length === 0) {
       return Promise.resolve(telephone);
     }
-    let tel = this._phoneUtil.parse(telephone, this._country); // this._defaultCountryCode());
+    let tel;
+    try {
+      tel = this._phoneUtil.parse(telephone, this._country); // this._defaultCountryCode());
+    } catch (err) {
+      this.log(logger, 'warn', fieldName, `${tel} => ${err.message}`);
+      return Promise.resolve(telephone);
+    }
     let format = this._format;
     let countryCode = tel.getCountryCode();
     if (countryCode === this._countryCode) {
@@ -107,7 +113,7 @@ class FieldTextTelephone extends FieldText {
       if (this.validate(fieldName, rec, logger)) {
         return Promise.resolve(rec)
       }
-      this.log(logger, 'error', fieldName, `${rec} is not a valid email`)
+      this.log(logger, 'error', fieldName, `${rec} is not a valid telephone`)
       return Promise.resolve('' )
     })
   }

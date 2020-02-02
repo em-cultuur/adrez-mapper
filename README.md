@@ -5,6 +5,9 @@ npm install https://github.com/em-cultuur/adrez-mapper.git --save
 ```
 Convert a raw address record into the workable version for the AdreZ api
 
+## Revisions
+see: [revisions.md](revisions.md)
+
 ````javascript
 const Record = require('adrez-mapper').AdrezRecord;
 const Logger = require('logger');
