@@ -1,4 +1,4 @@
-# adrez-mapp
+# adrez-mapper
 _version: 0.4.13_
 ```sh
 npm install https://github.com/em-cultuur/adrez-mapper.git --save
