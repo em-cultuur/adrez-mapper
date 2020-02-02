@@ -33,6 +33,10 @@ class FieldTextUrl extends FieldText {
           if (result.substr(0, parsed.protocol.length) === parsed.protocol) {
             result = result.substr(parsed.protocol.length + 2);
           }
+          // remove the irritating / on the end
+          if (result[result.length - 1] === '/') {
+            result = result.substr(0, result.length -1)
+          }
           break;
         case 'hostPath':
           result = parsed.host + parsed.path;
