@@ -6,9 +6,16 @@ const FieldComposed = require('./field-composed').FieldComposed;
 const FieldTextUrl = require('./field-text-url').FieldTextUrl;
 const FieldText = require('./field-text').FieldText;
 
+// ------
+// default type of none is give. Can be set in the options by the DEFAULT_CODE_URL key
+let DEFAULT_CODE_URL = 117;
+
 class FieldUrl extends FieldComposed {
   constructor(options = {}) {
     super(options);
+    if (options.DEFAULT_CODE_URL) {
+      DEFAULT_CODE_URL = options.DEFAULT_CODE_URL;
+    }
     this._fields.url = new FieldTextUrl({part: 'href'});
     // this._fields.href = new FieldTextUrl({part: 'href'});
     this._fields.hostPath = new FieldTextUrl({part: 'hostPath'});
@@ -112,6 +119,9 @@ class FieldUrl extends FieldComposed {
         }
         skipFields.push(name)
       }
+    }
+    if (!data.typeId) {
+      data.typeId = DEFAULT_CODE_URL;
     }
     this.copyFieldsToResult(result, data, skipFields);
     let cFields = this.remapFields(result);
