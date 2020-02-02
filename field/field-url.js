@@ -17,17 +17,17 @@ class FieldUrl extends FieldComposed {
     // convert the auto loaded urls in regex
     // textRegEx is the part that holds the name of the account
     this._urls = {
-      twitter: {
+      Twitter: {
         url: new RegExp('twitter\.com'),
         typeId: 140,
         textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?twitter\\.com\\/(?:(?:\\w)*#!\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
      },
-     facebook: {
+     Facebook: {
        url: new RegExp('facebook\.com'),
        typeId: 142,
        textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?facebook\\.com\\/(?:(?:\\w)*#!\\/)?(?:pages\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
      },
-     linkedIn: {
+     LinkedIn: {
        url: new RegExp('linkedin\.com\/'),
        typeId: 143,
        // textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?linkedin.com(\\w+:{0,1}\\w*@)?(\\S+)(:([0-9])+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?')
