@@ -36,7 +36,7 @@ describe('field.url', () => {
 
   it('load direct types', async () => {
     let f2 = new FieldUrl({lookup: new Lookup(), removeEmpty: false});
-    r = await f2.convert('url', {twitter: 'emcultuur'}, logger);
+    r = await f2.convert('url', {Twitter: 'emcultuur'}, logger);
     assert.equal(r.value, 'emcultuur', 'just the name');
     assert.equal(r.typeId, '140', 'found type');
   });
@@ -62,15 +62,12 @@ describe('field.url', () => {
     let f2 = new FieldUrl({
       lookup: new Lookup(), removeEmpty: false,
       urls: [
-        {name: 'facebook', url: 'facebook\.com', typeId: 141},
-        {name: 'instagram', url: 'instagram\.com', typeId: 154},
-        {name: 'linkedIn', url: 'www\.linkedin\.com\/in\/', typeId: 142},
-        {name: 'twitter', url: 'twitter\.com', typeId: 143}
+        {name: 'Instagram', url: 'instagram\.com', typeId: 154},
       ]
     });
     let r = await f2.convert('url', {url: 'http://www.linkedin.com/in/toxus'}, logger);
-    assert.equal(r.value, 'www.linkedin.com/in/toxus', 'has url with name');
-    assert.equal(r.typeId, '142', 'found type');
+    assert.equal(r.value, 'toxus', 'has url with name');
+    assert.equal(r.typeId, '143', 'found type');
   });
 
 });

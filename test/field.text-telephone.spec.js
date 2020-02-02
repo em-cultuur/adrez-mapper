@@ -21,10 +21,18 @@ describe('text-telephone',  () => {
   it('too long', async () => {
     let f = new FieldTextTelephone();
     let r = await f.convert('telephone', '020-6253215 is too long', logger);
-    assert.equal(r, '020-6253215 is too long', 'nothing changed')
+    assert.equal(r, '020-6253215 is too long #import', 'nothing changed')
     assert.equal(logger.hasWarnings(), true, 'has an error');
     logger.clear();
   });
-
-
+  it('telephone issues #14', async () => {
+    let f = new FieldTextTelephone();
+    assert.equal(logger.hasWarnings(), false, 'clean');
+    let r = await f.convert('telephone', '085-4898985123123123', logger);
+    assert.equal(r, '085-4898985123123123 #import', 'got the number');
+    assert.equal(logger.hasWarnings(), true, 'something is wrong');
+    assert.equal(logger.warnings.length, 1, 'one warning');
+    assert.equal(logger.warnings[0].message, '085-4898985123123123 => The string supplied is too long to be a phone number' , 'the warning');
+    logger.clear();
+  });
 });

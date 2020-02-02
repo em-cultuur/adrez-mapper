@@ -5,13 +5,31 @@
 const FieldComposed = require('./field-composed').FieldComposed;
 const FieldTextTelephone = require('./field-text-telephone').FieldTextTelephone;
 
+let CODE_IDS = {
+  'telephone' : 113,  // the default one
+  'mobile': 114,
+  'fax': 116
+};
 class FieldTelephone extends FieldComposed {
   constructor(options = {}) {
     super(options);
-    this._fields.telephone = new FieldTextTelephone();
-    this._fields.telephoneInt = new FieldTextTelephone({ countryCode: -1})     ; // force to international
-    this._fields.telephone10 = new FieldTextTelephone();
-    this._fields.telephone10Int = new FieldTextTelephone({ countryCode: -1})     ; // force to international
+    if (options.CODE_IDS) {
+      CODE_IDS = options.CODE_IDS;
+    }
+
+    this._baseNames = ['telephone', 'mobile', 'fax'];
+    this._skipName = [];
+    for (let l = 0; l < this._baseNames.length; l++) {
+      let name = this._baseNames[l];
+      this._fields[name] = new FieldTextTelephone();
+      this._skipName.push(name);
+      this._fields[name + 'Int'] = new FieldTextTelephone({countryCode: -1}); // force to international
+      this._skipName.push(name + 'Int');
+      this._fields[name + '10'] = new FieldTextTelephone();
+      this._skipName.push(name + '10');
+      this._fields[name + '10Int'] = new FieldTextTelephone({countryCode: -1}); // force to international
+      this._skipName.push(name + '10int');
+    }
   }
 
 
@@ -25,19 +43,28 @@ class FieldTelephone extends FieldComposed {
    */
   async processKeys(fieldName, fields, data, logger) {
     let result = {};
-
-    if (fields.value === undefined) {  // value overrules all
-      if (fields.telephoneInt) {
-        data.value = await this._fields.telephoneInt.convert(fieldName, '' + data.telephoneInt, logger)
-      } else if (fields.telephone10) {
-        data.value = await this._fields.telephone10.convert(fieldName, ('' + data.telephone10).padStart(10, '0'), logger)
-      } else if (fields.telephone10Int) {
-        data.value = await this._fields.telephone10Int.convert(fieldName, ('' + data.telephone10Int).padStart(10, '0'), logger)
-      } else if (fields.telephone) {
-        data.value = await this._fields.telephone.convert(fieldName, '' + data.telephone, logger)
+    if (!fields.value) {
+      for (let l = 0; l < this._baseNames.length; l++) {
+        let name = this._baseNames[l];
+        if (fields[name + 'Int']) {
+          data.value = await this._fields[name + 'Int'].convert(fieldName, '' + data[name + 'Int'], logger)
+        } else if (fields[name + '10']) {
+          data.value = await this._fields[name + '10'].convert(fieldName, ('' + data[name + '10']).padStart(10, '0'), logger)
+        } else if (fields[name + '10Int']) {
+          data.value = await this._fields[name + '10Int'].convert(fieldName, ('' + data[name + '10Int']).padStart(10, '0'), logger)
+        } else if (fields[name]) {
+          data.value = await this._fields[name].convert(fieldName, '' + data[name], logger)
+        }
+        if (data.value) {
+          data.typeId = CODE_IDS[name];
+          break; // done it, only one is accepted
+        }
       }
     }
-    this.copyFieldsToResult(result, data, ['telephone', 'telephoneInt','telephone10', 'telephone10Int']);
+    if (!data.typeId) {
+      data.typeId = CODE_IDS[Object.keys(CODE_IDS)[0]];
+    }
+    this.copyFieldsToResult(result, data, this._skipName);
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);
   }

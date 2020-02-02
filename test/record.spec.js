@@ -91,7 +91,6 @@ describe('record', () => {
       let r = await rec.convert('rec', {email: [{email: 'info@test.com', type: 'work'}]}, logger);
       assert.equal(r.email[0].value,'info@test.com', 'did the convert');
       assert.isUndefined(r.email[0].type, 'removed type');
-      assert.isDefined(r.email[0].typeId, 'changed to number');
       assert.equal(r.email[0].typeId, 1234, 'did read it');
     });
   });

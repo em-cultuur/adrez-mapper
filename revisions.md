@@ -1,11 +1,15 @@
 # adrez-mapper Revisions
-version: 0.4.15 (dd: 2020-02-02)
+version: 0.4.16 (dd: 2020-02-02)
 
 
-2020-02-02
+2020-02-02 (0.4.16)
 - if the telephone number is not valid it is still return and a warning is added to the log
+- (phonenumber issues #15) - if telephone to long the #import is appended. Can be set by options.ERROR_CODE
+- (telephone issues #14) - value of the telephone field with #import appended and is stored and in the error report
+- (emailadres/telefoon en adres naar code_ID 115,113, 11 #12). Fix so the type is automatically set.
+If a manual changes is needed use the type or typeId
 
-2020-020-01
+2020-02-01 (0.4.13)
 - the url is now extended so can include configurable "Facebook", etc
 - default type is set to 117. it can be changed by setting the **DEFAULT_CODE_URL** of the options.url 
 - documentation adjusted so it can read different formats of urls

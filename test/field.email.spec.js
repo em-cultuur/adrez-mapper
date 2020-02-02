@@ -28,5 +28,13 @@ describe('field.email', () => {
     let r = await f2.convert('email', {email: ''}, logger);
     assert.isDefined(r.value, 'still there');
     assert.equal(r.value, '', 'and empty')
+  });
+
+  it('force type', async () => {
+    let f2 = new FieldEmail();
+    let r = await f2.convert('email', {email: 'info@emcultuur.nl'}, logger);
+    assert.equal(r.value, 'info@emcultuur.nl', 'value');
+    assert.equal(r.typeId, 115, 'did set the typeId')
   })
-})
+
+});

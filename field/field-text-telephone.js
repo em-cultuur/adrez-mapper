@@ -6,11 +6,14 @@ const FieldText = require('./field-text').FieldText;
 const _ = require('lodash');
 const ErrorNotValid = require('./field').ErrorNotValid;
 
-
+let ERROR_CODE = '#import'
 class FieldTextTelephone extends FieldText {
 
   constructor(options = {}){
     super(options);
+    if (options.ERROR_CODE) {
+      ERROR_CODE = options.ERROR_CODE;
+    }
     this._name = 'telephone';
     this._PNF = require('google-libphonenumber').PhoneNumberFormat;
     this._phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
@@ -74,8 +77,8 @@ class FieldTextTelephone extends FieldText {
     try {
       tel = this._phoneUtil.parse(telephone, this._country); // this._defaultCountryCode());
     } catch (err) {
-      this.log(logger, 'warn', fieldName, `${tel} => ${err.message}`);
-      return Promise.resolve(telephone);
+      this.log(logger, 'warn', fieldName, `${telephone} => ${err.message}`);
+      return Promise.resolve(telephone + ' ' + ERROR_CODE);
     }
     let format = this._format;
     let countryCode = tel.getCountryCode();
