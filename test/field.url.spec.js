@@ -34,17 +34,43 @@ describe('field.url', () => {
     assert.equal(r.value, undefined, 'not there');
   });
 
+  it('load direct types', async () => {
+    let f2 = new FieldUrl({lookup: new Lookup(), removeEmpty: false});
+    r = await f2.convert('url', {twitter: 'emcultuur'}, logger);
+    assert.equal(r.value, 'emcultuur', 'just the name');
+    assert.equal(r.typeId, '140', 'found type');
+  });
+
+
+  it('load default types', async () => {
+    let f2 = new FieldUrl({ lookup: new Lookup(), removeEmpty: false});
+    r = await f2.convert('url', {url: 'http://www.twitter.com/emcultuur'}, logger);
+    assert.equal(r.value, 'emcultuur', 'just the name');
+    assert.equal(r.typeId, '140', 'found type');
+
+    r = await f2.convert('url', {url: 'http://www.linkedin.com/in/emcultuur'}, logger);
+    assert.equal(r.value, 'emcultuur', 'just the name');
+    assert.equal(r.typeId, '143', 'found type');
+
+    r = await f2.convert('url', {url: 'http://www.facebook.com/emcultuur'}, logger);
+    assert.equal(r.value, 'emcultuur', 'just the name');
+    assert.equal(r.typeId, '142', 'found type');
+
+  });
+
   it('load special types', async () => {
-    let f2 = new FieldUrl({ lookup: new Lookup(), removeEmpty : false,
+    let f2 = new FieldUrl({
+      lookup: new Lookup(), removeEmpty: false,
       urls: [
-        { name: 'facebook', url: 'facebook\.com', typeId: 141},
-        { name: 'instagram',  url: 'instagram\.com', typeId: 154},
-        { name: 'linkedIn', url: 'www\.linkedin\.com\/in\/', typeId: 142},
-        { name: 'twitter', url: 'twitter\.com', typeId: 143 }
+        {name: 'facebook', url: 'facebook\.com', typeId: 141},
+        {name: 'instagram', url: 'instagram\.com', typeId: 154},
+        {name: 'linkedIn', url: 'www\.linkedin\.com\/in\/', typeId: 142},
+        {name: 'twitter', url: 'twitter\.com', typeId: 143}
       ]
     });
     let r = await f2.convert('url', {url: 'http://www.linkedin.com/in/toxus'}, logger);
     assert.equal(r.value, 'www.linkedin.com/in/toxus', 'has url with name');
-    assert.equal(r.typeId, '142', 'found type')
-  })
+    assert.equal(r.typeId, '142', 'found type');
+  });
+
 });

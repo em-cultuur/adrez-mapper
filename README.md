@@ -1,5 +1,5 @@
 # adrez-mapper
-_version: 0.4.13_
+_version: 0.4.14_
 ```sh
 npm install https://github.com/em-cultuur/adrez-mapper.git --save
 ```
@@ -240,24 +240,46 @@ adjusted by adding options to the initial creation of the record.
 example:
 ```javascript
 let rec = new Record({removeEmpty: true,  url: {
-    urls: [
-      { name: 'facebook', url: 'facebook\.com', typeId: 141},
-      { name: 'instagram',  url: 'instagram\.com', typeId: 154},
-      { name: 'linkedIn', url: 'www\.linkedin\.com\/in\/', type: 'Instagram'}
-   ]
-   }});
+    urls: { 
+       instagram: { 
+         url: 'instagram\.com', 
+         typeId: 146,
+         textRegEx: '(?:https?:\/\/)?(?:www\.)?twitter\.com\/(?:(?:\w)*#!\/)?(?:[\w\-]*\/)*([\w\-\.]*)' 
+       }        
+    }}}
+  );
 ```
 properties:
-- name: the identifies the parser. If the parser already exist the existing one is overwritten
+- object name: the identifies the parser. If the parser already exist the existing one is overwritten
+  the name is also available for direct access to the property. This means that by creating the field
+  instagram, the definition is also available in the data record by the name. So the two following examples 
+  are the same
+```javascript
+  {
+    "instagram": "emcultuur"
+  },
+  {
+    "url": "http://www.instagram.com/emcultuur" 
+  }
+```
+Both will produce the data record of:
+```javascript
+  {
+    "value": "emcultuur",
+    "typeId": 146
+  }
+```  
 - url; the regEx for analysing the url
 - typeId: defines the type of record it will become
 - type: if defined and typeId is **not** defined it can be used to create new codes
+- textRegEx: the regexpression that extracts the name of the account. If found it will overrule the url
+  and replace it.
 
 
 
-[class Lookup](lookup.md)
+# [class Lookup](lookup.md)
 
-## lookup function
+### lookup function
 
 The folling **baseType** can be expected:
 - contact - value is **text** of type, result is the **typeId**
