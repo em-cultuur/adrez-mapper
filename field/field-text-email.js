@@ -6,29 +6,27 @@ const FieldText = require('./field-text').FieldText;
 const _ = require('lodash');
 const ErrorNotValid = require('./field').ErrorNotValid;
 
+let ERROR_CODE = '#import'
 
 class FieldTextEmail extends FieldText {
 
   constructor(options = {}){
     super(options);
+    if (options.ERROR_CODE) {
+      ERROR_CODE = options.ERROR_CODE;
+    }
     this._name = 'email';
   }
 
-  validate(fieldName, data, logger = false) {
-    if (super.validate(fieldName, data, logger)) {
-      if (data && data.length) {
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(data);
-      }
-      return true;
-    }
-    return false;
-  }
-
-  adjust(fieldName, email, logger = false) {
-
+   adjust(fieldName, email, logger = false) {
+    let errMsg = '';
     if (email === undefined || email.length === 0) {
       return Promise.resolve(email);
+    }
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(email)) {
+      errMsg = ' ' + ERROR_CODE;
+      this.log(logger, 'warn', fieldName, `the email address ${email} is not valid`);
     }
     email = _.replace(email, /</g, '');
     email = _.replace(email, />/g, '');
@@ -38,7 +36,7 @@ class FieldTextEmail extends FieldText {
     email = _.replace(email, /\t/g, '');
     email = _.replace(email, /\r/g, '');
     email = _.replace(email, / /g, '');
-    return Promise.resolve(email)
+    return Promise.resolve(email + errMsg)
   }
 
   /**

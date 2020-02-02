@@ -8,6 +8,7 @@ version: 0.4.16 (dd: 2020-02-02)
 - (telephone issues #14) - value of the telephone field with #import appended and is stored and in the error report
 - (emailadres/telefoon en adres naar code_ID 115,113, 11 #12). Fix so the type is automatically set.
 If a manual changes is needed use the type or typeId
+- fixed: if an invalid email the value is not stored. Now the #import is appended and a warning is added to the log
 
 2020-02-01 (0.4.13)
 - the url is now extended so can include configurable "Facebook", etc
