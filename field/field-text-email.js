@@ -23,11 +23,7 @@ class FieldTextEmail extends FieldText {
     if (email === undefined || email.length === 0) {
       return Promise.resolve(email);
     }
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!re.test(email)) {
-      errMsg = ' ' + ERROR_CODE;
-      this.log(logger, 'warn', fieldName, `the email address ${email} is not valid`);
-    }
+
     email = _.replace(email, /</g, '');
     email = _.replace(email, />/g, '');
     email = _.toLower(email);
@@ -36,6 +32,11 @@ class FieldTextEmail extends FieldText {
     email = _.replace(email, /\t/g, '');
     email = _.replace(email, /\r/g, '');
     email = _.replace(email, / /g, '');
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(email)) {
+      errMsg = ' ' + ERROR_CODE;
+      this.log(logger, 'warn', fieldName, `the email address ${email} is not valid`);
+    }
     return Promise.resolve(email + errMsg)
   }
 

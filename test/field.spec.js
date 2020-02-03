@@ -225,7 +225,7 @@ describe('field',  () => {
 
 
 
-  describe('Memo',  () => {
+  describe('memo',  () => {
     let f = new FieldMemo();
     logger.clear();
     it('empty', async () => {
