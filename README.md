@@ -175,10 +175,13 @@ let record = {
     {        
         typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId         
         type: 'string',
+        guid: 'string',   // the guid is newly created
         value: 'string',
         _source: 'string',
         _parent: 'string',  // the contact it belongs to
-        groupId: 'guid'        
+        parentCode: 'string',   // the link in the tree
+        parentCodeId: 'string',
+        parentCodeGuid: 'string'                
     }
   ],
   memo: [

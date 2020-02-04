@@ -26,7 +26,7 @@ describe('field.email', () => {
     let f = new FieldEmail({lookup: new Lookup()});
     logger.clear();
     it('empty', async () => {
-      let r = await f.convert('email', {email: '', _source: 'master'}, logger);
+      let r = await f.convert('email', {email: ''}, logger);
       assert.isEmpty(r, 'should clear a empty record')
     });
   });

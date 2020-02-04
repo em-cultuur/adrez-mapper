@@ -5,15 +5,28 @@
 const Field = require('./field').Field;
 const _ = require('lodash');
 const ErrorFieldNotAllowed = require('error-types').ErrorFieldNotAllowed;
+const FieldText = require('./field-text').FieldText;
+const FieldGuid = require('./field-text').FieldTextGuid;
 
 class FieldObject extends Field {
 
   constructor(options = {}){
     super(options);
-    this._name = 'object';
-    // add here the fieldName: fieldDefinition
-    this._fields = options.fields !== undefined ? options.fields : {};
+    // this should be set by the child object. Defines the parentId for new records
+    this.baseTypeId = undefined;
+    // this function is called when type has to be translated to typdId
     this._lookup = options.lookup;
+    this.lookupFunctionName = false;
+    this.emptyValueAllowed = false;
+    // this._name = 'object';
+    // add here the fieldName: fieldDefinition
+    this._fields = options.fields !== undefined ? options.fields : {
+      type: new FieldText({emptyAllow: true}),        // the name of the code
+      typeId: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
+      _parent: new FieldText({emptyAllow: true}),     // where is this record linked to
+      _source: new FieldText({emptyAllow: true}),     // not used but should be!
+    };
+
     this._removeEmpty = options.removeEmpty !== undefined ? options.removeEmpty : true;
   }
 
@@ -117,6 +130,18 @@ class FieldObject extends Field {
         this.log(logger,'error', subName, e.message);
       }
     }
+    // clean the type definition
+    if ((this.emptyValueAllowed || result.value !== undefined) && ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
+      if (this.lookup && this.lookupFunctionName && this.lookup[this.lookupFunctionName]) {
+        result.typeId = await this.lookup[this.lookupFunctionName](fieldName, result.type, this.baseTypeId, data);
+      } else if (result.type !== undefined) {
+        this.log(logger, 'error', fieldName, `no lookup function or lookupFunction name not defined for class "${this.constructor.name}" to translate type to typeId`);
+      } else {
+        result.typeId = this.baseTypeId;
+      }
+    }
+    delete result.type;
+
     return Promise.resolve(result);
   }
 

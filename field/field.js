@@ -16,10 +16,9 @@ class Field {
 
   constructor(options = {}) {
     this._name = 'field';
-    if (options.emptyAllow) { // if field is set but other ones are not, the field is remove
-      this.emptyAllow = true;
-    }
+    this.emptyAllow = options.emptyAllow === undefined ? false : options.emptyAllow
   }
+
   get name() {
     return this._name;
   }

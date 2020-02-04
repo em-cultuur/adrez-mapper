@@ -11,6 +11,25 @@ describe('field.code', () => {
 
   let logger = new Logger({toConsole: false});
 
+  class LookupCode {
+    async code(fieldName, codeText, defaults, data) {
+      switch(codeText) {
+        case 'test':
+          return Promise.resolve(defaults === 10 ? 'add.test': 'wrong default');
+        case 'parent':
+          return Promise.resolve(data.parentCode === 'parent' ? 'found.parent': 'wrong parent')
+        case 'parentGuid':
+          return Promise.resolve(data.parentCodeGuid === 'parentGuid' ? 'found.parentGuid': 'wrong parent')
+        case 'parentId':
+          return Promise.resolve(data.parentCodeId === 'parentId' ? 'found.parentId': 'wrong parent')
+
+      }
+      return Promise.resolve(defaults);
+    }
+
+  }
+
+
   describe('basic field', () => {
     let f = new FieldCode();
     logger.clear();
@@ -22,11 +41,12 @@ describe('field.code', () => {
       let r = await f.convert('code', {code: 'test', codeId: '1234', _source: 'master'}, logger);
       assert(r.typeId === '1234', 'select code Id');
     });
-    it('leave empty', async () => {
-      let f2 = new FieldCode({ lookup: new Lookup(), removeEmpty : false});
+    it('add a new code', async () => {
+      let f2 = new FieldCode({ lookup: new LookupCode(), removeEmpty : false});
       let r = await f2.convert('code', {code: 'test'}, logger);
-      assert.isDefined(r.typeId, 'still there');
+      assert.equal(r.typeId, 'add.test', 'did create code');
     });
+
     it('remove empty', async () => {
       let f2 = new FieldCode({ lookup: new Lookup(), removeEmpty : false});
       let r = await f2.convert('code', {code: 'test', _remove:true}, logger);
@@ -34,20 +54,30 @@ describe('field.code', () => {
       assert.isDefined(r._remove, 'has remove');
       assert.equal(r._remove, 1, 'is true');
     });
-    it('create default groupId', async () => {
-      let f2 = new FieldCode({ lookup: new Lookup(), removeEmpty : false});
-      let r = await f2.convert('code', {code: 'test', _remove:true}, logger);
-      assert.isDefined(r.groupId, 'Has groupId');
-      assert.equal(r.groupId, CODE_TYPE_CODE, 'did default value')
-    });
-    it('set groupId', async () => {
-      let f2 = new FieldCode({ lookup: new Lookup(), removeEmpty : false});
-      let r = await f2.convert('code', {code: 'test', groupId: '123'}, logger);
-      assert.isDefined(r.groupId, 'Has groupId');
-      assert.equal(r.groupId, '123', 'did set')
-    })
-
   });
+  describe('code with parent', () => {
+    it('add a new code parent', async () => {
+      let f2 = new FieldCode({ lookup: new LookupCode()});
+      let r = await f2.convert('code', {code: 'parent', parentCode: 'parent'}, logger);
+      assert.equal(r.typeId, 'found.parent', 'did create code');
+    });
+    it('add a new code parentGuid', async () => {
+      let f2 = new FieldCode({ lookup: new LookupCode()});
+      let r = await f2.convert('code', {code: 'parentGuid', parentCodeGuid: 'parentGuid'}, logger);
+      assert.equal(r.typeId, 'found.parentGuid', 'did create code');
+    });
+    it('add a new code parentId', async () => {
+      let f2 = new FieldCode({ lookup: new LookupCode()});
+      let r = await f2.convert('code', {code: 'parentId', parentCodeId: 'parentId'}, logger);
+      assert.equal(r.typeId, 'found.parentId', 'did create code');
+    });
+    it('add a new code no parent', async () => {
+      let f2 = new FieldCode({ lookup: new LookupCode()});
+      let r = await f2.convert('code', {code: 'parent.none'}, logger);
+      assert.equal(r.typeId, 10, 'use the default');
+    });
+  });
+
   describe('key', () => {
     let f = new FieldCode();
     it('set', async () => {
