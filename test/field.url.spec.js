@@ -8,6 +8,63 @@ const FieldUrl = require('../field/field-url').FieldUrl;
 describe('field.url', () => {
 
   let logger = new Logger({toConsole: false});
+  class LookupTypeUrl {
+    async url(fieldName, url, defaults, data) {
+      if (url === 'new value') {
+        return Promise.resolve(558)
+      } else if (url === 'Instagram') {
+        return Promise.resolve(559)
+      }
+      return Promise.resolve(defaults);
+    }
+  }
+
+
+  describe('type/typeId and value', () => {
+    it('1. direct none changed values', async () => {
+      let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
+      let r = await f2.convert('url', {value: 'test.com', typeId: '123'}, logger);
+      assert.equal(r.value, 'test.com', 'nothing changed');
+      assert.equal(r.typeId, '123', 'nothing changed');
+    });
+    it('2. create / use a user defined type', async () => {
+      let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
+      let r = await f2.convert('url', {value: 'test.com', type: 'new value'}, logger);
+      assert.equal(r.value, 'test.com', 'nothing changed');
+      assert.equal(r.typeId, 558, 'translate type to typeId');
+    });
+    it('3. use a predefined field type', async () => {
+      let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
+      let r = await f2.convert('url', {Facebook: 'emcultuur'}, logger);
+      assert.equal(r.value, 'emcultuur', 'nothing changed');
+      assert.equal(r.typeId, 142, 'translate type to typeId');
+    });
+    it('4. translate from url', async () => {
+      let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
+      let r = await f2.convert('url', {url: 'http://www.facebook.com/emcultuur'}, logger);
+      assert.equal(r.value, 'emcultuur', 'nothing changed');
+      assert.equal(r.typeId, 142, 'translate type to typeId');
+    });
+    it('5. translate from url with no typeId', async () => {
+      let f2 = new FieldUrl({ lookup: new LookupTypeUrl(),
+        urls: {
+          Instagram: {
+            url: new RegExp('instagram\.com'),
+            type: 'Instagram',
+            textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?instagram\\.com\\/(?:(?:\\w)*#!\\/)?(?:pages\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
+          }
+        }
+      });
+      let r = await f2.convert('url', {url: 'http://www.instagram.com/emcultuur'}, logger);
+      assert.equal(r.value, 'emcultuur', 'nothing changed');
+      assert.equal(r.typeId, 559, 'translated Instagram to typeId');
+    });
+
+  });
+
+
+
+
   describe('url',  () => {
     let f = new FieldUrl({lookup: new Lookup()});
     logger.clear();
@@ -33,6 +90,7 @@ describe('field.url', () => {
     let r = await f2.convert('url', {url: ''}, logger);
     assert.equal(r.value, undefined, 'not there');
   });
+
 
   it('load direct types', async () => {
     let f2 = new FieldUrl({lookup: new Lookup(), removeEmpty: false});

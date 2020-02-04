@@ -1,6 +1,10 @@
 # adrez-mapper Revisions
-version: 0.4.16 (dd: 2020-02-02)
+version: 0.5.0 (dd: 2020-02-04)
 
+2020-02-04 (0.5.0)
+- type/typeId is not stored the way a propperty. Full rebuild of field-composed part.
+- adjusted url
+- added email.newsletter, email.prive with auto type definition
 
 2020-02-02 (0.4.16)
 - if the telephone number is not valid it is still return and a warning is added to the log

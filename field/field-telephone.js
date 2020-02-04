@@ -13,9 +13,8 @@ let CODE_IDS = {
 class FieldTelephone extends FieldComposed {
   constructor(options = {}) {
     super(options);
-    if (options.CODE_IDS) {
-      CODE_IDS = options.CODE_IDS;
-    }
+    this.baseTypeId = CODE_IDS['telephone'];
+    this.lookupFunctionName = 'telephone';
 
     this._baseNames = ['telephone', 'mobile', 'fax'];
     this._skipName = [];
@@ -55,15 +54,13 @@ class FieldTelephone extends FieldComposed {
         } else if (fields[name]) {
           data.value = await this._fields[name].convert(fieldName, '' + data[name], logger)
         }
-        if (data.value) {
+        if (data.value && data.typeId === undefined && data.type === undefined) {
           data.typeId = CODE_IDS[name];
           break; // done it, only one is accepted
         }
       }
     }
-    if (!data.typeId) {
-      data.typeId = CODE_IDS[Object.keys(CODE_IDS)[0]];
-    }
+
     this.copyFieldsToResult(result, data, this._skipName);
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);

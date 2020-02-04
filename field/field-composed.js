@@ -13,6 +13,11 @@ class FieldComposed extends FieldObject {
 
   constructor(options = {}) {
     super(options);
+    // this should be set by the child object. Defines the parentId for new records
+    this.baseTypeId = undefined;
+    // this function is called when type has to be translated to typdId
+    this.lookupFunctionName = false;
+
     this._fields = {
       type: new FieldText({emptyAllow: true}),        // the name of the code
       typeId: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
@@ -51,16 +56,14 @@ class FieldComposed extends FieldObject {
    * @param logger Class where to store the errors
    */
   async processKeys(fieldName, fields, data, logger) {
-    if (! (fields['typeId'] && ! fields['typeId'].isEmpty(data['typeId']))) {
-      let baseType = this._baseType(fieldName);
-      if (this.lookup[baseType]) {
-        data.typeId = await this.lookup[baseType](fieldName, data.type, 0, data);
+    if (data.value !== undefined && ! (fields['typeId'] && ! fields['typeId'].isEmpty(data['typeId']))) {
+      if (this.lookup && this.lookupFunctionName && this.lookup[this.lookupFunctionName]) {
+        data.typeId = await this.lookup[this.lookupFunctionName](fieldName, data.type, this.baseTypeId, data);
+      } else if (data.type !== undefined) {
+        this.log(logger, 'error', fieldName, `no lookup function or lookupFunction name not defined for class "${this.constructor.name}" to translate type to typeId`);
       } else {
-        this.log(logger, 'error', fieldName, `there is no lookup definition for ${this._baseType(fieldName)}`);
+        data.typeId = this.baseTypeId;
       }
-    } else if (!fields.typeId) {
-      this.log(logger, 'warn', fieldName, `no type or typeId set. marking unknown`);
-      data['typeId'] = TYPE_UNKNOWN;
     }
     delete data.type;
     let cFields = this.remapFields(data);

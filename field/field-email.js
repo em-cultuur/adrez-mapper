@@ -5,15 +5,15 @@
 const FieldComposed = require('./field-composed').FieldComposed;
 const FieldTextEmail = require('./field-text-email').FieldTextEmail;
 
-let CODE_EMAIL = 115;
-
 class FieldEmail extends FieldComposed {
   constructor(options = {}) {
     super(options);
-    if (options.CODE_EMAIL) {
-      CODE_EMAIL = options.CODE_EMAIL;
-    }
+    this.lookupFunctionName = 'email';
+    this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 115;
+
     this._fields.email = new FieldTextEmail();
+    this._fields.newsletter = new FieldTextEmail();
+    this._fields.prive = new FieldTextEmail();
   }
 
 
@@ -31,15 +31,15 @@ class FieldEmail extends FieldComposed {
     if (fields.value === undefined) {  // value overrules all
       if (fields.email) {
         data.value = await this._fields.email.convert(fieldName, data.email, logger)
-        if (data.value && data.typeId === undefined && this.lookup) {
-          data.typeId = await this.lookup.email(fieldName, data.type, CODE_EMAIL, data);
-        }
+      } else if (fields.newsletter) {
+        data.value = await this._fields.newsletter.convert(fieldName, data.newsletter, logger);
+        data.type = 'Nieuwsbrief'
+      } else if (fields.prive) {
+        data.value = await this._fields.prive.convert(fieldName, data.prive, logger);
+        data.type = 'Privé'
       }
     }
-    if (data.typeId === undefined) {
-      data.typeId = CODE_EMAIL;
-    }
-    this.copyFieldsToResult(result, data, ['email']);
+    this.copyFieldsToResult(result, data, ['email', 'newsletter', 'prive']);
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);
   }

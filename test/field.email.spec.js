@@ -8,33 +8,67 @@ const FieldEmail = require('../field/field-email').FieldEmail;
 describe('field.email', () => {
 
   let logger = new Logger({toConsole: false});
-  describe('email',  () => {
+
+  LookupEmail = class {
+    email(fieldName, value, defaults, data) {
+      if (value === 'Nieuwsbrief') {
+        return Promise.resolve('444')
+      } else if (value === 'Privé') {
+        return Promise.resolve('555')
+      } else if (value === 'Custom') {
+        return Promise.resolve('666');
+      }
+      return Promise.resolve(defaults);
+    }
+  }
+
+  describe('email empty',  () => {
     let f = new FieldEmail({lookup: new Lookup()});
     logger.clear();
     it('empty', async () => {
       let r = await f.convert('email', {email: '', _source: 'master'}, logger);
       assert.isEmpty(r, 'should clear a empty record')
     });
+  });
+  describe('type email', () => {
+    let f = new FieldEmail({lookup: new Lookup()});
     it('select field', async () => {
-      let r = await f.convert('email', {email: 'INFO@test.com', _source: 'master'}, logger);
+      let r = await f.convert('email', {email: 'INFO@test.com'}, logger);
       assert(r.value === 'info@test.com', 'select email en convert');
-      r = await f.convert('email', {email: 'INFO@test.com', value: 'test@test.com', _source: 'master'}, logger);
+      assert.equal(r.typeId, 115, 'made it an email');
+      r = await f.convert('email', {email: 'INFO@test.com', value: 'test@test.com'}, logger);
       assert(r.value === 'test@test.com', 'select value not email');
     });
   });
 
-  it('leave empty', async () => {
-    let f2 = new FieldEmail({ lookup: new Lookup(), removeEmpty : false});
-    let r = await f2.convert('email', {email: ''}, logger);
-    assert.isDefined(r.value, 'still there');
-    assert.equal(r.value, '', 'and empty')
-  });
+  describe('setting types', () => {
+    logger.clear();
+    it('default is email', async () => {
+      let f2 = new FieldEmail();
+      let r = await f2.convert('email', {email: 'info@emcultuur.nl'}, logger);
+      assert.equal(r.value, 'info@emcultuur.nl', 'value');
+      assert.equal(r.typeId, 115, 'did set the typeId')
+    });
+    it('newsletter', async () => {
+      let f2 = new FieldEmail({ lookup: new LookupEmail() });
+      let r = await f2.convert('email', {newsletter: 'info@emcultuur.nl'}, logger);
+      assert.equal(r.value, 'info@emcultuur.nl', 'value');
+      assert.equal(r.typeId, 444, 'did set the typeId')
+    });
+    it('prive', async () => {
+      let f2 = new FieldEmail({ lookup: new LookupEmail() });
+      let r = await f2.convert('email', {prive: 'info@emcultuur.nl'}, logger);
+      assert.equal(r.value, 'info@emcultuur.nl', 'value');
+      assert.equal(r.typeId, 555, 'did set the typeId')
+    });
+    it('custom', async () => {
+      let f2 = new FieldEmail({ lookup: new LookupEmail() });
+      let r = await f2.convert('email', {email: 'info@emcultuur.nl', type: 'Custom'}, logger);
+      assert.equal(r.value, 'info@emcultuur.nl', 'value');
+      assert.equal(r.typeId, 666, 'did set the typeId')
+    });
 
-  it('force type', async () => {
-    let f2 = new FieldEmail();
-    let r = await f2.convert('email', {email: 'info@emcultuur.nl'}, logger);
-    assert.equal(r.value, 'info@emcultuur.nl', 'value');
-    assert.equal(r.typeId, 115, 'did set the typeId')
   })
+
 
 });

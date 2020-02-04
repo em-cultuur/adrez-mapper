@@ -1,5 +1,5 @@
 # adrez-mapper
-_version: 0.4.14_
+_version: 0.5.0_
 ```sh
 npm install https://github.com/em-cultuur/adrez-mapper.git --save
 ```
@@ -7,6 +7,9 @@ Convert a raw address record into the workable version for the AdreZ api
 
 ## Revisions
 see: [revisions.md](revisions.md)
+
+## Explain:
+- [typeId/type and value](doc/typeId.md)
 
 ````javascript
 const Record = require('adrez-mapper').AdrezRecord;
@@ -124,11 +127,31 @@ let record = {
       _source: 'string',
       _parent: 'string',  // the contact it belongs to (contact._key)
       
-      // fields recalculated
-      // make a fix layout
       email: 'string',
+      // add the type Newsletter 
+      newsletter: 'string',
+      // add the type Privé
+      prive: 'string'
     }
   ],
+  url: [
+    {
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
+      type: 'string',
+      value: 'string',
+      isDefault: 'bool',
+      _source: 'string',
+      _parent: 'string',  // the contact it belongs to (contact._key)
+      
+      // input: url: 'http://www.em-cultuur.com:81/test?x=2     
+      url: 'string',
+      // www.em-cultuur.com:81/test?x=2
+      // it will scan on Twitter, Facebook, t   
+      hostPath: 'string',
+      // www.em-cultuur.com
+      origin: 'string'    
+    } 
+  ], 
   location: [
     {
       typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
@@ -177,24 +200,7 @@ let record = {
         groupId: 'guid'
     } 
   ],
-  url: [
-    {
-      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
-      type: 'string',
-      value: 'string',
-      isDefault: 'bool',
-      _source: 'string',
-      _parent: 'string',  // the contact it belongs to (contact._key)
-      
-      // input: url: 'http://www.em-cultuur.com:81/test?x=2
-      // www.em-cultuur.com:81
-      url: 'string',
-      // http://www.em-cultuur.com:81/test?x=2   
-      hostPath: 'string',
-      // www.em-cultuur.com
-      origin: 'string'    
-    } 
-  ], 
+  
   campaign: [
     { 
       guid: 'string',

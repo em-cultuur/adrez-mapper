@@ -14,9 +14,8 @@ class FieldLocation extends FieldComposed {
 
   constructor(options = {}) {
     super(options);
-    // this._fields = {
-    //   type: new FieldText(),        // the name of the code
-    //   typeId: new FieldGuid(),      // the id, overrules the type
+    this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 111;
+    this.lookupFunctionName = 'location';
 
     this._fields.street = new FieldText();
     this._fields.number = new FieldText();
@@ -27,10 +26,7 @@ class FieldLocation extends FieldComposed {
     this._fields.country = new FieldText({emptyAllow: true});
     this._fields.countryId = new FieldGuid({emptyAllow: true});
     delete this._fields.value;
-
-      // _source: new FieldText({ emptyAllow: true }),      // the ref to only update our own info
-    // }
-  }
+ }
 
   /**
    * just process all keys individual
