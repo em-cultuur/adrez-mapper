@@ -9,11 +9,11 @@ describe('field.campaign-code', () => {
   let logger = new Logger({toConsole: false});
 
   class TypeLookup extends Lookup {
-    async campaignCode(fieldName, value, defaults, data) {
-      if (value === 'uitnodiging') {
+    async campaignCode(fieldName, def) {
+      if (def.text === 'uitnodiging') {
         return '123'
       }
-      return Promise.resolve(defaults);
+      return super.campaignCode(fieldName, def);
     }
   }
 
@@ -25,7 +25,7 @@ describe('field.campaign-code', () => {
     logger.clear();
     it('translate default', async () => {
       let r = await f.convert('campaigncode', {code: 'test', _parent: 'test'}, logger);
-      assert.equal(r.typeId, 0, 'found default');
+      assert.equal(r.typeId, 10, 'found default');
       assert.equal(r._parent, 'test', 'did store test')
     });
     it('translate value', async () => {

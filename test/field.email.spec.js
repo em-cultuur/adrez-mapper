@@ -10,15 +10,15 @@ describe('field.email', () => {
   let logger = new Logger({toConsole: false});
 
   LookupEmail = class {
-    email(fieldName, value, defaults, data) {
-      if (value === 'Nieuwsbrief') {
+    email(fieldName, def) {
+      if (def.text === 'Nieuwsbrief') {
         return Promise.resolve('444')
-      } else if (value === 'Privé') {
+      } else if (def.text === 'Privé') {
         return Promise.resolve('555')
-      } else if (value === 'Custom') {
+      } else if (def.text === 'Custom') {
         return Promise.resolve('666');
       }
-      return Promise.resolve(defaults);
+      return Promise.resolve(def.parentIdDefault);
     }
   }
 

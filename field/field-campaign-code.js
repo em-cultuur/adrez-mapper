@@ -1,17 +1,14 @@
 /*
- * The campaign record
+ * The campaign code record
  */
 
 const FieldCode = require('./field-code').FieldCode;
-const FieldText = require('./field-text').FieldText;
-
 
 class FieldCampaignCode extends FieldCode {
   constructor(options = {}) {
     super(options);
-//    delete this._fields.codeId;
-//    delete this._fields.groupId;
-    this.lookupFunc = 'campaignCode';
+    this.lookupFunctionName = 'campaignCode';
+    this.baseTypeId = 10; // TODO: what is the base code for the campaigns??????
   }
 }
 module.exports.FieldCampaignCode = FieldCampaignCode;

@@ -9,13 +9,16 @@ describe('field.url', () => {
 
   let logger = new Logger({toConsole: false});
   class LookupTypeUrl {
-    async url(fieldName, url, defaults, data) {
-      if (url === 'new value') {
+    async url(fieldName, def) {
+      if (def.guid === 'URL_WEB') {
+        return Promise.resolve('web.guid')
+      }
+      if (def.text === 'new value') {
         return Promise.resolve(558)
-      } else if (url === 'Instagram') {
+      } else if (def.text === 'Instagram') {
         return Promise.resolve(559)
       }
-      return Promise.resolve(defaults);
+      return Promise.resolve(def.parentIdDefault);
     }
   }
 
@@ -39,13 +42,21 @@ describe('field.url', () => {
       assert.equal(r.value, 'emcultuur', 'nothing changed');
       assert.equal(r.typeId, 142, 'translate type to typeId');
     });
-    it('4. translate from url', async () => {
+    it('4. create / use a user defined type based on the guid', async () => {
+      let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
+      let r = await f2.convert('url', {value: 'www.emcultuur.nl', typeGuid: 'URL_WEB', type: 'Website'}, logger);
+      assert.equal(r.value, 'www.emcultuur.nl', 'nothing changed');
+      assert.equal(r.typeId, 'web.guid', 'translate type to typeId');
+    });
+
+
+    it('6. translate from url', async () => {
       let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
       let r = await f2.convert('url', {url: 'http://www.facebook.com/emcultuur'}, logger);
       assert.equal(r.value, 'emcultuur', 'nothing changed');
       assert.equal(r.typeId, 142, 'translate type to typeId');
     });
-    it('5. translate from url with no typeId', async () => {
+    it('7. translate from url with no typeId', async () => {
       let f2 = new FieldUrl({ lookup: new LookupTypeUrl(),
         urls: {
           Instagram: {

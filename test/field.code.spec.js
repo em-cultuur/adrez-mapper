@@ -12,19 +12,19 @@ describe('field.code', () => {
   let logger = new Logger({toConsole: false});
 
   class LookupCode {
-    async code(fieldName, codeText, defaults, data) {
-      switch(codeText) {
+    async code(fieldName, def) {
+      switch(def.text) {
         case 'test':
-          return Promise.resolve(defaults === 10 ? 'add.test': 'wrong default');
+          return Promise.resolve(def.parentIdDefault === 10 ? 'add.test': 'wrong default');
         case 'parent':
-          return Promise.resolve(data.parentCode === 'parent' ? 'found.parent': 'wrong parent')
+          return Promise.resolve(def.parentText === 'parent' ? 'found.parent': 'wrong parent');
         case 'parentGuid':
-          return Promise.resolve(data.parentCodeGuid === 'parentGuid' ? 'found.parentGuid': 'wrong parent')
+          return Promise.resolve(def.parentGuid === 'parentGuid' ? 'found.parentGuid': 'wrong parent');
         case 'parentId':
-          return Promise.resolve(data.parentCodeId === 'parentId' ? 'found.parentId': 'wrong parent')
+          return Promise.resolve(def.parentId === 'parentId' ? 'found.parentId': 'wrong parent')
 
       }
-      return Promise.resolve(defaults);
+      return Promise.resolve(def.parentIdDefault);
     }
 
   }
@@ -48,8 +48,8 @@ describe('field.code', () => {
     });
 
     it('remove empty', async () => {
-      let f2 = new FieldCode({ lookup: new Lookup(), removeEmpty : false});
-      let r = await f2.convert('code', {code: 'test', _remove:true}, logger);
+      let f2 = new FieldCode({ lookup: new LookupCode(), removeEmpty : false});
+      let r = await f2.convert('code', {code: 'remove empty', _remove:true}, logger);
       assert.isDefined(r.typeId, 'still there');
       assert.isDefined(r._remove, 'has remove');
       assert.equal(r._remove, 1, 'is true');
@@ -58,17 +58,17 @@ describe('field.code', () => {
   describe('code with parent', () => {
     it('add a new code parent', async () => {
       let f2 = new FieldCode({ lookup: new LookupCode()});
-      let r = await f2.convert('code', {code: 'parent', parentCode: 'parent'}, logger);
+      let r = await f2.convert('code', {code: 'parent', parentText: 'parent'}, logger);
       assert.equal(r.typeId, 'found.parent', 'did create code');
     });
     it('add a new code parentGuid', async () => {
       let f2 = new FieldCode({ lookup: new LookupCode()});
-      let r = await f2.convert('code', {code: 'parentGuid', parentCodeGuid: 'parentGuid'}, logger);
+      let r = await f2.convert('code', {code: 'parentGuid', parentGuid: 'parentGuid'}, logger);
       assert.equal(r.typeId, 'found.parentGuid', 'did create code');
     });
     it('add a new code parentId', async () => {
       let f2 = new FieldCode({ lookup: new LookupCode()});
-      let r = await f2.convert('code', {code: 'parentId', parentCodeId: 'parentId'}, logger);
+      let r = await f2.convert('code', {code: 'parentId', parentId: 'parentId'}, logger);
       assert.equal(r.typeId, 'found.parentId', 'did create code');
     });
     it('add a new code no parent', async () => {
@@ -81,21 +81,22 @@ describe('field.code', () => {
   describe('key', () => {
     let f = new FieldCode();
     it('set', async () => {
-      let r = await f.convert('code', {code: 'Testing', _parent:'test'}, logger);
+      let r = await f.convert('code', {code: 'Testing with key', _parent:'test'}, logger);
       assert.isDefined(r._parent, 'has key');
       assert.equal(r._parent, 'test', 'got value')
     });
   });
 
   describe('in record', async () => {
-    let rec = new Record({removeEmpty: false});
+    let rec = new Record({removeEmpty: false,  lookup: new LookupCode()  });
     it('list code', async () => {
-      let r = await rec.convert('rec', { code: [{code: 'testing'}]});
+      let r = await rec.convert('rec', { code: [{code: 'test in record'}]});
       assert.isDefined(r.code, 'should have codes');
       assert.equal(r.code.length, 1, 'one code');
       assert.isDefined(r.code[0].typeId, 'has id')
     })
   });
+
   describe('lookup access', async () => {
     let called = false;
 

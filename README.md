@@ -10,6 +10,7 @@ see: [revisions.md](revisions.md)
 
 ## Explain:
 - [typeId/type and value](doc/typeId.md)
+- [code tree creation](doc/code.md)
 
 ````javascript
 const Record = require('adrez-mapper').AdrezRecord;

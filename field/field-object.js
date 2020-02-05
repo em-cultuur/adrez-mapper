@@ -23,6 +23,16 @@ class FieldObject extends Field {
     this._fields = options.fields !== undefined ? options.fields : {
       type: new FieldText({emptyAllow: true}),        // the name of the code
       typeId: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
+      typeGuid: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
+
+      fieldTypeId:  new FieldGuid(),                    // if set: set the code.typeId
+      fieldTypeGuid: new FieldGuid(),                   // or find the code.guid => typeId
+
+      parentId: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
+      parentGuid: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
+      parentText: new FieldText({emptyAllow: true}),      // the id, overrules the type
+      parentTypeId: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
+
       _parent: new FieldText({emptyAllow: true}),     // where is this record linked to
       _source: new FieldText({emptyAllow: true}),     // not used but should be!
     };
@@ -132,15 +142,37 @@ class FieldObject extends Field {
     }
     // clean the type definition
     if ((this.emptyValueAllowed || result.value !== undefined) && ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
+
       if (this.lookup && this.lookupFunctionName && this.lookup[this.lookupFunctionName]) {
-        result.typeId = await this.lookup[this.lookupFunctionName](fieldName, result.type, this.baseTypeId, data);
+        // create / lookup the code. Needs id, guid or text for code. If not found needs also groupId, fieldTypeId.
+        // translate into a new code that can be found
+        let codeDef = {
+          // the code we want to find. Text is store in the result.type
+          id: data.typeId,
+          guid: data.typeGuid,
+          text: data.type,
+          fieldTypeId: data.fieldTypeId,
+          fieldTypeGuid: data.fieldTypeGuid,
+
+          // the data to create the parent if it does not exist
+          parentIdDefault: this.baseTypeId,
+          parentId: data.parentId,
+          parentGuid: data.parentGuid,
+          parentText: data.parentText,
+
+        };
+        result.typeId = await this.lookup[this.lookupFunctionName](fieldName, codeDef); //
+
+        // result.type, this.baseTypeId, data);
       } else if (result.type !== undefined) {
         this.log(logger, 'error', fieldName, `no lookup function or lookupFunction name not defined for class "${this.constructor.name}" to translate type to typeId`);
       } else {
+        // use the root code as typeId
         result.typeId = this.baseTypeId;
       }
     }
-    delete result.type;
+    result = _.omit(result, ['typeGuid', 'type', 'parentId', 'parentGuid', 'parentText', 'parentTypeId']);
+    // delete result.type;
 
     return Promise.resolve(result);
   }
