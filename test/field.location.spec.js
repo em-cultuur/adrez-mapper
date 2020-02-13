@@ -45,7 +45,7 @@ describe('field.location', () => {
       if (def.text === 'test') {
         return '1234'
       } else {
-        return 'error'
+        return def.parentIdDefault;
       }
     }
   }
@@ -54,6 +54,16 @@ describe('field.location', () => {
     lookup: new LookupLocation()
   });
 
+
+  describe('only zipcode, number, type', async() => {
+    it('unset', async () => {
+      let r = await f.convert('location', {
+        number: '25',
+        zipcode: '1069AB'
+      }, logger);
+      assert.isDefined(r.typeId, 'has typeId')
+    });
+  });
 
   describe('street', () => {
 
@@ -172,4 +182,6 @@ describe('field.location', () => {
       assert.equal(r.typeId, '1234', 'found');
     });
   });
+
+
 });

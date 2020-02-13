@@ -6,7 +6,7 @@ version: 0.5.0 (dd: 2020-02-04)
 - location does not request the translation from type to typeId
 - change lookup for function standard
 - change lookup for salutation to standard
-
+- typeId is not set to default if location has only zipcode and number
 
 2020-02-04 (0.5.0)
 - type/typeId is not stored the way a propperty. Full rebuild of field-composed part.

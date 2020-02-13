@@ -16,6 +16,7 @@ class FieldLocation extends FieldComposed {
     super(options);
     this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 111;
     this.lookupFunctionName = 'location';
+    this.emptyValueAllowed = true;
 
     this._fields.street = new FieldText();
     this._fields.number = new FieldText();
