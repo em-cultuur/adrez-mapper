@@ -46,7 +46,7 @@ Rules:
 - if nothing is found but there is an **caption**, a new record is created with the **caption** and **groupId** and if available the **guid**
 - if all fails and **parentIdDefault** is defined, it's used
 - otherwise: **999999999** is used 
-- if the **fieldTypdId** is given and found, it's used.
+- if the **fieldTypeId** is given and found, it's used.
 - if the **fieldTypeGuid** is give, it's queried. If found, it's used and stored in the **typeId**
 - if the **fieldTypeGuid** is give, it's queried. If not found, it's added and stored in the **typeId**
 - the same rules apply for the parent.

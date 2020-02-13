@@ -141,7 +141,7 @@ class FieldObject extends Field {
       }
     }
     // clean the type definition
-    if ((this.emptyValueAllowed || result.value !== undefined) && ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
+    if ((this.emptyValueAllowed || result.value !== undefined || result.type !== undefined) && ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
 
       if (this.lookup && this.lookupFunctionName && this.lookup[this.lookupFunctionName]) {
         // create / lookup the code. Needs id, guid or text for code. If not found needs also groupId, fieldTypeId.

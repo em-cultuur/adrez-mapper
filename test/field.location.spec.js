@@ -40,11 +40,20 @@ describe('field.location', () => {
     async zipcode(fieldName, streetObj, defaults, data) {
       return `${streetObj.city}:${streetObj.street}:${streetObj.number}`;
     }
+
+    async location(fieldName, def) {
+      if (def.text === 'test') {
+        return '1234'
+      } else {
+        return 'error'
+      }
+    }
   }
 
   let f = new FieldLocation({
     lookup: new LookupLocation()
   });
+
 
   describe('street', () => {
 
@@ -147,6 +156,20 @@ describe('field.location', () => {
       assert.equal(r.number, '23', 'has number');
       assert.equal(r.countryId, '500', 'has country');
     });
+  });
 
-  })
+  describe('type translate', async() => {
+    it('translate type to id', async () => {
+      let r = await f.convert('location', {
+        street: '',
+        city: 'Amsterdam',
+        number: '67',
+        zipcode: '1017 TE',
+        country: 'nederland',
+        type: 'test',
+        _source: 'master'
+      }, logger);
+      assert.equal(r.typeId, '1234', 'found');
+    });
+  });
 });
