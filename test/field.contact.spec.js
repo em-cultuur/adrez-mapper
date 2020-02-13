@@ -38,21 +38,59 @@ describe('field.contact', () => {
       return super.gender(fieldName, value, defaults, data);
     }
 
-    async contactFunction(fieldname, value, defaults, data) {
-      if (value.function === 'jobber') {
-        return Promise.resolve(444)
+    async contactFunction(fieldname, definition) {
+      if (definition.id) {
+        return '1'
+      } else if (definition.guid) {
+        return '2'
+      } else if (definition.text) {
+        return '3'
+      } else {
+        return '-1'
       }
-      return Promise.resolve(defaults)
     }
-    async contactSalutation(fieldname, value, defaults, data) {
-      if (value.salutation === 'hi') {
-        return Promise.resolve(444)
+    async contactSalutation(fieldname, definition) {
+      if (definition.id) {
+        return '1'
+      } else if (definition.guid) {
+        return '2'
+      } else if (definition.text) {
+        return '3'
+      } else {
+        return definition.parentIdDefault
       }
-      return Promise.resolve(defaults);
     }
+
   }
   let f = new FieldContact({
     lookup: new ContactLookup()
+  });
+
+
+  describe('salutation',  () => {
+    it('has salutationId', async() => {
+      let r = await f.convert('contact', {fullName: 'Jan de Hond', salutationId: 123}, logger);
+      assert.isDefined(r.salutationId, 'got salutationId');
+      assert.equal(r.salutationId, '1', 'and set')
+    });
+    it('translate from text', async () => {
+      let r = await f.convert('contact', {fullName: 'Jan de Hond', salutation: 'hi'}, logger);
+      assert.isDefined(r.salutationId, 'got salutationId');
+      assert.equal(r.salutationId, '3', 'and set');
+      assert.equal(r.salutation, undefined, 'did remove the text')
+    });
+    it('translate from guid', async () => {
+      let r = await f.convert('contact', {fullName: 'Jan de Hond', salutationGuid: 'hi'}, logger);
+      assert.isDefined(r.salutationId, 'got salutationId');
+      assert.equal(r.salutationId, '2', 'and set');
+    });
+
+    it('set default', async () => {
+      let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
+      assert.isDefined(r.salutationId, 'got Id');
+      assert.equal(r.salutationId, DEFAULT_SALUTATION, 'and set');
+
+    });
   });
 
   describe('fullname',  () => {
@@ -115,44 +153,35 @@ describe('field.contact', () => {
       assert.equal(r.typeId, 102, 'did genderize, result default')
     })
   });
+
+
+
   describe('function',  () => {
     it('has functionId', async() => {
       let r = await f.convert('contact', {fullName: 'Jan de Hond', functionId: 123}, logger);
       assert.isDefined(r.functionId, 'got functionId');
-      assert.equal(r.functionId, 123, 'and set')
+      assert.equal(r.functionId, '1', 'and set')
     });
     it('translate from text', async () => {
       let r = await f.convert('contact', {fullName: 'Jan de Hond', function: 'jobber'}, logger);
       assert.isDefined(r.functionId, 'got functionId');
-      assert.equal(r.functionId, 444, 'and set');
+      assert.equal(r.functionId, '3', 'and set');
+      assert.equal(r.function, undefined, 'did remove the function')
+    });
+    it('translate from guid', async () => {
+      let r = await f.convert('contact', {fullName: 'Jan de Hond', functionGuid: 'IMP_XXX'}, logger);
+      assert.isDefined(r.functionId, 'got functionId');
+      assert.equal(r.functionId, '2', 'and set');
       assert.equal(r.function, undefined, 'did remove the function')
     });
     it('set default', async () => {
       let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
       assert.isDefined(r.functionId, 'got functionId');
-      assert.equal(r.functionId, DEFAULT_FUNCTION, 'and set');
+      assert.equal(r.functionId, -1, 'and set');
 
     });
   });
-  describe('salutation',  () => {
-    it('has salutationId', async() => {
-      let r = await f.convert('contact', {fullName: 'Jan de Hond', salutationId: 123}, logger);
-      assert.isDefined(r.salutationId, 'got salutationId');
-      assert.equal(r.salutationId, 123, 'and set')
-    });
-    it('translate from text', async () => {
-      let r = await f.convert('contact', {fullName: 'Jan de Hond', salutation: 'hi'}, logger);
-      assert.isDefined(r.salutationId, 'got salutationId');
-      assert.equal(r.salutationId, 444, 'and set');
-      assert.equal(r.salutation, undefined, 'did remove the text')
-    });
-    it('set default', async () => {
-      let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
-      assert.isDefined(r.salutationId, 'got Id');
-      assert.equal(r.salutationId, DEFAULT_SALUTATION, 'and set');
 
-    });
-  });
   describe('organisation', () => {
     it('is org 1', async() => {
       let r = await f.convert('contact', {organisation: 'Working it', isOrganisation: true, functionId: '12'}, logger);

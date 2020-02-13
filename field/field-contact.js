@@ -37,8 +37,10 @@ class FieldContact extends FieldComposed {
       nameSuffix: new FieldText(),
 
       functionId: new FieldGuid(),
+      functionGuid: new FieldGuid(),
       function: new FieldText(),
       salutationId: new FieldGuid(),
+      salutationGuid: new FieldGuid(),
       salutation: new FieldText(),
       isDefault: new FieldBoolean(),
 
@@ -130,21 +132,23 @@ class FieldContact extends FieldComposed {
       if (typeId) {
         data.typeId = typeId;
       }
-      if (data.functionId === undefined) {
-        // if (data.function) {
-        //   data.functionId = await this.lookup.contactFunction(fieldName, {function: data.function}, DEFAULT_FUNCTION, data);
-        // } else {
-        //   data.functionId = DEFAULT_FUNCTION
-        // }
-        data.functionId = await this.lookup.contactFunction(fieldName, {function: data.function}, DEFAULT_FUNCTION, data);
-      }
-      if (data.salutationId === undefined) {
-        if (data.salutation) {
-          data.salutationId = await this.lookup.contactSalutation(fieldName, {salutation: data.salutation}, DEFAULT_SALUTATION, data);
-        } else {
-          data.salutationId = DEFAULT_SALUTATION;
-        }
-      }
+      // version 0.5.2: use the same structure as for the type translation
+      let codeDef = {
+        // the code we want to find. Text is store in the result.type
+        id: data.functionId,
+        guid: data.functionGuid,
+        text: data.function,
+        parentIdDefault: DEFAULT_FUNCTION
+      };
+      data.functionId = await this.lookup.contactFunction(fieldName, codeDef);
+      codeDef = {
+        // the code we want to find. Text is store in the result.type
+        id: data.salutationId,
+        guid: data.salutationGuid,
+        text: data.salutation,
+        parentIdDefault: DEFAULT_SALUTATION
+      };
+      data.salutationId = await this.lookup.contactSalutation(fieldName, codeDef);
 
       this.copyFieldsToResult(result, data, ['fullName', 'function', 'salutation']);
       let later = result.middleName && result.middleName.length ? (result.firstName + ' ' + result.middleName) : result.firstName && result.firstName.length ? result.firstName : result.firstLetters;
