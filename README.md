@@ -63,6 +63,7 @@ let record = {
   contact: [
     {
       typeId: 'guid',
+      typeGuid: 'guid',
       _source: 'string',
       
       title: 'string',
@@ -79,10 +80,13 @@ let record = {
 
       isDefault: 'boolean',  // default contact for the organisation
 
-      functionId: 'guid',
-      function: 'string',
-      salutationId: 'guid',
-      salutation: 'string',
+      functionId: 'guid',     // fixed id of the guid. If not found, funciton added with guid
+      functionGuid: 'guid',   // the guid of the function
+      function: 'string',     // added if not found with the guid
+
+      salutationId: 'guid',   // the fix id
+      salutationGuid: 'guid', // if found used
+      salutation: 'string',   // search if not found added with the guid
 
       isOrganisation: 'boolean', // if true, organisation is place in name and type is set
       organization: 'string',
@@ -101,8 +105,10 @@ let record = {
   ],
   telephone: [
     {
-      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
-      type: 'string',
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
+      typeGuid: 'guid', // if found used for the look/add
+      type: 'string',   // if not guid, look this up, or add with guid
+
       value: 'string',
       isDefault: 'bool',
       _source: 'string',
@@ -121,7 +127,8 @@ let record = {
   ],
   email: [
     {
-      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
+      typeGuid: 'guid', // if found, used, otherwisd type added with this guid
       type: 'string',
       value: 'string',
       isDefault: 'bool',
@@ -137,8 +144,10 @@ let record = {
   ],
   url: [
     {
-      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
+      typeGuid: 'guid', // same as email 
       type: 'string',
+
       value: 'string',
       isDefault: 'bool',
       _source: 'string',
@@ -155,8 +164,10 @@ let record = {
   ], 
   location: [
     {
-      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId 
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
+      typeGuid: 'guid', // same as url 
       type: 'string',     
+
       street: 'string',
       number: 'string',
       suffix: 'string',
@@ -187,7 +198,8 @@ let record = {
   ],
   memo: [
     {
-      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId         
+      typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
+      typeGuid: 'guid',          
       type: 'string',
       description: 'string'
     }
@@ -195,7 +207,8 @@ let record = {
   ], 
   extra: [
     {
-        typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId         
+        typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
+        typeGuid: 'guid',         
         type: 'string',
         text: 'string',
         description: 'string',
@@ -228,7 +241,8 @@ let record = {
   ],
   campaignCode: [
     {
-        typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId         
+        typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
+        typeGuid: 'guid',         
         type: 'string',
         value: 'string',
         _source: 'string',
@@ -324,4 +338,4 @@ record defined **typeId**, so **typeId** will be the default.
 - campaignContact - translate the type in campaign-to-contact
 
 
-&copy; MIT 2019-2020 Toxus
+&copy; MIT 2019-2020 Jay/EM
