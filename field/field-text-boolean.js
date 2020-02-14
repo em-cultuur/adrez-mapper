@@ -34,7 +34,7 @@ class FieldTextBoolean extends Field {
   }
 
   adjust(fieldName, data, logger = false) {
-    return Promise.resolve(!! data);
+    return Promise.resolve(!!data ? '1' : '0');
   }
 }
 module.exports.FieldTextBoolean = FieldTextBoolean;
