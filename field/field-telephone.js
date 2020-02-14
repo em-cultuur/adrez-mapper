@@ -20,13 +20,13 @@ class FieldTelephone extends FieldComposed {
     this._skipName = [];
     for (let l = 0; l < this._baseNames.length; l++) {
       let name = this._baseNames[l];
-      this._fields[name] = new FieldTextTelephone();
+      this._fields[name] = new FieldTextTelephone({ emptyAllow: false});
       this._skipName.push(name);
-      this._fields[name + 'Int'] = new FieldTextTelephone({countryCode: -1}); // force to international
+      this._fields[name + 'Int'] = new FieldTextTelephone({countryCode: -1, emptyAllow: false}); // force to international
       this._skipName.push(name + 'Int');
-      this._fields[name + '10'] = new FieldTextTelephone();
+      this._fields[name + '10'] = new FieldTextTelephone({ emptyAllow: false});
       this._skipName.push(name + '10');
-      this._fields[name + '10Int'] = new FieldTextTelephone({countryCode: -1}); // force to international
+      this._fields[name + '10Int'] = new FieldTextTelephone({countryCode: -1, emptyAllow: false}); // force to international
       this._skipName.push(name + '10int');
     }
   }

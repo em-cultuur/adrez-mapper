@@ -57,7 +57,7 @@ describe('field',  () => {
       assert(logger.hasErrors(), 'error');
       assert(logger.errors.length === 1, 'the error');
       assert(logger.errors[0].fieldName === 'name', 'the field');
-      assert(logger.errors[0].message === 'must be string or number', 'the error');
+      assert.equal(logger.errors[0].message, 'must be string or number object', 'the error');
       logger.clear();
       assert(f.validate('name', undefined, logger) === true, 'no value is allowed');
       assert(logger.hasErrors() === false, 'no error');
@@ -79,13 +79,14 @@ describe('field',  () => {
     });
 
     it('validate', () => {
+      logger.clear();
       assert(f.validate('name', '123', logger) === true, 'string number is valid');
-      assert(!logger.hasMessages(), 'no messages');
+      assert.isFalse(logger.hasMessages(), 'no messages');
       assert(f.validate('name', {test: 'value'}, logger) === false, 'object not valid');
       assert(logger.hasErrors(), 'error');
       assert(logger.errors.length === 1, 'the error');
       assert(logger.errors[0].fieldName === 'name', 'the field');
-      assert(logger.errors[0].message === 'must be string or number', 'the error');
+      assert.equal(logger.errors[0].message, 'must be string or number (object)', 'the error');
       logger.clear();
       assert(f.validate('name', undefined, logger) === true, 'no value is allowed');
       assert(logger.hasErrors() === false, 'no error');
@@ -185,12 +186,7 @@ describe('field',  () => {
       assert(logger.errors[0].fieldName === 'obj.wrong', 'field is defined');
       logger.clear();
     });
-    it('subprocess fields', async () => {
-      f = new FieldObject({fields: {bool: new FieldTextBoolean(), email: new FieldTextEmail()}});
-      let r = await f.convert('obj', {bool: 0, email:'INFO@test.com'}, logger);
-      assert(typeof r.bool === 'boolean', 'changed');
-      assert(f.isEmpty({bool: undefined}), 'is empty');
-    });
+
     it('remove empty allowed fields',async () => {
       f = new FieldObject({fields: {bool: new FieldTextBoolean(), email: new FieldTextEmail(), _source: new FieldText({emptyAllow: true})}});
       let r = await f.convert('obj', {bool: undefined, _source : '1234'}, logger);
@@ -234,8 +230,8 @@ describe('field',  () => {
     });
     it('select field', async () => {
       let r = await f.convert('memo', {description: 'test', typeId: '1234', _source: 'master'}, logger);
-      assert(r.typeId === '1234', 'select code Id');
-      assert(r.description === 'test', 'just copied');
+      assert.equal(r.typeId, '1234', 'select code Id');
+      assert.equal(r.description,'test', 'just copied');
     });
   });
 

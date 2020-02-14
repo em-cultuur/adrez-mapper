@@ -25,15 +25,15 @@ class FieldContact extends FieldComposed {
     super(options);
     this._fields = _.merge(this._fields, {
       // fields for the database
-      guid: new FieldGuid(),
+      guid: new FieldGuid({ emptyAllow: false}),
       subName: new FieldText(),        // the name of the code
-      firstName: new FieldText(),      // the id, overrules the type
-      middleName: new FieldText(),
+      firstName: new FieldText({ emptyAllow: false}),      // the id, overrules the type
+      middleName: new FieldText({ emptyAllow: false}),
       title: new FieldText(),
       firstLetters : new FieldText(),
       nickName: new FieldText(),
       namePrefix: new FieldText(),
-      name: new FieldText(),
+      name: new FieldText({ emptyAllow: false}),
       nameSuffix: new FieldText(),
 
       functionId: new FieldGuid(),
@@ -47,7 +47,7 @@ class FieldContact extends FieldComposed {
       search: new FieldText(),
 
       isOrganisation: new FieldBoolean({emptyAllow: true}),
-      organisation: new FieldText(),
+      organisation: new FieldText({ emptyAllow: false}),
 //      organizationId: new FieldGuid({emptyAllow: true}),
       // key should an other contacts key
       _key: new FieldText({emptyAllow: true}),  // _parent is defined in the composed type
@@ -55,10 +55,10 @@ class FieldContact extends FieldComposed {
       contactId: new FieldGuid({emptyAllow: true}),
 
       // used to for calculations
-      fullName: new FieldText(),
+      fullName: new FieldText({ emptyAllow: false}),
 
       _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
-      locator: new FieldLocatorContact()
+      locator: new FieldLocatorContact({emptyAllow: false})
     });
     // the contact does not know about values
     delete this._fields.value;

@@ -11,9 +11,9 @@ class FieldEmail extends FieldComposed {
     this.lookupFunctionName = 'email';
     this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 115;
 
-    this._fields.email = new FieldTextEmail();
-    this._fields.newsletter = new FieldTextEmail();
-    this._fields.prive = new FieldTextEmail();
+    this._fields.email = new FieldTextEmail({emptyAllow: false});
+    this._fields.newsletter = new FieldTextEmail({ emptyAllow: false});
+    this._fields.prive = new FieldTextEmail({ emptyAllow: false});
   }
 
 

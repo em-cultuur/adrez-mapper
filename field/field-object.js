@@ -16,25 +16,26 @@ class FieldObject extends Field {
     this.baseTypeId = undefined;
     // this function is called when type has to be translated to typdId
     this._lookup = options.lookup;
-    this.lookupFunctionName = false;
+    this.lookupFunctionName = options.lookupFunctionName ? options.lookupFunctionName : false;
     this.emptyValueAllowed = false;
     // this._name = 'object';
     // add here the fieldName: fieldDefinition
     this._fields = options.fields !== undefined ? options.fields : {
-      type: new FieldText({emptyAllow: true}),        // the name of the code
-      typeId: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
-      typeGuid: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
+      type: new FieldText({emptyAllow:  this.emptyAllow }),          // the name of the code
+      type_: new FieldText({emptyAllow:  this.emptyAllow }),         // the name of the code but never used as lookup
+      typeId: new FieldGuid({emptyAllow:  this.emptyAllow }),        // the id, overrules the type
+      typeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
 
-      fieldTypeId:  new FieldGuid(),                    // if set: set the code.typeId
-      fieldTypeGuid: new FieldGuid(),                   // or find the code.guid => typeId
+      fieldTypeId:  new FieldGuid({emptyAllow:  this.emptyAllow }),  // if set: set the code.typeId
+      fieldTypeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }), // or find the code.guid => typeId
 
-      parentId: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
-      parentGuid: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
-      parentText: new FieldText({emptyAllow: true}),      // the id, overrules the type
-      parentTypeId: new FieldGuid({emptyAllow: true}),      // the id, overrules the type
+      parentId: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
+      parentGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),    // the id, overrules the type
+      parentText: new FieldText({emptyAllow:  this.emptyAllow }),    // the id, overrules the type
+      parentTypeId: new FieldGuid({emptyAllow:  this.emptyAllow }),  // the id, overrules the type
 
-      _parent: new FieldText({emptyAllow: true}),     // where is this record linked to
-      _source: new FieldText({emptyAllow: true}),     // not used but should be!
+      _parent: new FieldText({emptyAllow:  this.emptyAllow }),       // where is this record linked to
+      _source: new FieldText({emptyAllow:  this.emptyAllow }),       // not used but should be!
     };
 
     this._removeEmpty = options.removeEmpty !== undefined ? options.removeEmpty : true;
@@ -141,7 +142,8 @@ class FieldObject extends Field {
       }
     }
     // clean the type definition
-    if ((this.emptyValueAllowed || result.value !== undefined || result.type !== undefined) && ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
+    if ((this.emptyValueAllowed || result.value !== undefined || result.type !== undefined || result.type_ !== undefined) &&
+      ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
 
       if (this.lookup && this.lookupFunctionName && this.lookup[this.lookupFunctionName]) {
         // create / lookup the code. Needs id, guid or text for code. If not found needs also groupId, fieldTypeId.
@@ -150,7 +152,7 @@ class FieldObject extends Field {
           // the code we want to find. Text is store in the result.type
           id: data.typeId,
           guid: data.typeGuid,
-          text: data.type,
+//          text: data.type,
           fieldTypeId: data.fieldTypeId,
           fieldTypeGuid: data.fieldTypeGuid,
 
@@ -159,8 +161,12 @@ class FieldObject extends Field {
           parentId: data.parentId,
           parentGuid: data.parentGuid,
           parentText: data.parentText,
-
         };
+        if (data.type_) {
+          codeDef.textNoFind = data.type_;
+        } else {
+          codeDef.text = data.type;
+        }
         result.typeId = await this.lookup[this.lookupFunctionName](fieldName, codeDef); //
 
         // result.type, this.baseTypeId, data);
@@ -171,7 +177,7 @@ class FieldObject extends Field {
         result.typeId = this.baseTypeId;
       }
     }
-    result = _.omit(result, ['typeGuid', 'type', 'parentId', 'parentGuid', 'parentText', 'parentTypeId']);
+    result = _.omit(result, ['typeGuid', 'type', 'type_', 'parentId', 'parentGuid', 'parentText', 'parentTypeId']);
     // delete result.type;
 
     return Promise.resolve(result);

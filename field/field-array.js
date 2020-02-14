@@ -15,6 +15,7 @@ class FieldArray extends Field {
     this._name = 'array';
     this._type = options.type ? options.type : new FieldText();
     this._removeEmpty = moreOptions.removeEmpty  !== undefined ? moreOptions.removeEmpty : true;
+    this.emptyAllow = false;
   }
 
 

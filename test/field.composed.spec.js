@@ -34,11 +34,6 @@ describe('field.composed', () => {
         assert(e.fields[0] === 'unknownField', 'the name');
       }
     });
-    it('remove empty fields', async () => {
-      let r = await f.convert('composed', {type: '', value:'some value', _source: '123'}, logger);
-      assert(r.type === undefined, 'removed');
-      assert(r._source === '123', 'left the others');
-    });
   });
 
   describe('parent', () => {

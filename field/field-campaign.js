@@ -18,10 +18,10 @@ class FieldCampaign extends FieldComposed {
     super(options);
     // source / sourceId is stored in type / typeId
     this._fields.guid = new FieldGuid();
-    this._fields.title = new FieldText();
+    this._fields.title = new FieldText({emptyAllow: false});
     this._fields.campaignDate = new FieldDate();
     this._fields.isActive = new FieldBoolean();
-    this._fields.description = new FieldText();
+    this._fields.description = new FieldText({emptyAllow: false});
     this._fields.group = new FieldText({emptyAllow: true});
     this._fields.groupId = new FieldGuid();
     // the action that added to campaignContact
@@ -30,7 +30,7 @@ class FieldCampaign extends FieldComposed {
 
     this._fields._key = new FieldText({emptyAllow: true});
 
-    this._fields.locator = new FieldLocatorCampaign();
+    this._fields.locator = new FieldLocatorCampaign({emptyAllow: false});
   }
 
 

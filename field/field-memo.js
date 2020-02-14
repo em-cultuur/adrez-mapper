@@ -12,7 +12,8 @@ class FieldMemo extends FieldComposed {
 
     this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 400;
 
-    this._fields.description = new FieldText()     ; // force to international
+    // if field is set, save it all
+    this._fields.description = new FieldText({emptyAllow: false});
   }
 }
 

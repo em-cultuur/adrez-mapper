@@ -28,7 +28,7 @@ class FieldTextNumber extends Field {
    */
   validate(fieldName, data, logger = false) {
     if (data !== undefined && !(typeof data === 'string' || typeof data === 'number')) {
-      this.log(logger,'error', fieldName, `must be string or number (${typeof data}`);
+      this.log(logger,'error', fieldName, `must be string or number (${typeof data})`);
       return false;
     } else {
       return true;

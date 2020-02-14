@@ -11,12 +11,12 @@ class FieldLocatorContact extends FieldLocator {
     super(options);
     this._fields = _.merge(this._fields, {
       // _sync : new FieldTextBoolean(),
-      id: new FieldGuid(),
-      fullName: new FieldText(),
-      guid: new FieldGuid(),
-      search: new FieldText(),
-      typeId: new FieldText(),
-      type: new FieldText(),
+      id: new FieldGuid({ emptyAllow: false}),
+      fullName: new FieldText({ emptyAllow: false}),
+      guid: new FieldGuid({ emptyAllow: false}),
+      search: new FieldText({ emptyAllow: false}),
+      typeId: new FieldText({ emptyAllow: false}),
+      type: new FieldText({ emptyAllow: false}),
     });
   }
 }

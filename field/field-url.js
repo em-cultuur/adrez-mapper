@@ -12,9 +12,9 @@ class FieldUrl extends FieldComposed {
     this._skipField = ['url', 'href', 'hostPath', 'origin'];
     this.baseTypeId = options.baseType !== undefined ? options.baseType: 117;
     this.lookupFunctionName = 'url';
-    this._fields.url = new FieldTextUrl({part: 'href'});
-    this._fields.hostPath = new FieldTextUrl({part: 'hostPath'});
-    this._fields.origin = new FieldTextUrl({part: 'origin'});
+    this._fields.url = new FieldTextUrl({part: 'href', emptyAllow: false});
+    this._fields.hostPath = new FieldTextUrl({part: 'hostPath', emptyAllow: false});
+    this._fields.origin = new FieldTextUrl({part: 'origin', emptyAllow: false});
 
     // convert the auto loaded urls in regex
     // textRegEx is the part that holds the name of the account
@@ -59,7 +59,7 @@ class FieldUrl extends FieldComposed {
     }
     for (let name in this._urls) {
       if (!this._urls.hasOwnProperty(name)) { continue }
-      this._fields[name] = new FieldText();
+      this._fields[name] = new FieldText({ emptyAllow: false});
       this._skipField.push(name)
     }
   }

@@ -16,10 +16,10 @@ class FieldExtra extends FieldObject {
     this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 201;
 
     this._controlTypes = {
-      boolean: new FieldBoolean(),
-      text: new FieldText(),
-      number: new FieldNumber(),
-      date: new FieldDate(),
+      boolean: new FieldBoolean({ emptyAllow: false}),
+      text: new FieldText({ emptyAllow: false}),
+      number: new FieldNumber({ emptyAllow: false}),
+      date: new FieldDate({ emptyAllow: false}),
     };
     this._fieldDef = {
       text: {

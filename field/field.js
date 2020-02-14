@@ -16,7 +16,7 @@ class Field {
 
   constructor(options = {}) {
     this._name = 'field';
-    this.emptyAllow = options.emptyAllow === undefined ? false : options.emptyAllow
+    this.emptyAllow = options.emptyAllow === undefined ? true : options.emptyAllow
   }
 
   get name() {
