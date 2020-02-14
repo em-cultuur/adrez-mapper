@@ -1,6 +1,7 @@
 # adrez-mapper Revisions
-version: 0.5.0 (dd: 2020-02-04)
 
+2020-02-14 (0.5.2)
+- better explain for type mismatch with text fields
 
 2020-02-13 (0.5.1)
 - location does not request the translation from type to typeId

@@ -22,7 +22,7 @@ class FieldTextBoolean extends Field {
   validate(fieldName, data, logger = false) {
     if (data !== undefined) {
       if (typeof data === 'object') {
-        this.log(logger, 'error', fieldName, 'must be string or number or boolean');
+        this.log(logger, 'error', fieldName, 'must be string or number or boolean but is object');
         return false;
       }
     }
