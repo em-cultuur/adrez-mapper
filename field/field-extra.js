@@ -124,7 +124,7 @@ class FieldExtra extends FieldObject {
       if (fields[name] && data[name] !== undefined) {
         // found the field
         result[this._fieldDef[name].fieldName] = await this._fields[name].convert(fieldName, data[name], logger);
-        if (this._fields[name].field === this._controlTypes.boolean) {
+        if (this._fieldDef[name].field === this._controlTypes.boolean) {
           // booleans must be converted to Text
           result[this._fieldDef[name].fieldName] = result[this._fieldDef[name].fieldName] ? '1' : '0'
         }
