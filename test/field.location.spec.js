@@ -55,6 +55,32 @@ describe('field.location', () => {
   });
 
 
+  describe('street - bugs', () => {
+
+    logger.clear();
+    it('wrong number', async () => {
+      let r = await f.convert('location', {streetNumber: 'Guntersteinweg 377.1.22',}, logger);
+      assert.equal(r.street, 'Guntersteinweg 377.1.22', 'no change')
+    });
+    it('no number', async () => {
+      let r = await f.convert('location', {streetNumber: 'Jan De Louterpad',}, logger);
+      assert.equal(r.street, 'Jan De Louterpad', 'remove all')
+    });
+    it('strange combination', async () => {
+      let r = await f.convert('location', {streetNumber: 'Postbus 12808/Frankemaheerd 2',}, logger);
+      assert.equal(r.street, 'Postbus 12808/Frankemaheerd 2', 'remove all')
+    });
+    it('strange combination', async () => {
+      let r = await f.convert('location', {streetNumber: 'Dr. Jan van Breemenstraat 1 – ruimte E5',}, logger);
+      assert.equal(r.street, 'Dr. Jan van Breemenstraat 1 – ruimte E5', 'remove all')
+    });
+    it('strange combination', async () => {
+      let r = await f.convert('location', {streetNumber: 'Joubertstraat 15, 2e verdieping',}, logger);
+      assert.equal(r.street, 'Joubertstraat 15, 2e verdieping', 'remove all')
+    });
+
+  });
+
   describe('only zipcode, number, type', async() => {
     it('unset', async () => {
       let r = await f.convert('location', {

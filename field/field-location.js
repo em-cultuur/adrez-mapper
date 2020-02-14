@@ -69,7 +69,7 @@ class FieldLocation extends FieldComposed {
             data.suffix = match[2].trim();
           } else {
             this.log(logger, 'warn', fieldName + '.streetNumber', `can not parse: "${data.streetNumber}"`);
-            data.street = field.data.streetNumber;
+            data.street = data.streetNumber;
           }
         } else {
           // we do not parse other formats

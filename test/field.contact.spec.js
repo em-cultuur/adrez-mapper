@@ -130,6 +130,17 @@ describe('field.contact', () => {
       assert.equal(r.fullName, 'Customer, Test', 'did change')
     })
   });
+
+
+  describe('fullname', async () => {
+    logger.clear();
+    it('fullname', async () => {
+      let r = await f.convert('contact', {fullName: 'Annemarie Manger- Havengildediner 2019'}, logger);
+      assert.equal(r.name, '2019', 'got the name');
+    })
+  });
+
+
   describe('type and lookup',  () => {
     logger.clear();
 

@@ -1,10 +1,11 @@
 # adrez-mapper Revisions
 
-2020-02-14 (0.5.2)
+2020-02-14 (0.5.3)
 - better explain for type mismatch with text fields
 - boolean is stored as  '1'
 - added optional lookup in code **type_**
 - fix: emptyAll && allowEmpty error
+- fix: "streetNumber issues (location wordt niet opgeslagen als fout in parsing) #13"
 
 2020-02-13 (0.5.1)
 - location does not request the translation from type to typeId
