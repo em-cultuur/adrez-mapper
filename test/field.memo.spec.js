@@ -11,6 +11,12 @@ describe('field.memo', () => {
 
   LookupMemo = class {
     memo(fieldName, def) {
+      // if no type is set, we get the ''
+      if (def.text === '') {
+        return Promise.resolve(123)
+      } else if (def.text === 'some') {
+        return Promise.resolve(456)
+      }
       return Promise.resolve(def.parentIdDefault);
     }
   };
@@ -31,6 +37,8 @@ describe('field.memo', () => {
       assert.equal(r.text, 'use text', 'set the value');
       assert.isUndefined(r.description, 'no description');
       assert.equal(r.useDescription, 0, 'use the text');
+      assert.isDefined(r.typeId, 'has type');
+      assert.equal(r.typeId, 123, 'and set')
     });
     it('no value', async () => {
       let r = await f.convert('memo', {}, logger);
@@ -38,6 +46,10 @@ describe('field.memo', () => {
       assert.isUndefined(r.description, 'no description');
       assert.isUndefined(r.useDescription,  'no use');
     });
+    it('test type', async () => {
+      let r = await f.convert('memo', { text: 'use text', type: 'some' }, logger);
+      assert.equal(r.typeId, 456, 'and set')
+    })
   });
   describe('description',  () => {
     let f = new FieldMemo({lookup: new LookupMemo()});

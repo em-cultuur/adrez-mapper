@@ -4,6 +4,7 @@
 - typo in doc for memo
 - made test routines for memo
 - added memo text and memo.description and memo.useDescription
+- for memo to have a type ('' is default)
 
 2020-02-14 (0.5.3)
 - better explain for type mismatch with text fields

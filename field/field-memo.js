@@ -45,6 +45,10 @@ class FieldMemo extends FieldComposed {
       delete data.description;
     }
 
+    // we must force the type of the memo
+    if (data.type === undefined && data.typeId === undefined) {
+      data.type = ''
+    }
     let cFields = this.remapFields(data);
     return super.processKeys(fieldName, cFields, data, logger);
   }
