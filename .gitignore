@@ -23,3 +23,4 @@ yarn-error.log*
 *.sln
 
 /src/statics/indexed.do/
+.nyc_output

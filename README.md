@@ -200,8 +200,10 @@ let record = {
     {
       typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
       typeGuid: 'guid',          
-      type: 'string',
-      description: 'string'
+      type: 'string', 
+      description: 'string',   // if set over rulse text
+      text: 'string',          
+      useDescription: boolean  // force a special way of storing 
     }
   
   ], 

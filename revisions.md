@@ -1,5 +1,10 @@
 # adrez-mapper Revisions
 
+2020-02-19 (0.5.4)
+- typo in doc for memo
+- made test routines for memo
+- added memo text and memo.description and memo.useDescription
+
 2020-02-14 (0.5.3)
 - better explain for type mismatch with text fields
 - boolean is stored as  '1'

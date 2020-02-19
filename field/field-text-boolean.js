@@ -8,6 +8,7 @@ class FieldTextBoolean extends Field {
   constructor(options = {}){
     super(options);
     this._name = 'boolean';
+    this._returnNumeric = options.returnNumeric === undefined ? false : options.returnNumeric;
   }
 
   /**
@@ -34,6 +35,9 @@ class FieldTextBoolean extends Field {
   }
 
   adjust(fieldName, data, logger = false) {
+    if (this._returnNumeric) {
+      return Promise.resolve(!!data ? 1 : 0);
+    }
     return Promise.resolve(!!data );
   }
 }
