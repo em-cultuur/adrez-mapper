@@ -108,6 +108,7 @@ let record = {
       typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
       typeGuid: 'guid', // if found used for the look/add
       type: 'string',   // if not guid, look this up, or add with guid
+      typeIsDefault: 'boolean', // make it the default type
 
       value: 'string',
       isDefault: 'bool',
@@ -130,6 +131,8 @@ let record = {
       typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
       typeGuid: 'guid', // if found, used, otherwisd type added with this guid
       type: 'string',
+      typeIsDefault: 'boolean', // make it the default type
+
       value: 'string',
       isDefault: 'bool',
       _source: 'string',
@@ -147,6 +150,7 @@ let record = {
       typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
       typeGuid: 'guid', // same as email 
       type: 'string',
+      typeIsDefault: 'boolean', // make it the default type
 
       value: 'string',
       isDefault: 'bool',
@@ -167,6 +171,7 @@ let record = {
       typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
       typeGuid: 'guid', // same as url 
       type: 'string',     
+      typeIsDefault: 'boolean', // make it the default type
 
       street: 'string',
       number: 'string',
@@ -188,6 +193,8 @@ let record = {
         typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId         
         type: 'string',
         guid: 'string',   // the guid is newly created
+        typeIsDefault: 'boolean', // make it the default type
+
         value: 'string',
         _source: 'string',
         _parent: 'string',  // the contact it belongs to
@@ -201,6 +208,8 @@ let record = {
       typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
       typeGuid: 'guid',          
       type: 'string', 
+      typeIsDefault: 'boolean', // make it the default type
+
       description: 'string',   // if set over rulse text
       text: 'string',          
       useDescription: boolean  // force a special way of storing 
@@ -212,12 +221,14 @@ let record = {
         typeId: 'guid',   // if given, type is ignored, otherwise type translated to typeId
         typeGuid: 'guid',         
         type: 'string',
+        typeIsDefault: 'boolean', // make it the default type
+    
         text: 'string',
         description: 'string',
         boolean: 'boolean',
         number: 'number',
         groupId: 'guid'
-    } 
+} 
   ],
   
   campaign: [

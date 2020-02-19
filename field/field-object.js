@@ -25,6 +25,7 @@ class FieldObject extends Field {
       type_: new FieldText({emptyAllow:  this.emptyAllow }),         // the name of the code but never used as lookup
       typeId: new FieldGuid({emptyAllow:  this.emptyAllow }),        // the id, overrules the type
       typeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
+      typeIsDefault: new FieldGuid({emptyAllow: this.emptyAllow}),   // set in the code table it's default
 
       fieldTypeId:  new FieldGuid({emptyAllow:  this.emptyAllow }),  // if set: set the code.typeId
       fieldTypeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }), // or find the code.guid => typeId
