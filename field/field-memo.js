@@ -11,7 +11,7 @@ class FieldMemo extends FieldComposed {
     super(options);
     this.lookupFunctionName = 'memo';
 
-    this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 400;
+    this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 0;
 
     // if field is set, save it all
     this._fields.text = new FieldText({emptyAllow: false});
