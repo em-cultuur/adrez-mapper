@@ -16,8 +16,16 @@ class FieldMemo extends FieldComposed {
     // if field is set, save it all
     this._fields.text = new FieldText({emptyAllow: false});
     this._fields.description = new FieldText({emptyAllow: false});
+    // this is stored in the Code definition
     this._fields.useDescription = new FieldTextBoolean({emptyAllow: false, returnNumeric: true})
   }
+
+  buildCodeDef(definition, data) {
+    if (data.useDescription) {
+      definition = data.useDescription;
+    }
+  }
+
   async processKeys(fieldName, fields, data, logger) {
     if (fields.useDescription) { // we force the type of memo
       data.useDescription = await fields.useDescription.convert(fieldName, data.useDescription, logger);

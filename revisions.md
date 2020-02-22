@@ -1,5 +1,9 @@
 # adrez-mapper Revisions
 
+2020-02-22
+- changed useDescription (object) to useDescription for memo and extra
+- added data to the lookup definition
+
 2020-02-19 (0.5.4)
 - typo in doc for memo
 - made test routines for memo

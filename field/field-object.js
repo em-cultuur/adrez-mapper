@@ -117,6 +117,15 @@ class FieldObject extends Field {
     }
     return currentFields;
   }
+
+  /**
+   * to set the parameters for the code definition
+   * @param definition
+   * @param data
+   */
+  buildCodeDef(definition, data) {
+
+  }
   /**
    * just process all keys individual
    *
@@ -162,12 +171,15 @@ class FieldObject extends Field {
           parentId: data.parentId,
           parentGuid: data.parentGuid,
           parentText: data.parentText,
+          data: data
         };
         if (data.type_) {
           codeDef.textNoFind = data.type_;
         } else {
           codeDef.text = data.type;
         }
+        this.buildCodeDef(codeDef, data);
+
         result.typeId = await this.lookup[this.lookupFunctionName](fieldName, codeDef); //
 
         // result.type, this.baseTypeId, data);
