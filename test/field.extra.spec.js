@@ -20,6 +20,27 @@ describe('field.extra', () => {
   }
 
   let logger = new Logger({toConsole: false});
+
+  describe('useDescription',  () => {
+    let f = new FieldExtra({lookup: new LookupExtra()});
+    logger.clear();
+    it('default settings', async () => {
+      let r = await f.convert('extra', {text: 'some text'}, logger);
+      assert.equal(r.text, 'some text')
+    });
+    it('memo = auto description', async() => {
+      let r = await f.convert('extra', {description: 'memo'}, logger);
+      assert.equal(r.description, 'memo');
+      assert.isTrue(r.useDescription);
+    });
+    it('memo = manual description', async() => {
+      let r = await f.convert('extra', {description: 'memo', useDescription: false}, logger);
+      assert.equal(r.description, 'memo');
+      assert.isFalse(r.useDescription);
+    })
+
+  });
+
   describe('extra',  () => {
     let f = new FieldExtra({lookup: new LookupExtra()});
     logger.clear();

@@ -3,6 +3,7 @@
 2020-02-22
 - changed useDescription (object) to useDescription for memo and extra
 - added data to the lookup definition
+- useDescription auto set for extra fields. Can be overruled by setting useDescription
 
 2020-02-19 (0.5.4)
 - typo in doc for memo

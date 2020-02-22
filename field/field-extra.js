@@ -14,6 +14,7 @@ class FieldExtra extends FieldObject {
     this.lookupFunctionName = 'extra';
     // 201 is wrong value but there is no default extra field.
     this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 201;
+    this._fields.useDescription = new FieldBoolean({emptyAllow: true, returnNumeric: true})
 
     this._controlTypes = {
       boolean: new FieldBoolean({ emptyAllow: false}),
@@ -27,6 +28,7 @@ class FieldExtra extends FieldObject {
         fieldTypeGuid: 'ADREZ_FIELD_STRING',
         fieldTypeId: 201,
         field: this._controlTypes.text,
+        useDescription: false,
         skip: false  // field should remain in the result
       },
       description: {
@@ -34,47 +36,64 @@ class FieldExtra extends FieldObject {
         fieldTypeGuid: 'ADREZ_FIELD_MEMO',
         fieldTypeId: 206,
         field: this._controlTypes.text,
+        useDescription: true,
         skip: false  // field should remain in the result
       },
       boolean: {
         fieldName: 'text',
         fieldTypeGuid: 'ADREZ_FIELD_BOOLEAN',
-        field: this._controlTypes.boolean
+        fieldTypeId: 202,
+        field: this._controlTypes.boolean,
+        useDescription: false,
       },
       number: {
         fieldName: 'text',
         fieldTypeGuid: 'ADREZ_FIELD_INTEGER',
-        field: this._controlTypes.number
+        fieldTypeId: 203,
+        field: this._controlTypes.number,
+        useDescription: false,
       },
       date: {
         fieldName: 'text',
         fieldTypeGuid: 'ADREZ_FIELD_DATE',
-        field: this._controlTypes.date
+        fieldTypeId: 204,
+        field: this._controlTypes.date,
+        useDescription: false,
       },
       dateTime: {
         fieldName: 'text',
         fieldTypeGuid: 'ADREZ_FIELD_DATETIME',
-        field: this._controlTypes.date
+        fieldTypeId: 205,
+        field: this._controlTypes.date,
+        useDescription: false,
       },
       money: {
         fieldName: 'text',
         fieldTypeGuid: 'ADREZ_FIELD_MONEY',
-        field: this._controlTypes.text
+        fieldTypeId: 207,
+        field: this._controlTypes.text,
+        useDescription: false,
       },
       list: {
         fieldName: 'description',
         fieldTypeGuid: 'ADREZ_FIELD_LIST',
-        field: this._controlTypes.text
+        fieldTypeId: 208,
+        field: this._controlTypes.text,
+        useDescription: false,
       },
       image: {
         fieldName: 'text',
         fieldTypeGuid: 'ADREZ_FIELD_IMAGE',
-        field: this._controlTypes.text
+        fieldTypeId: 209,
+        field: this._controlTypes.text,
+        useDescription: false,
       },
       multi: {
         fieldName: 'description',
         fieldTypeGuid: 'ADREZ_FIELD_MULTI',
-        field: this._controlTypes.text
+        fieldTypeId: 210,
+        field: this._controlTypes.text,
+        useDescription: false,
       },
     };
     this._skipFields = [];
@@ -106,6 +125,13 @@ class FieldExtra extends FieldObject {
 //     this._fields.fieldTypeId = new FieldText();
   }
 
+  buildCodeDef(definition, data) {
+    if (data.useDescription) {
+      definition.useDescription = data.useDescription;
+    }
+  }
+
+
   /**
    * read only the field that are filled
    * @param fieldName
@@ -130,6 +156,7 @@ class FieldExtra extends FieldObject {
         }
         result.fieldTypeGuid = this._fieldDef[name].fieldTypeGuid;
         result.fieldTypeId = this._fieldDef[name].fieldTypeId;
+        result.useDescription = data.useDescription !== undefined ? data.useDescription : this._fieldDef[name].useDescription;
         break;
       }
     }

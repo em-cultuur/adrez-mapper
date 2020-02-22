@@ -22,7 +22,7 @@ class FieldMemo extends FieldComposed {
 
   buildCodeDef(definition, data) {
     if (data.useDescription) {
-      definition = data.useDescription;
+      definition.useDescription = data.useDescription;
     }
   }
 
