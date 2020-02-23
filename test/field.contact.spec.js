@@ -123,6 +123,8 @@ describe('field.contact', () => {
       r = await f.convert('contact', {fullName: 'Jaap-Wieger van der Kreeft'}, logger);
       assert(r.name === 'Kreeft' && r.firstLetters === 'J.' && r.namePrefix === 'van der' && r.firstName === 'Jaap-Wieger', 'got all');
       r = await f.convert('contact', {fullName: 'Jaap Wieger van der Kreeft'}, logger);
+      assert(r.name === 'Kreeft' && r.firstLetters === 'J.' && r.namePrefix === 'van der' && r.firstName === 'Jaap' && middleName === 'Wieger', 'got all');
+      r = await f.convert('contact', {fullName: 'Jaap Wieger van der Kreeft'}, logger);
       assert(r.name === 'Kreeft' && r.firstLetters === 'J.W.' && r.namePrefix === 'van der' && r.firstName === 'Jaap' && r.middleName === 'Wieger', 'got all')
     });
     it('specials', async () => {

@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-02-23 (0.5.5)
+- added _rowIndex for debugging
+
 2020-02-22
 - changed useDescription (object) to useDescription for memo and extra
 - added data to the lookup definition

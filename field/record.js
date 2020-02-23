@@ -33,6 +33,7 @@ class AdrezRecord extends FieldObject {
       id: new FieldGuid(),
       // contactId is the true address id
       contactId: new FieldGuid(),
+      _rowIndex : new FieldGuid(),
 
       contact:      new FieldArray( { type: new FieldContact(_.merge({lookup: this._lookup}, options, options.contact)) }, options),
       email:        new FieldArray( { type: new FieldEmail(_.merge({lookup: this._lookup}, options, options.email)) }, options),
