@@ -47,6 +47,10 @@ class FieldCode extends FieldObject {
     } else if (data.code) {
       data.type = data.code;
     }
+    if (data.guid && !data.typeGuid) {
+      data.typeGuid = data.guid;
+      delete data.guid
+    }
 
     if (data._remove) {
       result._remove = 1;
@@ -57,7 +61,7 @@ class FieldCode extends FieldObject {
     // recalculate the available fields
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger).then((processed) => {
-      this.copyFieldsToResult(result, processed, ['parentCodeGuid', 'parentCodeId', 'parentCode'])
+      this.copyFieldsToResult(result, processed, ['parentCodeGuid', 'parentCodeId', 'parentCode']);
       return result;
     });
   }

@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+202-03-17 (0.5.6)
+- Campaign code / Code guid converted to typeGuid for definition
+
 2020-02-23 (0.5.5)
 - added _rowIndex for debugging
 

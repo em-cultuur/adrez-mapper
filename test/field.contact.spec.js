@@ -115,7 +115,7 @@ describe('field.contact', () => {
       assert(r.firstName === 'Bert' && r.name === 'Vries' && r.firstLetters === 'B.' && r.title === 'sergeant majoor', 'got all');
       r = await f.convert('contact', {fullName: 'Abt Jan'}, logger);
       assert(r.name === 'Jan' && r.title === 'Abt', 'got all');
-      assert.equal(r.fullName, 'Jan', 'did')
+      assert.equal(r.fullName, 'Jan', 'did');
       r = await f.convert('contact', {fullName: 'Familie E. de Boer-Brenninkmeijer'}, logger);
       assert(r.name === 'Boer-Brenninkmeijer' && r.firstLetters === 'E.' && r.namePrefix === 'de', 'got all');
       r = await f.convert('contact', {fullName: 'Vera de Boer-van Woerdens'}, logger);
@@ -123,7 +123,7 @@ describe('field.contact', () => {
       r = await f.convert('contact', {fullName: 'Jaap-Wieger van der Kreeft'}, logger);
       assert(r.name === 'Kreeft' && r.firstLetters === 'J.' && r.namePrefix === 'van der' && r.firstName === 'Jaap-Wieger', 'got all');
       r = await f.convert('contact', {fullName: 'Jaap Wieger van der Kreeft'}, logger);
-      assert(r.name === 'Kreeft' && r.firstLetters === 'J.' && r.namePrefix === 'van der' && r.firstName === 'Jaap' && middleName === 'Wieger', 'got all');
+      assert(r.name === 'Kreeft' && r.firstLetters === 'J.W.' && r.namePrefix === 'van der' && r.firstName === 'Jaap' && r.middleName === 'Wieger', 'got all');
       r = await f.convert('contact', {fullName: 'Jaap Wieger van der Kreeft'}, logger);
       assert(r.name === 'Kreeft' && r.firstLetters === 'J.W.' && r.namePrefix === 'van der' && r.firstName === 'Jaap' && r.middleName === 'Wieger', 'got all')
     });
