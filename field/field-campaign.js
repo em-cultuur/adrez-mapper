@@ -26,6 +26,7 @@ class FieldCampaign extends FieldComposed {
     this._fields.groupId = new FieldGuid();
     // the action that added to campaignContact
     this._fields.actionId = new FieldText({emptyAllow: true});
+    this._fields.actionGuid = new FieldGuid({emptyAllow: true});
     this._fields.action = new FieldText();
 
     this._fields._key = new FieldText({emptyAllow: true});
@@ -58,7 +59,12 @@ class FieldCampaign extends FieldComposed {
       result.groupId = data.groupId;
     }
     if (data.actionId === undefined) {
-      result.actionId = await this.lookup.campaignAction(fieldName, data.action, DEFAULT_CAMPAIGN_ACTION, data);
+      let codeDef = {
+        id: data.actionId,
+        guid: data.actionGuid,
+        text: data.action,
+      };
+      result.actionId = await this.lookup.campaignAction(fieldName, codeDef);
     } else {
       result.actionId = data.actionId;
     }
