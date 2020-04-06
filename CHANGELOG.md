@@ -1,5 +1,9 @@
 # adrez-mapper Revisions
 
+
+2020-03-23 (0.5.8)
+- contact._campaign to define which campaign we connect to. If empty / missing all is used
+
 2020-03-23 (0.5.7)
 - campaign.action has now a standized lookup function
 

@@ -50,9 +50,11 @@ class FieldContact extends FieldComposed {
       organisation: new FieldText({ emptyAllow: false}),
 //      organizationId: new FieldGuid({emptyAllow: true}),
       // key should an other contacts key
-      _key: new FieldText({emptyAllow: true}),  // _parent is defined in the composed type
+      _key: new FieldText({emptyAllow: true}),
+      // _parent is defined in the object type
       // if _key is defined the contactId is automatic set
       contactId: new FieldGuid({emptyAllow: true}),
+      _campaign: new FieldText({emptyAllow: true}),
 
       // used to for calculations
       fullName: new FieldText({ emptyAllow: false}),
