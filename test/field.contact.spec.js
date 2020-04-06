@@ -240,8 +240,17 @@ describe('field.contact', () => {
       assert.isDefined(r.locator, 'has locator');
       assert.isDefined(r.locator.guid, 'look for');
       assert.equal(r.guid, 'g.1', 'has guid')
+    });
+  })
+
+  describe('_parent (v: 0.5.8', () => {
+    it ('field', async () => {
+      let r = await f.convert('contact', {name: 'Working it', _campaign: 'check'}, logger);
+      assert.isDefined(r._campaign);
+      assert.isDefined(r._campaign, 'check');
+
     })
 
-  })
+  });
 });
 
