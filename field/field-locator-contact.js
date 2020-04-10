@@ -13,6 +13,8 @@ class FieldLocatorContact extends FieldLocator {
       // _sync : new FieldTextBoolean(),
       id: new FieldGuid({ emptyAllow: false}),
       fullName: new FieldText({ emptyAllow: false}),
+      name: new FieldText(({emptyAllow: false})),
+      subName: new FieldText(({emptyAllow: false})),
       guid: new FieldGuid({ emptyAllow: false}),
       search: new FieldText({ emptyAllow: false}),
       typeId: new FieldText({ emptyAllow: false}),

@@ -1,5 +1,12 @@
 # adrez-mapper Revisions
 
+2020-04-10 (0.5.10)
+- changed campaign lookup to handle default construction
+- changed doc
+
+2020-04-10 (0.5.9)
+- locator-contact: added subName and name
+
 
 2020-03-23 (0.5.8)
 - contact._campaign to define which campaign we connect to. If empty / missing all is used

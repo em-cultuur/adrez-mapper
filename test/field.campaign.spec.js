@@ -13,24 +13,25 @@ describe('field.campaign', () => {
   let logger = new Logger({toConsole: false});
 
   class TypeLookup extends Lookup {
-    async campaign(fieldName, type, defaults, data) {
-      if (type === 'x') {
+    async campaign(fieldName, def) {
+      if (def.text === 'x') {
         return 123
       }
-      return super.campaign(fieldName, type, defaults, data);
-    }
-    async campaignGroup(fieldName, group, defaults, data) {
-      if (group === 'xx') {
-        return 123
-      }
-      return super.campaignGroup(fieldName, group, defaults, data);
+      return super.campaign(fieldName, def);
     }
 
-    async campaignAction(fieldName, action, defaults, data) {
-      if (action === 'test') {
+    async campaignGroup(fieldName, def) {
+      if (def.text === 'xx') {
         return 123
       }
-      return super.campaignAction(fieldName, action, defaults, data);
+      return super.campaignGroup(fieldName, def);
+    }
+
+    async campaignAction(fieldName, def) {
+      if (def.text === 'test') {
+        return 123
+      }
+      return super.campaignAction(fieldName, def);
 
     }
   }

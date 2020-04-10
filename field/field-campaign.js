@@ -16,6 +16,7 @@ const DEFAULT_CAMPAIGN_ACTION = 9998;
 class FieldCampaign extends FieldComposed {
   constructor(options = {}) {
     super(options);
+    this.lookupFunctionName = 'campaign';
     // source / sourceId is stored in type / typeId
     this._fields.guid = new FieldGuid();
     this._fields.title = new FieldText({emptyAllow: false});
@@ -32,6 +33,7 @@ class FieldCampaign extends FieldComposed {
     this._fields._key = new FieldText({emptyAllow: true});
 
     this._fields.locator = new FieldLocatorCampaign({emptyAllow: false});
+    this.emptyValueAllowed = true;
   }
 
 
@@ -45,15 +47,19 @@ class FieldCampaign extends FieldComposed {
    */
   async processKeys(fieldName, fields, data, logger) {
     let result = {};
-    // translate the type of campaign
-    if (data.typeId === undefined) {
-      result.typeId = await this.lookup.campaign(fieldName, data.type, DEFAULT_CAMPAIGN_TYPE, data)
-      data.typeId = result.typeId;
-    } else {
-      result.typeId = data.typeId;
-    }
+    // // translate the type of campaign
+    // if (data.typeId === undefined) {
+    //   result.typeId = await this.lookup.campaign(fieldName, data.type, DEFAULT_CAMPAIGN_TYPE, data)
+    //   data.typeId = result.typeId;
+    // } else {
+    //   result.typeId = data.typeId;
+    // }
     if (data.groupId === undefined) {
-      result.groupId = await this.lookup.campaignGroup(fieldName, data.group, DEFAULT_CAMPAIGN_GROUP, data)
+      let codeDef = {
+        id: data.groupId,
+        text: data.group,
+      };
+      result.groupId = await this.lookup.campaignGroup(fieldName, codeDef)
       data.groupId = result.groupId;
     } else {
       result.groupId = data.groupId;
@@ -72,7 +78,7 @@ class FieldCampaign extends FieldComposed {
 
     result.campaignDate = data.campaignDate ? data.campaignDate : ('' + new Date());
 
-    this.copyFieldsToResult(result, data, ['type', 'group', 'action']);
+    this.copyFieldsToResult(result, data, ['group', 'action']);
     if (data.locator) {
       if (fields.locator) {
         result.locator = await fields.locator.convert(fieldName + '.locator', data.locator, logger);

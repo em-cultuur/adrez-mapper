@@ -44,3 +44,36 @@ Should return **true** if the number is on the right.
 Looks up the name of the street. **locationObj** is a structure:
 **{ zipcode, number, countryId}**
 
+## definition
+```javascript
+ let def = {
+        id: data.typeId,
+        guid: data.typeGuid,        
+        fieldTypeId: data.fieldTypeId,
+        fieldTypeGuid: data.fieldTypeGuid,
+        
+        // the data to create the parent if it does not exist
+        parentIdDefault: this.baseTypeId,
+        parentId: data.parentId,
+        parentGuid: data.parentGuid,
+        parentText: data.parentText,
+        data: data
+    };
+    if (data.type_) {
+      codeDef.textNoFind = data.type_;
+    } else {
+      codeDef.text = data.type;
+    }
+```
+
+### campaign(fieldName, def)
+Look up for the type of campaign
+
+### campaignAction(fieldName, def)
+Lookup for the action
+
+### campaignGroup(fieldName, def)
+Lookup for the definition
+
+### campaignContact(field, def)
+Lookup for the code in the campaign => contact
