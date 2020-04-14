@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-04-15 (0.5.11)
+- fix: location.zipcode if not found throws an error
+
 2020-04-10 (0.5.10)
 - changed campaign lookup to handle default construction
 - changed doc

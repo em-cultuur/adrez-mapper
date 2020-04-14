@@ -209,5 +209,18 @@ describe('field.location', () => {
     });
   });
 
+  describe('zipcode text', async() => {
+    it('translate type to id', async () => {
+      logger.clear();
+      let r = await f.convert('location', {
+        "zipcode" : "INTERNE POST",
+        "typeId" : 111,
+        "isDefault" : "true",
+        "_parent" : "main"
+      }, logger);
+      assert.equal(r.zipcode, 'INTERNE POST');
+    });
+  });
+
 
 });

@@ -47,7 +47,7 @@ class FieldLocation extends FieldComposed {
       } else if (data.zipcode) {
         result.countryId = await this._fields.zipcode.countryId(data.zipcode, false);
         if (result.countryId === false) {
-          let countryId = await this.lookup.zipcode2Country(fieldName, data.zipcode, 0, data);
+          result.countryId = await this.lookup.zipcode2Country(fieldName, data.zipcode, 0, data);
         }
       }
     }
