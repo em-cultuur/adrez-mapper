@@ -250,7 +250,16 @@ describe('field.contact', () => {
       assert.isDefined(r._campaign, 'check');
 
     })
+  });
+  describe('subNmae (v: 0.5.12', () => {
+    it ('field', async () => {
+      let r = await f.convert('contact', {name: 'Working it', subName: 'department'}, logger);
+      assert.isDefined(r.subName);
+      assert.equal(r.subName, 'department');
+
+    })
 
   });
+
 });
 
