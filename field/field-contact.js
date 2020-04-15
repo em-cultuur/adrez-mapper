@@ -26,7 +26,6 @@ class FieldContact extends FieldComposed {
     this._fields = _.merge(this._fields, {
       // fields for the database
       guid: new FieldGuid({ emptyAllow: false}),
-      subName: new FieldText(),        // the name of the code
       firstName: new FieldText({ emptyAllow: false}),      // the id, overrules the type
       middleName: new FieldText({ emptyAllow: false}),
       title: new FieldText(),
@@ -48,6 +47,7 @@ class FieldContact extends FieldComposed {
 
       isOrganisation: new FieldBoolean({emptyAllow: true}),
       organisation: new FieldText({ emptyAllow: false}),
+      subName: new FieldText(),  // department etc
 //      organizationId: new FieldGuid({emptyAllow: true}),
       // key should an other contacts key
       _key: new FieldText({emptyAllow: true}),
@@ -128,7 +128,7 @@ class FieldContact extends FieldComposed {
       let typeId = await this.lookup.gender(fieldName, {
         firstName: data.firstName,
         title: data.title,
-        subName: data.subName,
+        // subName: data.subName,
         type: data.type
       }, data.typeId ? data.typeId : 105, data);
       if (typeId) {

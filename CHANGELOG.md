@@ -1,5 +1,11 @@
 # adrez-mapper Revisions
 
+
+2020-04-15 (0.5.12)
+- fix: contact.subName removed from gender
+- fix: contact.subName better implemented
+
+
 2020-04-15 (0.5.11)
 - fix: location.zipcode if not found throws an error
 
