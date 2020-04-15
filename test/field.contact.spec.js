@@ -35,6 +35,9 @@ describe('field.contact', () => {
       if (value.type === 'man') {
         return 102
       }
+      if (value.typeGuid === 'ADREZ_MALE') {
+        return 101
+      }
       return super.gender(fieldName, value, defaults, data);
     }
 
@@ -251,14 +254,17 @@ describe('field.contact', () => {
 
     })
   });
-  describe('subNmae (v: 0.5.12', () => {
-    it ('field', async () => {
+  describe('v: 0.5.12', () => {
+    it ('subName', async () => {
       let r = await f.convert('contact', {name: 'Working it', subName: 'department'}, logger);
       assert.isDefined(r.subName);
       assert.equal(r.subName, 'department');
-
     })
-
+    it ('typeGuid', async () => {
+      let r = await f.convert('contact', {name: 'Working it', typeGuid: 'ADREZ_MALE'}, logger);
+      assert.isDefined(r.typeId);
+      assert.equal(r.typeId, 101);
+    })
   });
 
 });

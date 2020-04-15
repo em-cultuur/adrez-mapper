@@ -129,7 +129,8 @@ class FieldContact extends FieldComposed {
         firstName: data.firstName,
         title: data.title,
         // subName: data.subName,
-        type: data.type
+        type: data.type,
+        typeGuid: data.typeGuid
       }, data.typeId ? data.typeId : 105, data);
       if (typeId) {
         data.typeId = typeId;

@@ -5,6 +5,7 @@
 - fix: contact.subName removed from gender
 - fix: contact.subName better implemented
 - fix: contact.subName is not copied to result
+- fix: contact.typeGuid is part of lookup.gender()
 
 
 2020-04-15 (0.5.11)
