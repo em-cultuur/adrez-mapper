@@ -4,6 +4,7 @@
 2020-04-15 (0.5.12)
 - fix: contact.subName removed from gender
 - fix: contact.subName better implemented
+- fix: contact.subName is not copied to result
 
 
 2020-04-15 (0.5.11)

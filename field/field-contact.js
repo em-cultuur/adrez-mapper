@@ -76,7 +76,7 @@ class FieldContact extends FieldComposed {
    * @param logger Class where to store the errors
    */
   async processKeys(fieldName, fields, data, logger) {
-    let result = {};
+    let result = { subName: subName};
     if (data.isOrganisation || (data.organisation && data.organisation.length > 0)) {
       if (data.organisation) {
         result.name = data.organisation;
