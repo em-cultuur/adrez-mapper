@@ -24,7 +24,7 @@ describe('field.campaign-code', () => {
   describe('type/source',  () => {
     logger.clear();
     it('use guid', async() => {
-      let r = await f.convert('campaignCode',   { "_parent": "campaign", "code": "uitnodiging", guid: 'CC_TEST' });
+      let r = await f.convert('campaignCode',   { "_parent": "campaign", "code": "uitnodiging", codeGuid: 'CC_TEST' });
       assert.equal(r.typeId, '123', 'found default')
       assert.equal(r.typeGuid, 'CC_TEST');
       r = await f.convert('campaignCode',   { "_parent": "campaign", "code": "uitnodiging", typeGuid: 'CC_TEST' });

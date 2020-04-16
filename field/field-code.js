@@ -22,7 +22,7 @@ class FieldCode extends FieldObject {
     // alias the type and code definition, so we only need to use the type / typeId to solve them
     this._fields.code = this._fields.type;
     this._fields.codeId = this._fields.typeId;
-    this._fields.guid = this._fields.typeGuid;
+    this._fields.codeGuid = this._fields.typeGuid;
 
     this._fields.typeId.emptyAllow = false;
     this._fields.type.emptyAllow = false;
@@ -47,17 +47,16 @@ class FieldCode extends FieldObject {
     } else if (data.code) {
       data.type = data.code;
     }
-    if (data.guid && !data.typeGuid) {
-      data.typeGuid = data.guid;
-      delete data.guid
+    if (data.codeGuid && !data.typeGuid) {
+      data.typeGuid = data.codeGuid;
+      delete data.codeGuid
     }
 
     if (data._remove) {
       result._remove = 1;
     }
 
-    this.copyFieldsToResult(result, data, ['code', 'codeId']
-     );
+    this.copyFieldsToResult(result, data, ['code', 'codeId']);
     // recalculate the available fields
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger).then((processed) => {

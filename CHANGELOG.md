@@ -1,5 +1,7 @@
 # adrez-mapper Revisions
 
+2020-04-15 (0.5.12)
+- changed code.guid to code.codeGuid
 
 2020-04-15 (0.5.12)
 - fix: contact.subName removed from gender
