@@ -1,8 +1,8 @@
 
 const FieldLocator = require('./field-locator').FieldLocator;
 const _ = require('lodash');
-const FieldText = require('./field-text').FieldText;
-const FieldTextGuid = require('./field-text').FieldTextGuid;
+const FieldLocatorText = require('./field-locator').FieldLocatorText
+const FieldLocatorGuid = require('./field-locator').FieldLocatorGuid;
 
 
 class FieldLocatorCampaign extends FieldLocator {
@@ -11,9 +11,9 @@ class FieldLocatorCampaign extends FieldLocator {
     super(options);
     this.emptyAllow = false;
     this._fields = _.merge(this._fields, {
-      title: new FieldText(options),
-      id: new FieldTextGuid(options),
-      guid: new FieldTextGuid(options)
+      title: new FieldLocatorText(options),
+      id: new FieldLocatorGuid(options),
+      guid: new FieldLocatorGuid(options)
     });
   }
 }

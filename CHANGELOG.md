@@ -1,5 +1,9 @@
 # adrez-mapper Revisions
 
+2020-04-18 (0.6)
+- changed LocatorContact and LocatorCampaign so empty field will remain in the locator.
+- LocatorContact / Camptaign field are only removed if undefined
+
 2020-04-15 (0.5.12)
 - changed code.guid to code.codeGuid
 

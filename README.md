@@ -1,12 +1,12 @@
 # adrez-mapper
-_version: 0.5.0_
+_version: 0.6.0_
 ```sh
 npm install https://github.com/em-cultuur/adrez-mapper.git --save
 ```
 Convert a raw address record into the workable version for the AdreZ api
 
 ## Revisions
-see: [revisions.md](revisions.md)
+see: [CHANGELOG.md](CHANGELOG.md)
 
 ## Explain:
 - [typeId/type and value](doc/typeId.md)
@@ -95,7 +95,10 @@ let record = {
       _parent: 'string',      // links the contact to the organisation by key      
   
       locator: {              // the lookup definition. The fields are AND
-        fullName: 'string',
+        fullName: 'string',   // if one of the field === undefined it's removed
+        name: 'string',       // if one of the fields === '' it will remain  
+        subName: 'string',
+        guid: 'string',
         search: 'string',
         id: 'string',
         typeId: 'string',
