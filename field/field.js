@@ -61,7 +61,7 @@ class Field {
    * @param logger
    * @param options
    */
-  convert(fieldName, data, logger) {
+  convert(fieldName, data, logger, parent = false) {
     if (this.validate(fieldName, data, logger)) {
       return this.adjust(fieldName, data, logger)
     }

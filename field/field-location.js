@@ -4,6 +4,7 @@
 
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldTextGuid;
+const FieldTextStreet = require('./field-text-street').FieldTextStreet;
 
 // const FieldObject = require('./field-object').FieldObject;
 const FieldComposed = require('./field-composed').FieldComposed;
@@ -22,6 +23,7 @@ class FieldLocation extends FieldComposed {
     this._fields.number = new FieldText();
     this._fields.suffix = new FieldText();
     this._fields.streetNumber = new FieldText({ emptyAllow: false});
+    this._fields.streetNumber2 = new FieldTextStreet({emptyAllow: false});
     this._fields.zipcode = new FieldZipcode(_.merge(options, {emptyAllow: false}));
     this._fields.city = new FieldText({ emptyAllow: false});
     this._fields.country = new FieldText({emptyAllow: true});
@@ -56,7 +58,15 @@ class FieldLocation extends FieldComposed {
 
     // streetNumber can be split if street and number do NOT exist
     if (data.street === undefined || data.number === undefined) {
-      if (data.streetNumber) {
+      if (data.streetNumber2) {
+        result.street = this._fields.streetNumber2.convert(fieldName, data.streetNumber2, logger, data);
+        if (data.number) {
+          result.number = data.number;
+        }
+        if (data.suffix) {
+          result.suffix = data.suffix
+        }
+      } else if (data.streetNumber) {
         if (countryNumberRight) {
           // ToDo: better implementation: https://www.rosettacode.org/wiki/Separate_the_house_number_from_the_street_name
           const re = /^(\d*[\wäöüß\d '\-\.]+)[,\s]+(\d+)\s*([\wäöüß\d\-\/]*)$/i;

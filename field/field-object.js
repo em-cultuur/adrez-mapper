@@ -143,7 +143,7 @@ class FieldObject extends Field {
       let subName = fieldName + '.' + name;
       try {
         let fieldDefinition = fields[name];
-        result[name] = await fieldDefinition.convert(subName, data[name], logger);
+        result[name] = await fieldDefinition.convert(subName, data[name], logger, data);
         if (result[name] === undefined) { // remove keys that are empty
           delete result[name];
         }
@@ -202,7 +202,7 @@ class FieldObject extends Field {
    * @param logger
    * @param options
    */
-  convert(fieldName, data, logger = false) {
+  convert(fieldName, data, logger = false, parent = false) {
     let isValid = [];
     let fields = {};
     // create the list of fields to process
