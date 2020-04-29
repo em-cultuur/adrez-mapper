@@ -15,6 +15,7 @@ class FieldLocation extends FieldComposed {
   constructor(options = {}) {
     super(options);
     this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 111;
+    this.defaultCountryId = options.defaultCountryId ? options.defaultCountryId : 500;
     this.lookupFunctionName = 'location';
     this.emptyValueAllowed = true;
 
@@ -43,13 +44,16 @@ class FieldLocation extends FieldComposed {
 
     if (!data.countryId) {
       if  (data.country) {
-        data.countryId = await this.lookup.country(fieldName, data.country, false, data)
+        result.countryId = await this.lookup.country(fieldName, data.country, false, data)
       } else if (data.zipcode) {
         result.countryId = await this._fields.zipcode.countryId(data.zipcode, false);
-        if (result.countryId === false) {
+        if (!result.countryId) {
           result.countryId = await this.lookup.zipcode2Country(fieldName, data.zipcode, 0, data);
         }
       }
+    }
+    if (!result.countryId) {
+      result.countryId = this.defaultCountryId;
     }
 
     let countryNumberRight = await this.lookup.countryStreetNumberRight(fieldName, data.countryId, true, data);

@@ -2,6 +2,7 @@
 
 2020-04-29
 - better streetNumber parser
+- missing location.countryId if not defined
 
 2020-04-18 (0.6)
 - changed LocatorContact and LocatorCampaign so empty field will remain in the locator.
