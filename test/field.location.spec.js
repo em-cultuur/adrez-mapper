@@ -68,7 +68,7 @@ describe('field.location', () => {
     });
     it('strange combination', async () => {
       let r = await f.convert('location', {streetNumber: 'Postbus 12808/Frankemaheerd 2',}, logger);
-      assert.equal(r.street, 'Postbus 12808/Frankemaheerd 2', 'remove all')
+      assert.equal(r.street, 'Postbus 12808/Frankemaheerd', 'remove all')
     });
     it('strange combination', async () => {
       let r = await f.convert('location', {streetNumber: 'Dr. Jan van Breemenstraat 1 – ruimte E5',}, logger);
@@ -76,7 +76,7 @@ describe('field.location', () => {
     });
     it('strange combination', async () => {
       let r = await f.convert('location', {streetNumber: 'Joubertstraat 15, 2e verdieping',}, logger);
-      assert.equal(r.street, 'Joubertstraat 15, 2e verdieping', 'remove all')
+      assert.equal(r.street, 'Joubertstraat 15', 'remove all')
     });
 
   });
@@ -222,5 +222,62 @@ describe('field.location', () => {
     });
   });
 
+  describe('zipcode text', async() => {
+    const street = [
+      {value: "Laan 1940-’45 66", street: 'Laan 1940-\'45', number: '66', suffix: ''},
+      {value: "Dr. J. Straat 12-14", street: 'Dr. J. Straat', number: '12', suffix: '-14'},
+      {value: "Plataanstraat 5", street: 'Plataanstraat', number: '5', suffix: ''},
+      {value: "Plataanstraat 5B", street: 'Plataanstraat', number: '5', suffix: 'B'},
+      {value: "Plataanstraat 5 B", street: 'Plataanstraat', number: '5', suffix: 'B'},
+      {value: "Straat 12", street: 'Straat', number: '12', suffix: ''},
+      {value: "Straat 12 II", street: 'Straat', number: '12', suffix: 'II'},
+      {value: "Dr. J. Straat   12", street: 'Dr. J. Straat', number: '12', suffix: ''},
+      {value: "Dr. J. Straat 12 a", street: 'Dr. J. Straat', number: '12', suffix: 'a'},
+
+//       {value: "Laan 1940–1945 37", street: 'Laan 1940 – 1945', number: '37', suffix: ''},
+      {value: "Plein 1940 2", street: 'Plein 1940', number: '2', suffix: ''},
+      {value: "1213-laan 11", street: '1213-laan', number: '11', suffix: ''},
+      {value: "16 april 1944 Pad 1", street: '16 april 1944 Pad', number: '1', suffix: ''},
+      {value: "1e Kruisweg 36", street: '1e Kruisweg', number: '36', suffix: ''},
+      {value: "Boisotkade 2A", street: 'Boisotkade', number: '2', suffix: 'A'},
+      {value: "Laan '40-`45", street: 'Laan \'40-\`45', number: undefined, suffix: undefined},
+      {value: "Langeloërduinen 3 46", street: 'Langeloërduinen 3', number: '46', suffix: ''},
+      {value: "Marienwaerdt 2e Dreef 2", street: 'Marienwaerdt 2e Dreef', number: '2', suffix: ''},
+      {value: "Provincialeweg N205 1", street: 'Provincialeweg N205', number: '1', suffix: ''},
+      {value: "Rivium 2e Straat 59.", street: 'Rivium 2e Straat 59.', number: undefined, suffix: undefined, comment: '. and the can not parsed' },
+      {value: "Nieuwe gracht 20rd", street: 'Nieuwe gracht', number: '20', suffix: 'rd'},
+      {value: "Nieuwe gracht 21rd 2", street: 'Nieuwe gracht 21rd', number: '2', suffix: ''},
+      {value: "Nieuwe gracht 20zw /2", street: 'Nieuwe gracht', number: '20', suffix: 'zw /2'},
+      {value: "Nieuwe gracht 20zw/3", street: 'Nieuwe gracht', number: '20', suffix: 'zw/3'},
+      {value: "Nieuwe gracht 20 zw/4", street: 'Nieuwe gracht', number: '20', suffix: 'zw/4'},
+      {value: "Nieuwe gracht 24 -2", street: 'Nieuwe gracht', number: '24', suffix: '-2'},
+      {value: "p/a Nieuwe gracht 24 -2", street: 'p/a Nieuwe gracht', number: '24', suffix: '-2'},
+      {value: "Nieuwe gracht 24 2hoog", street: 'Nieuwe gracht 24', number: '2', suffix: 'hoog', comment: 'number is on the street'},
+      {value: "Nieuwe gracht 24 2\"", street: 'Nieuwe gracht 24', number: '2', suffix: '"'},
+      {value: "Bahnhofstr. 4", street: 'Bahnhofstr.', number: '4', suffix: ''},
+
+      {value: "p/a P.C. Hooftstraat 15", street: 'p/a P.C. Hooftstraat', number: '15', suffix: ''},
+      {value: "Graaf FLorisstraat 10 4- hoog", street: 'Graaf FLorisstraat 10', number: '4', suffix: '- hoog', comment: 'number moved to address (1945('},
+      {value: "Graaf FLorisstraat 10 /4", street: 'Graaf FLorisstraat', number: '10', suffix: '/4'},
+      {value: "Jacob van Lennepkade 153- I\"", street: 'Jacob van Lennepkade', number: '153', suffix: '- I"'},
+      {value: "1e Jan van der Heijdenstraat 44-2 A", street: '1e Jan van der Heijdenstraat', number: '44', suffix: '-2 A'},
+      {value: "Cornelis v/d Lindenstraat 1\"", street: 'Cornelis v/d Lindenstraat', number: '1', suffix: '"'},
+      {value: "Frans Halsstraat 46 - II\"", street: 'Frans Halsstraat', number: '46', suffix: '- II"'},
+      {value: "Lange Slachterijstraat 32 bus II\"", street: 'Lange Slachterijstraat', number: '32', suffix: 'bus II"'},
+      {value: "Hoogte Kadijk 49 - C\"", street: 'Hoogte Kadijk', number: '49', suffix: '- C"'},
+      {value: "Grevelingenstr 16 (2)", street: 'Grevelingenstr', number: '16', suffix: '(2)'},
+    ]
+    it('translate street', async () => {
+      for (let l = 0; l < street.length; l++) {
+        logger.clear();
+        let r = await f.convert('location', {
+          "streetNumber": street[l].value,
+        }, logger);
+        assert.equal(r.street, street[l].street, street[l].value);
+        assert.equal(r.number, street[l].number, street[l].value)
+        assert.equal(r.suffix, street[l].suffix, street[l].value);
+      }
+    })
+  });
 
 });

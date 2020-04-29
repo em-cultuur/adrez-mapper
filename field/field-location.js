@@ -4,7 +4,6 @@
 
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldTextGuid;
-const FieldTextStreet = require('./field-text-street').FieldTextStreet;
 
 // const FieldObject = require('./field-object').FieldObject;
 const FieldComposed = require('./field-composed').FieldComposed;
@@ -23,7 +22,6 @@ class FieldLocation extends FieldComposed {
     this._fields.number = new FieldText();
     this._fields.suffix = new FieldText();
     this._fields.streetNumber = new FieldText({ emptyAllow: false});
-    this._fields.streetNumber2 = new FieldTextStreet({emptyAllow: false});
     this._fields.zipcode = new FieldZipcode(_.merge(options, {emptyAllow: false}));
     this._fields.city = new FieldText({ emptyAllow: false});
     this._fields.country = new FieldText({emptyAllow: true});
@@ -58,18 +56,12 @@ class FieldLocation extends FieldComposed {
 
     // streetNumber can be split if street and number do NOT exist
     if (data.street === undefined || data.number === undefined) {
-      if (data.streetNumber2) {
-        result.street = this._fields.streetNumber2.convert(fieldName, data.streetNumber2, logger, data);
-        if (data.number) {
-          result.number = data.number;
-        }
-        if (data.suffix) {
-          result.suffix = data.suffix
-        }
-      } else if (data.streetNumber) {
+      if (data.streetNumber) {
+        data.streetNumber = data.streetNumber.replace('’', '\'');
         if (countryNumberRight) {
-          // ToDo: better implementation: https://www.rosettacode.org/wiki/Separate_the_house_number_from_the_street_name
-          const re = /^(\d*[\wäöüß\d '\-\.]+)[,\s]+(\d+)\s*([\wäöüß\d\-\/]*)$/i;
+          //  https://gist.github.com/christiaanwesterbeek/c574beaf73adcfd74997
+          const re = /^(\d*[\p{L}\d '\/\\\-\.]+)[,\s]+(\d+)\s*([\p{L} \d\-\/"\(\)]*)$/iu;
+
           let match = data.streetNumber.match(re);
           if (match) {
             match.shift(); // verwijder element 0=het hele item
@@ -77,6 +69,13 @@ class FieldLocation extends FieldComposed {
             data.street = match[0].trim();
             data.number = match[1].trim();
             data.suffix = match[2].trim();
+
+            // for (let suffixIndex = 2; suffixIndex < match.length; suffixIndex++) {
+            //   data.suffix += match[suffixIndex]
+            // }
+            // if (data.suffix.length === 0) {
+            //   data.suffix = undefined
+            // }
           } else {
             this.log(logger, 'warn', fieldName + '.streetNumber', `can not parse: "${data.streetNumber}"`);
             data.street = data.streetNumber;
