@@ -224,6 +224,10 @@ describe('field.location', () => {
 
   describe('zipcode text', async() => {
     const street = [
+      {value: "Plein 1945 1", street: 'Plein 1945', number: '1', suffix: ''},
+      {value: "Straat 12 '", street: 'Straat', number: '12', suffix: '\''},
+      {value: "Straat 12 '\"", street: 'Straat', number: '12', suffix: '\'"'},
+      {value: "Nieuwe gracht 224 2", street: 'Nieuwe gracht 224', number: '2', suffix: '', comment: 'number is not right'},
       {value: "Laan 1940-’45 66", street: 'Laan 1940-\'45', number: '66', suffix: ''},
       {value: "Dr. J. Straat 12-14", street: 'Dr. J. Straat', number: '12', suffix: '-14'},
       {value: "Plataanstraat 5", street: 'Plataanstraat', number: '5', suffix: ''},
@@ -240,13 +244,13 @@ describe('field.location', () => {
       {value: "16 april 1944 Pad 1", street: '16 april 1944 Pad', number: '1', suffix: ''},
       {value: "1e Kruisweg 36", street: '1e Kruisweg', number: '36', suffix: ''},
       {value: "Boisotkade 2A", street: 'Boisotkade', number: '2', suffix: 'A'},
-      {value: "Laan '40-`45", street: 'Laan \'40-\`45', number: undefined, suffix: undefined},
-      {value: "Langeloërduinen 3 46", street: 'Langeloërduinen 3', number: '46', suffix: ''},
+      {value: "Laan '40-`45", street: 'Laan \'40-\'45', number: undefined, suffix: undefined},
+      {value: "Langeloërduinen 3 46", street: 'Langeloërduinen 3', number: '46', suffix: '', comment: 'suffix is wrong'},
       {value: "Marienwaerdt 2e Dreef 2", street: 'Marienwaerdt 2e Dreef', number: '2', suffix: ''},
       {value: "Provincialeweg N205 1", street: 'Provincialeweg N205', number: '1', suffix: ''},
       {value: "Rivium 2e Straat 59.", street: 'Rivium 2e Straat 59.', number: undefined, suffix: undefined, comment: '. and the can not parsed' },
       {value: "Nieuwe gracht 20rd", street: 'Nieuwe gracht', number: '20', suffix: 'rd'},
-      {value: "Nieuwe gracht 21rd 2", street: 'Nieuwe gracht 21rd', number: '2', suffix: ''},
+      {value: "Nieuwe gracht 21rd 2", street: 'Nieuwe gracht 21rd', number: '2', suffix: '', comment: 'number is place with the street'},
       {value: "Nieuwe gracht 20zw /2", street: 'Nieuwe gracht', number: '20', suffix: 'zw /2'},
       {value: "Nieuwe gracht 20zw/3", street: 'Nieuwe gracht', number: '20', suffix: 'zw/3'},
       {value: "Nieuwe gracht 20 zw/4", street: 'Nieuwe gracht', number: '20', suffix: 'zw/4'},
@@ -265,7 +269,9 @@ describe('field.location', () => {
       {value: "Frans Halsstraat 46 - II\"", street: 'Frans Halsstraat', number: '46', suffix: '- II"'},
       {value: "Lange Slachterijstraat 32 bus II\"", street: 'Lange Slachterijstraat', number: '32', suffix: 'bus II"'},
       {value: "Hoogte Kadijk 49 - C\"", street: 'Hoogte Kadijk', number: '49', suffix: '- C"'},
-      {value: "Grevelingenstr 16 (2)", street: 'Grevelingenstr', number: '16', suffix: '(2)'},
+      {value: "Grevelingenstr 16 (2)", street: 'Grevelingenstr', number: '16', suffix: '(2)'}
+
+
     ]
     it('translate street', async () => {
       for (let l = 0; l < street.length; l++) {

@@ -61,10 +61,16 @@ class FieldLocation extends FieldComposed {
     // streetNumber can be split if street and number do NOT exist
     if (data.street === undefined || data.number === undefined) {
       if (data.streetNumber) {
-        data.streetNumber = data.streetNumber.replace('’', '\'');
+        const repChar = [
+          {a:'`', b:'\''},
+          {a:'’', b:'\''} ]
+        for (let l = 0; l< repChar.length; l++) {
+          data.streetNumber = data.streetNumber.replace(repChar[l].a, repChar[l].b);
+        }
         if (countryNumberRight) {
           //  https://gist.github.com/christiaanwesterbeek/c574beaf73adcfd74997
-          const re = /^(\d*[\p{L}\d '\/\\\-\.]+)[,\s]+(\d+)\s*([\p{L} \d\-\/"\(\)]*)$/iu;
+           const re = /^(\d*[\p{L}\d '\/\\\-\.]+)[,\s]+(\d+)\s*([\p{L} \d\-\/'"\(\)]*)$/iu;
+          //const re = /^(\d*[\p{L}\d '\/\\\-\.]+)[,\s]+(\d+)\s*([\p{L}\d\-\/]*)$/iu;
 
           let match = data.streetNumber.match(re);
           if (match) {
@@ -74,12 +80,6 @@ class FieldLocation extends FieldComposed {
             data.number = match[1].trim();
             data.suffix = match[2].trim();
 
-            // for (let suffixIndex = 2; suffixIndex < match.length; suffixIndex++) {
-            //   data.suffix += match[suffixIndex]
-            // }
-            // if (data.suffix.length === 0) {
-            //   data.suffix = undefined
-            // }
           } else {
             this.log(logger, 'warn', fieldName + '.streetNumber', `can not parse: "${data.streetNumber}"`);
             data.street = data.streetNumber;
