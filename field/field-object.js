@@ -168,6 +168,7 @@ class FieldObject extends Field {
 //          text: data.type,
           fieldTypeId: data.fieldTypeId,
           fieldTypeGuid: data.fieldTypeGuid,
+          fieldTypeInsertOnly: data.hasOwnProperty('typeInsertOnly') ? !! data.typeInsertOnly : false,
 
           // the data to create the parent if it does not exist
           parentIdDefault: this.baseTypeId,

@@ -282,10 +282,10 @@ describe('field.location', () => {
         assert.equal(r.street, street[l].street, street[l].value);
         assert.equal(r.number, street[l].number, street[l].value)
         assert.equal(r.suffix, street[l].suffix, street[l].value);
-        let r2 = await f.convert('location', {
-          "streetNumber": r.street
-        })
-        assert.equal(r2.street, street[l].street, street[l].value);
+        // let r2 = await f.convert('location', {
+        //   "streetNumber": r.street
+        // })
+        // assert.equal(r2.street, street[l].street, street[l].value);
       }
     })
   });

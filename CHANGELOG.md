@@ -2,6 +2,7 @@
 
 2020-06-18
 - Object.typeInsertOnly
+- added the fieldTypeInsertOnly to the code (object) class definition
 
 2020-04-29
 - better streetNumber parser
