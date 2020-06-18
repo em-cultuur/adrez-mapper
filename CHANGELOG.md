@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-06-18
+- Object.typeInsertOnly
+
 2020-04-29
 - better streetNumber parser
 - missing location.countryId if not defined

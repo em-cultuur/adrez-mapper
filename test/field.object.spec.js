@@ -56,4 +56,15 @@ describe('field.object', () => {
 
   });
 
+  describe('typeIsInsertOnly', () => {
+    logger.clear();
+    it('type lookup', async () => {
+      let r = await f.convert('object', {
+        type: 'John',
+        typeInsertOnly: 1
+      }, logger);
+      assert.equal(r.typeInsertOnly, true, 'translate the type');
+    })
+
+  })
 });

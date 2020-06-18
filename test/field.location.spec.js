@@ -224,10 +224,10 @@ describe('field.location', () => {
 
   describe('zipcode text', async() => {
     const street = [
+      {value: "Nieuwe gracht 224 2", street: 'Nieuwe gracht 224', number: '2', suffix: '', comment: 'number is not right'},
       {value: "Plein 1945 1", street: 'Plein 1945', number: '1', suffix: ''},
       {value: "Straat 12 '", street: 'Straat', number: '12', suffix: '\''},
       {value: "Straat 12 '\"", street: 'Straat', number: '12', suffix: '\'"'},
-      {value: "Nieuwe gracht 224 2", street: 'Nieuwe gracht 224', number: '2', suffix: '', comment: 'number is not right'},
       {value: "Laan 1940-’45 66", street: 'Laan 1940-\'45', number: '66', suffix: ''},
       {value: "Dr. J. Straat 12-14", street: 'Dr. J. Straat', number: '12', suffix: '-14'},
       {value: "Plataanstraat 5", street: 'Plataanstraat', number: '5', suffix: ''},
@@ -282,6 +282,10 @@ describe('field.location', () => {
         assert.equal(r.street, street[l].street, street[l].value);
         assert.equal(r.number, street[l].number, street[l].value)
         assert.equal(r.suffix, street[l].suffix, street[l].value);
+        let r2 = await f.convert('location', {
+          "streetNumber": r.street
+        })
+        assert.equal(r2.street, street[l].street, street[l].value);
       }
     })
   });

@@ -7,6 +7,7 @@ const _ = require('lodash');
 const ErrorFieldNotAllowed = require('error-types').ErrorFieldNotAllowed;
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldTextGuid;
+const FieldTextBoolean = require('./field-text-boolean').FieldTextBoolean;
 
 class FieldObject extends Field {
 
@@ -26,6 +27,8 @@ class FieldObject extends Field {
       typeId: new FieldGuid({emptyAllow:  this.emptyAllow }),        // the id, overrules the type
       typeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
       typeIsDefault: new FieldGuid({emptyAllow: this.emptyAllow}),   // set in the code table it's default
+      typeInsertOnly: new FieldTextBoolean({emptyValueAllowed: this.emptyValueAllowed}),
+                                                                     // if set to true the code will not be delete by the sync
 
       fieldTypeId:  new FieldGuid({emptyAllow:  this.emptyAllow }),  // if set: set the code.typeId
       fieldTypeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }), // or find the code.guid => typeId
