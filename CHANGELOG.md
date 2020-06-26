@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-06-26
+- add: field-text-binary
+
 2020-06-18
 - Object.typeInsertOnly
 - added the fieldTypeInsertOnly to the code (object) class definition
