@@ -76,7 +76,7 @@ class FieldCampaign extends FieldComposed {
     }
 
 
-    result.campaignDate = data.campaignDate ? data.campaignDate : ('' + new Date());
+    result.campaignDate = data.campaignDate; // ? data.campaignDate : ('' + new Date());
 
     this.copyFieldsToResult(result, data, ['group', 'action']);
     if (data.locator) {

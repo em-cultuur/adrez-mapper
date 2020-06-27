@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-06-27
+- fix: removed campaign.campaignDate default value
+
 2020-06-26
 - add: field-text-binary
 
