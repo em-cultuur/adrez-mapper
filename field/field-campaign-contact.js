@@ -14,11 +14,11 @@ class FieldCampaignContact extends FieldCode {
     delete this._fields._parent;
 
     // add ours
-    this._fields.text = new FieldText();
-    this._fields._campaign = new FieldText({emptyAllow: true});
-    this._fields._contact = new FieldText({emptyAllow: true});
+   // this._fields.text = new FieldText();
+    this._fields.campaign = new FieldText({emptyAllow: true});
+    this._fields.contact = new FieldText({emptyAllow: true});
 
-    this.lookupFunc = 'campaignContact';
+    this.lookupFunctionName = 'campaignContact';
   }
 }
 module.exports.FieldCampaignContact = FieldCampaignContact;

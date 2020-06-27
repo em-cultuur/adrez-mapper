@@ -2,6 +2,7 @@
 
 2020-06-27
 - fix: removed campaign.campaignDate default value
+- fix: campaignContact with new lookup, campaign and contact
 
 2020-06-26
 - add: field-text-binary

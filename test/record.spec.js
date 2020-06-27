@@ -178,7 +178,7 @@ describe('record', () => {
   describe('campaignCode', () => {
     it('remove empty', async () => {
       let rec = new Record({removeEmpty: true, logger});
-      let result = await rec.convert('campaignCode', {campaignCode: [{typeGuid: "GUID", _parent: 'main', type: 'campaign test'}]});
+      let result = await rec.convert('campaignCode', {campaignCode: [{typeGuid: "GUID",type: 'campaign test'}]});
       assert.isDefined(result.campaignCode);
     });
   })
