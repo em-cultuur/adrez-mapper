@@ -16,7 +16,8 @@ const DEFAULT_CAMPAIGN_ACTION = 9998;
 class FieldCampaign extends FieldComposed {
   constructor(options = {}) {
     super(options);
-    this.lookupFunctionName = 'campaign';
+    // the lookup is for the action because its the relation between the campaign an the contact
+    this.lookupFunctionName = 'campaignContact';
     // source / sourceId is stored in type / typeId
     this._fields.guid = new FieldGuid();
     this._fields.title = new FieldText({emptyAllow: false});
@@ -26,9 +27,12 @@ class FieldCampaign extends FieldComposed {
     this._fields.group = new FieldText({emptyAllow: true});
     this._fields.groupId = new FieldGuid();
     // the action that added to campaignContact
-    this._fields.actionId = new FieldText({emptyAllow: true});
-    this._fields.actionGuid = new FieldGuid({emptyAllow: true});
-    this._fields.action = new FieldText();
+    // this._fields.actionId = new FieldText({emptyAllow: true});
+    // this._fields.actionGuid = new FieldGuid({emptyAllow: true});
+    // this._fields.action = new FieldText();
+    this._fields.action = this._fields.type;
+    this._fields.actionId = this._fields.typeId;
+    this._fields.actionGuid = this._fields.typeGuid;
 
     this._fields._key = new FieldText({emptyAllow: true});
 
