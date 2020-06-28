@@ -94,7 +94,7 @@ class FieldCampaign extends FieldComposed {
     }
 
     // do the second lookup for the action
-    this.lookupCode(data, 'campaignCode', 'action', 'action', 0, logger)
+    this.lookupCode(data, 'campaignContact', 'action', 'action', 0, logger)
 
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);

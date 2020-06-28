@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-06-28
+- fix: campaign action should call campaignContact
+
 2020-06-27
 - fix: removed campaign.campaignDate default value
 - fix: campaignContact with new lookup, campaign and contact
