@@ -9,9 +9,9 @@ const FieldDate = require('./field-text-date').FieldTextDate;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
 const FieldLocatorCampaign = require('./field-locator-campaign').FieldLocatorCampaign;
 
-const DEFAULT_CAMPAIGN_TYPE = 492381;
-const DEFAULT_CAMPAIGN_GROUP = 2;
-const DEFAULT_CAMPAIGN_ACTION = 9998;
+const DEFAULT_CAMPAIGN_TYPE = 0;
+const DEFAULT_CAMPAIGN_GROUP = 0;
+const DEFAULT_CAMPAIGN_ACTION = 0;
 
 class FieldCampaign extends FieldComposed {
   constructor(options = {}) {
