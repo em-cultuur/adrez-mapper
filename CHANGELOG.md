@@ -2,6 +2,7 @@
 
 2020-06-28
 - fix: campaign action should call campaignContact
+- fix: campaign action stored
 
 2020-06-27
 - fix: removed campaign.campaignDate default value
