@@ -17,6 +17,9 @@ describe('field.campaign', () => {
       if (def.text === 'x') {
         return 123
       }
+      if (def.guid === 'TYPE_GUID') {
+        return 4
+      }
       return super.campaign(fieldName, def);
     }
 
@@ -28,6 +31,9 @@ describe('field.campaign', () => {
     }
 
     async campaignAction(fieldName, def) {
+      if (def.guid === 'ACT_GUID') {
+        return 3;
+      }
       if (def.text === 'test') {
         return 123
       }
@@ -74,8 +80,9 @@ describe('field.campaign', () => {
       assert.equal(r.actionId, DEFAULT_CAMPAIGN_ACTION, 'found default')
     });
     it('translate value', async () => {
-      let r = await f.convert('campaign', {title: 'zeeland', action: 'test'}, logger);
-      assert.equal(r.actionId, 123, 'found group')
+      let r = await f.convert('campaign', {title: 'zeeland', type: 'alg', typeGuid: 'TYPE_GUID',  action: 'someAction', actionGuid: 'ACT_GUID'}, logger);
+      assert.equal(r.actionId, 3, 'found address2campaign');
+      assert.equal(r.typeId, 4)
     });
   });
 

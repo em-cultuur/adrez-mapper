@@ -160,41 +160,42 @@ class FieldObject extends Field {
     if ((this.emptyValueAllowed || result.value !== undefined || result.type !== undefined || result.type_ !== undefined) &&
       ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
 
-      if (this.lookup && this.lookupFunctionName && this.lookup[this.lookupFunctionName]) {
-        // create / lookup the code. Needs id, guid or text for code. If not found needs also groupId, fieldTypeId.
-        // translate into a new code that can be found
-        let codeDef = {
-          // the code we want to find. Text is store in the result.type
-          id: data.typeId,
-          guid: data.typeGuid,
-//          text: data.type,
-          fieldTypeId: data.fieldTypeId,
-          fieldTypeGuid: data.fieldTypeGuid,
-          fieldTypeInsertOnly: data.hasOwnProperty('typeInsertOnly') ? !! data.typeInsertOnly : false,
-
-          // the data to create the parent if it does not exist
-          parentIdDefault: this.baseTypeId,
-          parentId: data.parentId,
-          parentGuid: data.parentGuid,
-          parentText: data.parentText,
-          data: data
-        };
-        if (data.type_) {
-          codeDef.textNoFind = data.type_;
-        } else {
-          codeDef.text = data.type;
-        }
-        this.buildCodeDef(codeDef, data);
-
-        result.typeId = await this.lookup[this.lookupFunctionName](fieldName, codeDef); //
-
-        // result.type, this.baseTypeId, data);
-      } else if (result.type !== undefined) {
-        this.log(logger, 'error', fieldName, `no lookup function or lookupFunction name not defined for class "${this.constructor.name}" to translate type to typeId`);
-      } else {
-        // use the root code as typeId
-        result.typeId = this.baseTypeId;
-      }
+      result.typeId = await this.lookupCode(data, this.lookupFunctionName, 'type', '', this.baseTypeId, logger)
+//       if (this.lookup && this.lookupFunctionName && this.lookup[this.lookupFunctionName]) {
+//         // create / lookup the code. Needs id, guid or text for code. If not found needs also groupId, fieldTypeId.
+//         // translate into a new code that can be found
+//         let codeDef = {
+//           // the code we want to find. Text is store in the result.type
+//           id: data.typeId,
+//           guid: data.typeGuid,
+// //          text: data.type,
+//           fieldTypeId: data.fieldTypeId,
+//           fieldTypeGuid: data.fieldTypeGuid,
+//           fieldTypeInsertOnly: data.hasOwnProperty('typeInsertOnly') ? !! data.typeInsertOnly : false,
+//
+//           // the data to create the parent if it does not exist
+//           parentIdDefault: this.baseTypeId,
+//           parentId: data.parentId,
+//           parentGuid: data.parentGuid,
+//           parentText: data.parentText,
+//           data: data
+//         };
+//         if (data.type_) {
+//           codeDef.textNoFind = data.type_;
+//         } else {
+//           codeDef.text = data.type;
+//         }
+//         this.buildCodeDef(codeDef, data);
+//
+//         result.typeId = await this.lookup[this.lookupFunctionName](fieldName, codeDef); //
+//
+//         // result.type, this.baseTypeId, data);
+//       } else if (result.type !== undefined) {
+//         this.log(logger, 'error', fieldName, `no lookup function or lookupFunction name not defined for class "${this.constructor.name}" to translate type to typeId`);
+//       } else {
+//         // use the root code as typeId
+//         result.typeId = this.baseTypeId;
+//       }
     }
     result = _.omit(result, ['typeGuid', 'type', 'type_', 'parentId', 'parentGuid', 'parentText', 'parentTypeId']);
     // delete result.type;
@@ -202,6 +203,41 @@ class FieldObject extends Field {
     return Promise.resolve(result);
   }
 
+  async lookupCode(data, functionName, fieldName = 'type', parentPrefix = '', baseTypeId, logger) {
+    if (this.lookup && this.lookupFunctionName && this.lookup[this.lookupFunctionName]) {
+      // create / lookup the code. Needs id, guid or text for code. If not found needs also groupId, fieldTypeId.
+      // translate into a new code that can be found
+      let codeDef = {
+        // the code we want to find. Text is store in the result.type
+        id: data[`${fieldName}Id`],
+        guid: data[`${fieldName}Guid`],
+        fieldTypeId: data[`field${fieldName}Id`],
+        fieldTypeGuid: data[`field${fieldName.substring(0,1).toUpperCase() + fieldName.substring(1)}Guid`],
+        fieldTypeInsertOnly: data.hasOwnProperty(`${fieldName}InsertOnly`) ? !!data[`${fieldName}InsertOnly`] : false,
+
+        // the data to create the parent if it does not exist
+        parentIdDefault: this.baseTypeId,
+        parentId: data[`${parentPrefix}parentId`],
+        parentGuid: data[`${parentPrefix}parentGuid`],
+        parentText: data[`${parentPrefix}parentText`],
+        data: data
+      };
+      if (data.type_) {
+        codeDef.textNoFind = data.type_;
+      } else {
+        codeDef.text = data[fieldName];
+      }
+      this.buildCodeDef(codeDef, data);
+
+      return await this.lookup[functionName](fieldName, codeDef); //
+    // } else if (baseTypeId !== undefined) {
+    //   this.log(logger, 'error', fieldName, `no lookup function or lookupFunction ${functionName} name not defined for class "${this.constructor.name}" to translate type to typeId`);
+    } else {
+      return baseTypeId
+    }
+    return 0;
+
+  }
   /**
    * adjust the object. if error or warnings use the logger
    * @param object
