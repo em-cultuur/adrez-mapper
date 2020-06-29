@@ -61,7 +61,7 @@ describe('field.locator.contact', () => {
     assert.equal(r.contact[0].locator.name, 'John');
   })
 
-  it ('record - empty locatior', async() => {
+  it ('record - empty locator', async() => {
     let record = new Record();
     let r = await record.convert('rec', { contact:[{name: 'John', locator: {name: '', fullName: undefined}}]})
     assert.equal(r.contact.length, 1)

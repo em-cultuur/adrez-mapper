@@ -1,5 +1,9 @@
 # adrez-mapper Revisions
 
+2020-06-29
+- add: name parser can be configured by a config. Keys: suffix, prefix, titles 
+- fix: campaign.group (groupGuid, group, groupId). Callback: campaignGroup
+
 2020-06-28
 - fix: campaign action should call campaignContact
 - fix: campaign action stored

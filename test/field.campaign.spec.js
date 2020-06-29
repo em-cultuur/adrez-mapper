@@ -23,22 +23,28 @@ describe('field.campaign', () => {
       return super.campaign(fieldName, def);
     }
 
-    async campaignGroup(fieldName, def) {
+    async campaignCode(fieldName, def) {
       if (def.text === 'xx') {
         return 123
       }
       return super.campaignGroup(fieldName, def);
     }
 
-    async campaignAction(fieldName, def) {
+    async campaignContact(fieldName, def) {
       if (def.guid === 'ACT_GUID') {
         return 3;
       }
       if (def.text === 'test') {
         return 123
       }
-      return super.campaignAction(fieldName, def);
+      return super.campaignContact(fieldName, def);
+    }
 
+    async campaignGroup(fieldname, def) {
+      if (def.guid === 'GRP_X') {
+        return 123
+      }
+      return super.campaignGroup(fieldname, def)
     }
   }
 
@@ -68,7 +74,7 @@ describe('field.campaign', () => {
       assert.equal(r.groupId, DEFAULT_CAMPAIGN_GROUP, 'found default')
     });
     it('translate value', async () => {
-      let r = await f.convert('campaign', {title: 'zeeland', group: 'xx'}, logger);
+      let r = await f.convert('campaign', {title: 'zeeland', group: 'xx', groupGuid: 'GRP_X'}, logger);
       assert.equal(r.groupId, 123, 'found group')
     });
   });

@@ -7,6 +7,7 @@ const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldTextGuid;
 const FieldDate = require('./field-text-date').FieldTextDate;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
+const FieldBinary = require('./field-text-binary').FieldTextBinary;
 const FieldLocatorCampaign = require('./field-locator-campaign').FieldLocatorCampaign;
 
 const DEFAULT_CAMPAIGN_TYPE = 0;
@@ -26,6 +27,7 @@ class FieldCampaign extends FieldComposed {
     this._fields.description = new FieldText({emptyAllow: false});
     this._fields.group = new FieldText({emptyAllow: true});
     this._fields.groupId = new FieldGuid();
+    this._fields.groupGuid = new FieldGuid();
     // the action that added to campaignContact
     // typeId is used for the sourceId in Adrez, so we need to call it twice
     this._fields.actionId = new FieldText({emptyAllow: true});
@@ -36,6 +38,7 @@ class FieldCampaign extends FieldComposed {
     // this._fields.actionGuid = this._fields.typeGuid;
 
     this._fields._key = new FieldText({emptyAllow: true});
+    this._fields._mode = new FieldBinary({emptyAllow: true});
 
     this._fields.locator = new FieldLocatorCampaign({emptyAllow: false});
     this.emptyValueAllowed = true;
@@ -59,27 +62,30 @@ class FieldCampaign extends FieldComposed {
     // } else {
     //   result.typeId = data.typeId;
     // }
-    if (data.groupId === undefined) {
-      let codeDef = {
-        id: data.groupId,
-        text: data.group,
-      };
-      result.groupId = await this.lookup.campaignGroup(fieldName, codeDef)
-      data.groupId = result.groupId;
-    } else {
-      result.groupId = data.groupId;
-    }
+    // if (data.groupId === undefined) {
+    //   let codeDef = {
+    //     id: data.groupId,
+    //     text: data.group,
+    //   };
+    //   result.groupId = await this.lookup.campaignGroup(fieldName, codeDef)
+    //   data.groupId = result.groupId;
+    // } else {
+    //   result.groupId = data.groupId;
+    // }
     if (data.actionId === undefined) {
       let codeDef = {
         id: data.actionId,
         guid: data.actionGuid,
         text: data.action,
       };
-      result.actionId = await this.lookup.campaignAction(fieldName, codeDef);
+//      result.actionId = await this.lookup.campaignAction(fieldName, codeDef);
     } else {
-      result.actionId = data.actionId;
+//      result.actionId = data.actionId;
     }
 
+    result.groupId = await this.lookupCode(data, 'campaignGroup', 'group', 'group', 0, logger);
+    // do the second lookup for the action
+    result.actionId = await this.lookupCode(data, 'campaignContact', 'action', 'action', 0, logger)
 
     result.campaignDate = data.campaignDate; // ? data.campaignDate : ('' + new Date());
 
@@ -93,8 +99,6 @@ class FieldCampaign extends FieldComposed {
       }
     }
 
-    // do the second lookup for the action
-    result.actionId = await this.lookupCode(data, 'campaignContact', 'action', 'action', 0, logger)
 
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);

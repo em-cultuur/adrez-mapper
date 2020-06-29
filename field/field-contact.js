@@ -41,7 +41,7 @@ class FieldContact extends FieldComposed {
       salutationId: new FieldGuid(),
       salutationGuid: new FieldGuid(),
       salutation: new FieldText(),
-      isDefault: new FieldBoolean(),
+   //   isDefault: new FieldBoolean(),
 
       search: new FieldText(),
 
@@ -59,7 +59,7 @@ class FieldContact extends FieldComposed {
       // used to for calculations
       fullName: new FieldText({ emptyAllow: false}),
 
-      _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
+  //    _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
       locator: new FieldLocatorContact({emptyAllow: false})
     });
     // the contact does not know about values

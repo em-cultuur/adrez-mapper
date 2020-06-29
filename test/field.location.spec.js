@@ -287,7 +287,8 @@ describe('field.location', () => {
         // })
         // assert.equal(r2.street, street[l].street, street[l].value);
       }
-    })
+    });
+
   });
 
 });
