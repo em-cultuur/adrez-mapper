@@ -14,7 +14,7 @@ class FieldMemo extends FieldComposed {
     this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 0;
 
     // if field is set, save it all
-    this._fields.text = new FieldText({emptyAllow: false});
+    this._fields.text = this._fields.value;                        // map it to the value field // new FieldText({emptyAllow: false});
     this._fields.description = new FieldText({emptyAllow: false});
     // this is stored in the Code definition
     this._fields.useDescription = new FieldTextBoolean({emptyAllow: false, returnNumeric: true})
@@ -33,7 +33,7 @@ class FieldMemo extends FieldComposed {
         data.description = await fields.description.convert(fieldName, data.description, logger);
         delete data.text;
       } else if (!data.useDescription && fields.text) {
-        data.text = await fields.text.convert(fieldName, data.text, logger);
+        data.value = await fields.text.convert(fieldName, data.text, logger);
         delete data.description;
       } else {
         delete data.description;
@@ -45,7 +45,7 @@ class FieldMemo extends FieldComposed {
       data.useDescription = true;
       delete data.text;
     } else if (fields.text) {
-      data.text = await fields.text.convert(fieldName, data.text, logger);
+      data.value = await fields.text.convert(fieldName, data.text, logger);
       data.useDescription = false;
       delete data.description;
     } else {

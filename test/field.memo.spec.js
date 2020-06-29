@@ -89,6 +89,7 @@ describe('field.memo', () => {
       assert.isUndefined(r.description, 'no text');
       assert.isUndefined(r.useDescription, 'empty so removed');
     });
-
   });
+
+
 });
