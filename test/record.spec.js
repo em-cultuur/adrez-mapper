@@ -183,5 +183,14 @@ describe('record', () => {
     });
   })
 
+  describe('auto array creation', () => {
+    it('memo object to array', async () => {
+      let rec = new Record({removeEmpty: true, logger});
+      let result = await rec.convert('memo', {memo: {description: 'test'}});
+      assert.isDefined(result.memo);
+      assert.equal(result.memo.length, 1);
+      assert.equal(result.memo[0].description, 'test')
+    });
+  })
 
 });

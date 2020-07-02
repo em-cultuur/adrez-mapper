@@ -53,6 +53,19 @@ class AdrezRecord extends FieldObject {
     return this._lookup;
   }
 
-}
+  convert(fieldName, data, logger = false, parent = false) {
+    // check every key is an array
+    for (let key in data) {
+      if (!data.hasOwnProperty(key)) { continue }
+      if (['id','contactId','_rowIndex'].indexOf(key) >= 0) {
+        continue;
+      }
+      if (!Array.isArray(data[key])) {
+        data[key] = [data[key]]
+      }
+    }
+    return super.convert(fieldName, data, logger, parent)
+  }
+  }
 
 module.exports.AdrezRecord = AdrezRecord;
