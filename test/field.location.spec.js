@@ -14,17 +14,17 @@ describe('field.location', () => {
   let logger = new Logger({toConsole: false});
 
   class LookupLocation extends Lookup {
-    async country(fieldname, country, defaults, data) {
-      if (country.toLowerCase() === 'nederland') {
+    async country(fieldname, data ) {
+      if (data.country && data.country.toLowerCase() === 'nederland') {
         return 500
       }
-      if (country.toLowerCase() === 'belgië') {
+      if (data.country && data.country.toLowerCase() === 'belgië') {
         return 501
       }
-      if (country.toLowerCase() === 'engeland') {
+      if (data.guid && data.guid === 'ADREZ_CNT_GB') {
         return 502
       }
-      return super.country(fieldname, country, defaults, data);
+      return super.country(fieldname, data);
     }
 
     async countryStreetNumberRight(fieldName, countryId, defaults, data) {
@@ -119,7 +119,7 @@ describe('field.location', () => {
         street: '12 test street 99',
         city: 'London',
         zipcode: '',
-        country: 'Engeland',
+        countryGuid: 'ADREZ_CNT_GB',
         _source: 'master'
       }, logger);
       assert.equal(r.countryId, 502, 'found');

@@ -2,6 +2,7 @@
 
 2020-06-02
 - add: auto array for record elements
+- chg: country lookup param changes
 
 2020-06-29
 - add: name parser can be configured by a config. Keys: suffix, prefix, titles 

@@ -27,6 +27,7 @@ class FieldLocation extends FieldComposed {
     this._fields.city = new FieldText({ emptyAllow: false});
     this._fields.country = new FieldText({emptyAllow: true});
     this._fields.countryId = new FieldGuid({emptyAllow: true});
+    this._fields.countryGuid = new FieldGuid({emptyValueAllowed: true})
     delete this._fields.value;
  }
 
@@ -43,14 +44,24 @@ class FieldLocation extends FieldComposed {
     let lookup = false;
 
     if (!data.countryId) {
-      if  (data.country) {
-        result.countryId = await this.lookup.country(fieldName, data.country, false, data)
+      if (data.countryGuid) {
+        result.countryId = await this.lookup.country(fieldName, {guid: data.countryGuid})
+      } else if (data.country) {
+        result .countryId = await this.lookup.country(fieldName, {country: data.country})
       } else if (data.zipcode) {
         result.countryId = await this._fields.zipcode.countryId(data.zipcode, false);
         if (!result.countryId) {
           result.countryId = await this.lookup.zipcode2Country(fieldName, data.zipcode, 0, data);
         }
       }
+      if (!result.countryId) {
+        result .countryId = await this.lookup.country(fieldName, {country: ''})
+      }
+      delete data.countryGuid;
+      delete data.country;
+    } else {
+      delete data.countryGuid;
+      delete data.country;
     }
     if (!result.countryId) {
       result.countryId = this.defaultCountryId;
