@@ -3,6 +3,7 @@
 2020-06-16
 - add: locator-contact: email
 - add: locator-contact: _allowMulti
+- add: binary _mode for object (contact, telephone, etc)
 
 2020-06-02
 - add: auto array for record elements

@@ -19,19 +19,36 @@ class FieldTextBinary extends Field {
 
   }
 
-  /**
-   * validate a fields properties (keys)
-   * it ONLY checkes that the structure of data can be handled by this routine
+
+  /*
+   * convert the binary (text) data into a numeric value
    *
-   * @param fieldName String,
-   * @param data any value that can be converted into an boolean
-   * @param logger Class logger class. if available the info is logged to this object
-   * @return {boolean} True: it can be handled, False: structure has an error
    */
-  // validate(fieldName, data, logger = false) {
-  //   return  (typeof data === 'string' && this._values.hasOwnProperty(data)) ||
-  //     (typeof data === 'number');
-  // }
+  async convert(fieldName, data, logger) {
+    let dt = [];
+    if (Array.isArray(data)) {
+      dt = data;
+    } else if (typeof data === 'string') {
+      dt = data.split(',')
+    } else if (typeof data === 'number') {
+      return data;
+    } else {
+      this.log(logger, 'warn', fieldName, `${data} is not a valid binary`)
+      return 0;
+    }
+    dt.forEach(x => x.toLowerCase)
+    let n = 0;
+    for (let index = 0; index < dt.length; index++) {
+      if (dt[index].trim()) {
+        if (!this._values.hasOwnProperty(dt[index].trim())) {
+          this.log(logger, 'error', `unknown value "${dt[index]}". allowed are: ${Object.keys(this._values).toString()}`)
+        } else {
+          n += this._values[dt[index].trim()]
+        }
+      }
+    }
+    return n;
+  }
 
   isEmpty(data) {
     return data === undefined

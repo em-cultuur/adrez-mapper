@@ -206,5 +206,17 @@ describe('record', () => {
     })
   })
 
+  describe('locker', () => {
+
+    it('memo object to array', async () => {
+      let rec = new Record({removeEmpty: true, logger});
+      let result = await rec.convert('memo', {"contact": [ { "firstName": "Jack","locator": { "email": "info@doe.com" }, "_key": "main" }],
+        "telephone": [ {"telephone": "0123456789" } ]
+      });
+      assert.isDefined(result.contact);
+      assert.equal(result.contact.length, 1);
+      assert.equal(result.contact[0].firstName, 'Jack')
+    });
+  })
 
 });
