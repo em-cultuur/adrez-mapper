@@ -29,7 +29,7 @@ class FieldObject extends Field {
       typeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
       typeIsDefault: new FieldGuid({emptyAllow: this.emptyAllow}),   // set in the code table it's default
       typeInsertOnly: new FieldTextBoolean({emptyValueAllowed: this.emptyValueAllowed}),
-      _mode: new FieldTextBinary({emptyAllow: this.emptyValueAllowed, values:{ add: 1, update: 2, delete: 4, remove: 4, create: 1}}),
+      _mode: new FieldTextBinary({emptyAllow: this.emptyValueAllowed, values:{ none: 0, blocked: 0, add: 1, create: 1, insert: 1, update: 2, modify: 2, delete: 4, remove: 4}}),
       // if set to true the code will not be delete by the sync
 
       fieldTypeId:  new FieldGuid({emptyAllow:  this.emptyAllow }),  // if set: set the code.typeId
