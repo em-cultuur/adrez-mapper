@@ -191,6 +191,20 @@ describe('record', () => {
       assert.equal(result.memo.length, 1);
       assert.equal(result.memo[0].description, 'test')
     });
+    it ('retrieve memo', async () => {
+      let rec = new Record({removeEmpty: true, logger});
+      let result = await rec.convert('memo', {"memo" : [
+        {
+          "type": "'relatiememo'",
+          "description" : "Notitie | nl2br(true)",
+          "typeGuid" : "'I_MEM_REL'",
+          "_parent": "'contact'"
+        }
+      ]});
+      assert.equal(result.memo.length, 1);
+      assert.equal(result.memo[0].typeId, 0)
+    })
   })
+
 
 });

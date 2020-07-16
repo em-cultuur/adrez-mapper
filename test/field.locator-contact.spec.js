@@ -71,5 +71,21 @@ describe('field.locator.contact', () => {
   })
 
 
+  it('record - locator - email', async() => {
+    let record = new Record();
+    let r = await record.convert('rec', { contact:[{name: 'John', locator: {email: 'info@test.com', fullName: undefined}}]})
+    assert.equal(r.contact.length, 1)
+    assert.isDefined(r.contact[0].locator)
+    assert.equal(r.contact[0].locator.email, 'info@test.com');
+    assert.equal(r.contact[0].locator.fullName);
+  })
 
+  it('record - locator - allowMulti', async() => {
+    let record = new Record();
+    let r = await record.convert('rec', { contact:[{name: 'John', locator: {email: 'info@test.com', _allowMulti: true}}]})
+    assert.equal(r.contact.length, 1)
+    assert.isDefined(r.contact[0].locator)
+    assert.equal(r.contact[0].locator.email, 'info@test.com');
+    assert.equal(r.contact[0].locator._allowMulti, 1);
+  })
 });
