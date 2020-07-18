@@ -12,6 +12,7 @@ class FieldLocatorContact extends FieldLocator {
     this._fields = _.merge(this._fields, {
       id: new FieldLocatorGuid({ emptyAllow: false}),
       fullName: new FieldLocatorText({ emptyAllow: false}),
+      firstName: new FieldLocatorText({emptyAllow: false}),
       name: new FieldLocatorGuid({emptyAllow: false}),
       subName: new FieldLocatorText({emptyAllow: false}),
       guid: new FieldLocatorGuid({ emptyAllow: false}),

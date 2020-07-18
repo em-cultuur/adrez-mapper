@@ -8,7 +8,7 @@ const ErrorFieldNotAllowed = require('error-types').ErrorFieldNotAllowed;
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldTextGuid;
 const FieldTextBoolean = require('./field-text-boolean').FieldTextBoolean;
-const FieldTextBinary = require('./field-text-binary').FieldTextBinary;
+const FieldTextSet = require('./field-text-set').FieldTextSet;
 
 class FieldObject extends Field {
 
@@ -29,7 +29,7 @@ class FieldObject extends Field {
       typeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
       typeIsDefault: new FieldGuid({emptyAllow: this.emptyAllow}),   // set in the code table it's default
       typeInsertOnly: new FieldTextBoolean({emptyValueAllowed: this.emptyValueAllowed}),
-      _mode: new FieldTextBinary({emptyAllow: this.emptyValueAllowed, values:{ none: 0, blocked: 0, add: 1, create: 1, insert: 1, update: 2, modify: 2, delete: 4, remove: 4}}),
+      _mode: new FieldTextSet({emptyAllow: this.emptyValueAllowed, values:{ none: 0, blocked: 0, add: 1, create: 1, insert: 1, update: 2, modify: 2, delete: 4, remove: 4, skip: 8}}),
       // if set to true the code will not be delete by the sync
 
       fieldTypeId:  new FieldGuid({emptyAllow:  this.emptyAllow }),  // if set: set the code.typeId

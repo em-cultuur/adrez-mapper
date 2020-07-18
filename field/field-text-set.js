@@ -4,10 +4,10 @@
 
 const Field = require('./field').Field;
 
-class FieldTextBinary extends Field {
+class FieldTextSet extends Field {
   constructor(options = {}){
     super(options);
-    this._name = 'binary';
+    this._name = 'set';
     this._values = options.hasOwnProperty('values') ? options.values : {
       'yes': 1,
       'ja': 1,
@@ -33,7 +33,7 @@ class FieldTextBinary extends Field {
     } else if (typeof data === 'number') {
       return data;
     } else {
-      this.log(logger, 'warn', fieldName, `${data} is not a valid binary`)
+      this.log(logger, 'warn', fieldName, `${data} is not a valid set`)
       return 0;
     }
     dt.forEach(x => x.toLowerCase)
@@ -56,4 +56,4 @@ class FieldTextBinary extends Field {
 
 
 }
-module.exports.FieldTextBinary = FieldTextBinary;
+module.exports.FieldTextSet = FieldTextSet;

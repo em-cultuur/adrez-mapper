@@ -1,5 +1,9 @@
 # adrez-mapper Revisions
 
+2020-07-18
+- change binary to set
+- add: _mode: skip (8)
+
 2020-06-16
 - add: locator-contact: email
 - add: locator-contact: _allowMulti
