@@ -159,48 +159,10 @@ class FieldObject extends Field {
     // clean the type definition
     if ((this.emptyValueAllowed || result.value !== undefined || result.type !== undefined || result.type_ !== undefined) &&
       ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
-
       result.typeId = await this.lookupCode(data, this.lookupFunctionName, 'type', '', this.baseTypeId, logger)
-//       if (this.lookup && this.lookupFunctionName && this.lookup[this.lookupFunctionName]) {
-//         // create / lookup the code. Needs id, guid or text for code. If not found needs also groupId, fieldTypeId.
-//         // translate into a new code that can be found
-//         let codeDef = {
-//           // the code we want to find. Text is store in the result.type
-//           id: data.typeId,
-//           guid: data.typeGuid,
-// //          text: data.type,
-//           fieldTypeId: data.fieldTypeId,
-//           fieldTypeGuid: data.fieldTypeGuid,
-//           fieldTypeInsertOnly: data.hasOwnProperty('typeInsertOnly') ? !! data.typeInsertOnly : false,
-//
-//           // the data to create the parent if it does not exist
-//           parentIdDefault: this.baseTypeId,
-//           parentId: data.parentId,
-//           parentGuid: data.parentGuid,
-//           parentText: data.parentText,
-//           data: data
-//         };
-//         if (data.type_) {
-//           codeDef.textNoFind = data.type_;
-//         } else {
-//           codeDef.text = data.type;
-//         }
-//         this.buildCodeDef(codeDef, data);
-//
-//         result.typeId = await this.lookup[this.lookupFunctionName](fieldName, codeDef); //
-//
-//         // result.type, this.baseTypeId, data);
-//       } else if (result.type !== undefined) {
-//         this.log(logger, 'error', fieldName, `no lookup function or lookupFunction name not defined for class "${this.constructor.name}" to translate type to typeId`);
-//       } else {
-//         // use the root code as typeId
-//         result.typeId = this.baseTypeId;
-//       }
     }
     result = _.omit(result, ['typeGuid', 'type', 'type_', 'parentId', 'parentGuid', 'parentText', 'parentTypeId']);
-    // delete result.type;
-
-    return Promise.resolve(result);
+    return result;
   }
 
   async lookupCode(data, functionName, fieldName = 'type', parentPrefix = '', baseTypeId, logger) {
@@ -235,8 +197,6 @@ class FieldObject extends Field {
     } else {
       return baseTypeId
     }
-    return 0;
-
   }
   /**
    * adjust the object. if error or warnings use the logger
@@ -244,7 +204,7 @@ class FieldObject extends Field {
    * @param logger
    * @param options
    */
-  convert(fieldName, data, logger = false, parent = false) {
+  async convert(fieldName, data, logger = false, parent = false) {
     let isValid = [];
     let fields = {};
     // create the list of fields to process
@@ -263,18 +223,19 @@ class FieldObject extends Field {
     if (isValid.length > 0) {
       return Promise.reject(new ErrorFieldNotAllowed(isValid));
     } else if (this._removeEmpty && _.isEmpty(fields)) {
-      return Promise.resolve({});
+      return {};
     } else {
       // check the emptyAllow isn't set for all
       for (let key in fields) {
         if (!fields.hasOwnProperty(key)) { continue }
         if (fields[key].emptyAllow === undefined || fields[key].emptyAllow === false) {
-          return this.processKeys(`${fieldName}`, fields, data, logger).then((rec) => {
-            return Promise.resolve(rec)
-          })
+          return this.processKeys(`${fieldName}`, fields, data, logger);
+          // .then((rec) => {
+          //   return Promise.resolve(rec)
+          // })
         }
       }
-      return Promise.resolve({});
+      return {};
     }
   }
 }
