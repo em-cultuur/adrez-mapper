@@ -91,6 +91,7 @@ class FieldContact extends FieldComposed {
         result.typeId = data.typeId;
       }
       result.fullName = result.name;
+       this.copyFieldsToResult(result, data, ['fullName', 'function', 'salutation']);
     } else {
       if (fields.fullName && fields.name === undefined) {
         // parse the fullname only if there isn't already a name

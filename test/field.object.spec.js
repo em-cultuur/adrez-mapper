@@ -159,5 +159,11 @@ describe('field.object', () => {
       _mode: 'add, inherit'
     }, logger);
     assert.equal(r._mode, 1+16);
+    field = new FieldContact();
+    r = await field.convert('object', {
+      organisation: 'JohnX',
+      _mode: 'add, inherit'
+    }, logger);
+    assert.equal(r._mode, 1+16);
   })
 });
