@@ -29,7 +29,14 @@ class FieldObject extends Field {
       typeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
       typeIsDefault: new FieldGuid({emptyAllow: this.emptyAllow}),   // set in the code table it's default
       typeInsertOnly: new FieldTextBoolean({emptyValueAllowed: this.emptyValueAllowed}),
-      _mode: new FieldTextSet({emptyAllow: this.emptyValueAllowed, values:{ none: 0, blocked: 0, add: 1, create: 1, insert: 1, update: 2, modify: 2, delete: 4, remove: 4, skip: 8}}),
+      _mode: new FieldTextSet({emptyAllow: this.emptyValueAllowed, values:{
+          none: 0, blocked: 0,
+          add: 1, create: 1, insert: 1,
+          update: 2, modify: 2,
+          delete: 4, remove: 4,
+          skip: 8,      // if not found do nothing and no error
+          inherit: 16}   // if code / location has no mode use the one of the contact parent
+      }),
       // if set to true the code will not be delete by the sync
 
       fieldTypeId:  new FieldGuid({emptyAllow:  this.emptyAllow }),  // if set: set the code.typeId

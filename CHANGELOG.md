@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-07-23
+- add: _mode inherit to set the same mode to the location or code as the contact
+
 2020-07-18
 - change binary to set
 - add: _mode: skip (8)
