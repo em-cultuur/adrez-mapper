@@ -7,6 +7,7 @@ const _ = require('lodash');
 const Logger = require('logger');
 const Lookup = require('../lib/lookup');
 const FieldObject = require('../field/field-object').FieldObject;
+const FieldContact = require('../field/field-contact').FieldContact;
 
 describe('field.object', () => {
   let logger = new Logger({toConsole: false});
@@ -106,6 +107,57 @@ describe('field.object', () => {
       }, logger);
       assert.equal(r.typeId, 0)
     })
+  })
 
+  it('_mode values', async() => {
+    let field = new FieldObject({
+    });
+    let r = await field.convert('object', {
+      type: 'John',
+      _mode: 'add'
+    }, logger);
+    assert.equal(r._mode, 1);
+    r = await field.convert('object', {
+      type: 'John',
+      _mode: 'update'
+    }, logger);
+    assert.equal(r._mode, 2);
+    r = await field.convert('object', {
+      type: 'John',
+      _mode: 'delete'
+    }, logger);
+    assert.equal(r._mode, 4);
+    r = await field.convert('object', {
+      type: 'John',
+      _mode: 'skip'
+    }, logger);
+    assert.equal(r._mode, 8);
+    r = await field.convert('object', {
+      type: 'John',
+      _mode: 'inherit'
+    }, logger);
+    assert.equal(r._mode, 16);
+    r = await field.convert('object', {
+      type: 'John',
+      _mode: ['add','update', 'delete','skip','inherit']
+    }, logger);
+    assert.equal(r._mode, 1+2+4+8+16);
+    r = await field.convert('object', {
+      type: 'John',
+      _mode: 'add,inherit'
+    }, logger);
+    assert.equal(r._mode, 1+16);
+    r = await field.convert('object', {
+      type: 'John',
+      _mode: 'add, inherit'
+    }, logger);
+    assert.equal(r._mode, 1+16);
+
+    field = new FieldContact();
+    r = await field.convert('object', {
+      name: 'John',
+      _mode: 'add, inherit'
+    }, logger);
+    assert.equal(r._mode, 1+16);
   })
 });

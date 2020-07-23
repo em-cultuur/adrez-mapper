@@ -9,6 +9,7 @@ const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldTextGuid;
 const FieldTextBoolean = require('./field-text-boolean').FieldTextBoolean;
 const FieldTextSet = require('./field-text-set').FieldTextSet;
+const Lookup = require('../lib/lookup')
 
 class FieldObject extends Field {
 
@@ -17,7 +18,7 @@ class FieldObject extends Field {
     // this should be set by the child object. Defines the parentId for new records
     this.baseTypeId = undefined;
     // this function is called when type has to be translated to typdId
-    this._lookup = options.lookup;
+    this._lookup = options.hasOwnProperty('lookup') ? options.lookup : new Lookup();
     this.lookupFunctionName = options.lookupFunctionName ? options.lookupFunctionName : false;
     this.emptyValueAllowed = false;
     // this._name = 'object';
