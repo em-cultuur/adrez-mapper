@@ -4,6 +4,7 @@
 - add: _mode inherit to set the same mode to the location or code as the contact
 - fix: test if lookup exist
 - fix: _mode not loaded on contact.organisation
+- add: better contact handling
 
 2020-07-18
 - change binary to set

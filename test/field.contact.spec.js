@@ -150,7 +150,7 @@ describe('field.contact', () => {
     logger.clear();
 
     it('type', async () => {
-      let r = await f.convert('contact', {fullName: 'Jan de Hond', typeId: 101}, logger);
+      let r = await f.convert('contact', {fullName: 'Jan de Hond', typeId: 101, type: 'man'}, logger);
       assert.equal(r.typeId, 101, 'leave it');
       r = await f.convert('contact', {fullName: 'Jan de Hond', type: 'man'}, logger);
       assert.equal(r.typeId, 102, 'changed');
@@ -163,7 +163,7 @@ describe('field.contact', () => {
       assert.equal(r.name, 'Customer', 'name');
     });
     it('gender', async () => {
-      let r = await f.convert('contact', {fullName: 'mevrouw Clara de Hond', typeId: 105}, logger);
+      let r = await f.convert('contact', {fullName: 'mevrouw Clara de Hond'}, logger);
       assert.equal(r.typeId, 103, 'did genderize on title');
       r = await f.convert('contact', {fullName: 'dr Clara de Hond', typeId: 102}, logger);
       assert.equal(r.typeId, 102, 'did genderize, result default')
@@ -199,26 +199,63 @@ describe('field.contact', () => {
   });
 
   describe('organisation', () => {
-    it('is org 1', async() => {
-      let r = await f.convert('contact', {organisation: 'Working it', isOrganisation: true, functionId: '12'}, logger);
-      assert.isDefined(r.typeId, 'got typeId');
+    const CNAME = 'Working it'
+    it('set organisation', async() => {
+      let r = await f.convert('contact', {organisation: CNAME, isOrganisation: true, functionId: '12'}, logger);
+      assert.isDefined(r.typeId);
       assert.equal(r.typeId, DEFAULT_ORGANISATION, 'and set');
+      assert.equal(r.name, CNAME);
+      assert.equal(r.fullName, CNAME)
       assert.equal(r.functionId, undefined, 'removed unwanted')
+      assert.isUndefined(r._mode);
+      assert.isUndefined(r._source);
+      assert.isUndefined(r._key);
     });
-    it('is org 2', async() => {
-      let r = await f.convert('contact', {organisation: 'Working it'}, logger);
+    it('set full name', async() => {
+      let r = await f.convert('contact', {fullName: CNAME, isOrganisation: true}, logger);
+      assert.isDefined(r.typeId);
+      assert.equal(r.typeId, DEFAULT_ORGANISATION, 'and set');
+      assert.equal(r.name, CNAME);
+      assert.equal(r.fullName, CNAME)
+    });
+    it('set name', async() => {
+      let r = await f.convert('contact', {organisation: CNAME, subName: 'test'}, logger);
+      assert.isDefined(r.typeId);
+      assert.equal(r.typeId, DEFAULT_ORGANISATION, 'and set');
+      assert.equal(r.subName, 'test')
+      assert.equal(r.name, CNAME);
+      assert.equal(r.fullName, CNAME)
+    });
+    it('name priority', async() => {
+      let r = await f.convert('contact', {fullName: CNAME, name: 'none', isOrganisation: true}, logger);
+      assert.isDefined(r.typeId);
+      assert.equal(r.typeId, DEFAULT_ORGANISATION, 'and set');
+      assert.equal(r.name, CNAME);
+      assert.equal(r.fullName, CNAME)
+    });
+    it('set typeId', async() => {
+      let r = await f.convert('contact', {name: CNAME, isOrganisation: true, typeId: 34}, logger);
       assert.isDefined(r.typeId, 'got typeId');
-      assert.equal(r.typeId, DEFAULT_ORGANISATION, 'and set')
+      assert.equal(r.typeId, 34, 'and set');
     });
-    it('is org 3', async() => {
-      let r = await f.convert('contact', {name: 'Working it', isOrganisation: true, functionId: '12'}, logger);
+
+    it('by flag', async() => {
+      let r = await f.convert('contact', {name: CNAME, isOrganisation: true, functionId: '12'}, logger);
       assert.isDefined(r.typeId, 'got typeId');
       assert.equal(r.typeId, DEFAULT_ORGANISATION, 'and set');
       assert.equal(r.functionId, undefined, 'removed unwanted');
-      assert.equal(r.fullName, 'Working it', 'got full name');
-      assert.equal(r.name, 'Working it', 'got name');
+      assert.equal(r.fullName, CNAME, 'got full name');
+      assert.equal(r.name, CNAME, 'got name');
+    });
+
+    it('with _ fields', async() => {
+      let r = await f.convert('contact', {name: CNAME, isOrganisation: true, _mode: 1, _key: 'noname', _source: 'source'}, logger);
+      assert.equal(r._mode, 1)
+      assert.equal(r._key, 'noname');
+      assert.equal(r._source, 'source')
     });
   });
+
   describe('key/parent', () => {
     it('store the key', async () => {
       let r = await f.convert('contact', {name: 'Working it', _key: 'theKey'}, logger);

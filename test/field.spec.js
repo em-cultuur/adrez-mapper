@@ -318,7 +318,7 @@ describe('field',  () => {
       assert.equal(r.name, 'Customer', 'name');
     });
     it('gender', async () => {
-      let r = await f.convert('contact', {fullName: 'mevrouw Clara de Hond', typeId: 105}, logger);
+      let r = await f.convert('contact', {fullName: 'mevrouw Clara de Hond'}, logger);
       assert.equal(r.typeId, 103, 'did genderize on title');
       r = await f.convert('contact', {fullName: 'dr Clara de Hond', typeId: 102}, logger);
       assert.equal(r.typeId, 102, 'did genderize, result default')

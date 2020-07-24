@@ -76,22 +76,27 @@ class FieldContact extends FieldComposed {
    * @param logger Class where to store the errors
    */
   async processKeys(fieldName, fields, data, logger) {
-    let result = { subName: data.subName};
+    let result = {
+      subName: data.subName,
+      _key: data._key,
+      _source: data._source,
+      _mode: data._mode,
+    };
+
     if (data.isOrganisation || (data.organisation && data.organisation.length > 0)) {
       if (data.organisation) {
         result.name = data.organisation;
+      } else if (data.fullName) {
+        result.name = data.fullName;
       } else {
         result.name = data.name;
       }
-      result._key = data._key;
-      result._source = data._source;
-      if (data.typeId === undefined) {
+      if (!data.hasOwnProperty('typeId')) {
         result.typeId = await this.lookup.contact(fieldName, {type: data.type}, DEFAULT_ORGANISATION, data)
       } else {
         result.typeId = data.typeId;
       }
       result.fullName = result.name;
-       this.copyFieldsToResult(result, data, ['fullName', 'function', 'salutation']);
     } else {
       if (fields.fullName && fields.name === undefined) {
         // parse the fullname only if there isn't already a name
@@ -126,15 +131,16 @@ class FieldContact extends FieldComposed {
           data.firstLetters += data.middleName.substr(0, 1).toUpperCase() + '.';
         }
       }
-      let typeId = await this.lookup.gender(fieldName, {
-        firstName: data.firstName,
-        title: data.title,
-        // subName: data.subName,
-        type: data.type,
-        typeGuid: data.typeGuid
-      }, data.typeId ? data.typeId : 105, data);
-      if (typeId) {
-        data.typeId = typeId;
+      if (data.typeId) {
+        result.typeId = data.typeId
+      } else {
+        result.typeId = await this.lookup.gender(fieldName, {
+          firstName: data.firstName,
+          title: data.title,
+          // subName: data.subName,
+          type: data.type,
+          typeGuid: data.typeGuid
+        }, data.typeId ? data.typeId : 105, data);
       }
       // version 0.5.2: use the same structure as for the type translation
       let codeDef = {

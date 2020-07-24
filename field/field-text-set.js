@@ -33,21 +33,25 @@ class FieldTextSet extends Field {
     } else if (typeof data === 'number') {
       return data;
     } else {
-      this.log(logger, 'warn', fieldName, `${data} is not a valid set`)
-      return 0;
+      return undefined;
+      // this.log(logger, 'warn', fieldName, `${data} is not a valid set`)
+      // return 0;
     }
-    dt.forEach(x => x.toLowerCase)
-    let n = 0;
-    for (let index = 0; index < dt.length; index++) {
-      if (dt[index].trim()) {
-        if (!this._values.hasOwnProperty(dt[index].trim())) {
-          this.log(logger, 'error', `unknown value "${dt[index]}". allowed are: ${Object.keys(this._values).toString()}`)
-        } else {
-          n += this._values[dt[index].trim()]
+    if (dt.length) {
+      dt.forEach(x => x.toLowerCase);
+      let n = 0;
+      for (let index = 0; index < dt.length; index++) {
+        if (dt[index].trim()) {
+          if (!this._values.hasOwnProperty(dt[index].trim())) {
+            this.log(logger, 'error', `unknown value "${dt[index]}". allowed are: ${Object.keys(this._values).toString()}`)
+          } else {
+            n += this._values[dt[index].trim()]
+          }
         }
       }
+      return n;
     }
-    return n;
+    return undefined;
   }
 
   isEmpty(data) {
