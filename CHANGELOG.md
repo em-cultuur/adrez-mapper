@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-08-04
+- add: /adrezId to set the address_ID of the record. Overrules the contactId
+
 2020-07-23
 - add: _mode inherit to set the same mode to the location or code as the contact
 - fix: test if lookup exist

@@ -32,7 +32,8 @@ class AdrezRecord extends FieldObject {
       // id = synId
       id: new FieldGuid(),
       // contactId is the true address id
-      contactId: new FieldGuid(),
+      contactId: new FieldGuid(),  // the sync in the address2code
+      adrezId: new FieldGuid(),    // the true addressId in the address table. Overrules the contactId
       _rowIndex : new FieldGuid(),
 
       contact:      new FieldArray( { type: new FieldContact(_.merge({lookup: this._lookup}, options, options.contact)) }, options),
