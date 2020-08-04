@@ -58,7 +58,7 @@ class AdrezRecord extends FieldObject {
     // check every key is an array
     for (let key in data) {
       if (!data.hasOwnProperty(key)) { continue }
-      if (['id','contactId','_rowIndex'].indexOf(key) >= 0) {
+      if (['id','contactId','_rowIndex', 'adrezId'].indexOf(key) >= 0) {
         continue;
       }
       if (!Array.isArray(data[key])) {
