@@ -181,7 +181,7 @@ class FieldObject extends Field {
         // the code we want to find. Text is store in the result.type
         id: data[`${fieldName}Id`],
         guid: data[`${fieldName}Guid`],
-        fieldTypeId: data[`field${fieldName}Id`],
+        fieldTypeId: data[`field${fieldName.substring(0,1).toUpperCase() + fieldName.substring(1)}Id`],
         fieldTypeGuid: data[`field${fieldName.substring(0,1).toUpperCase() + fieldName.substring(1)}Guid`],
         fieldTypeInsertOnly: data.hasOwnProperty(`${fieldName}InsertOnly`) ? !!data[`${fieldName}InsertOnly`] : false,
 
