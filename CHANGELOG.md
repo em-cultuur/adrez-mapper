@@ -2,6 +2,7 @@
 
 2020-08-05
 - fix: type of extra field is not set in database
+- add: field-campaign-contact.actionDate
 
 2020-08-04
 - add: /adrezId to set the address_ID of the record. Overrules the contactId
