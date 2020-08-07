@@ -113,4 +113,13 @@ describe('field.code', () => {
       assert.isTrue(called, 'should call the code func');
     });
   })
+
+  describe('mode', async() => {
+    let f = new FieldCode();
+    it('set', async () => {
+      let r = await f.convert('code', {code: 'Testing with key', _mode:'add'}, logger);
+      assert.isDefined(r._mode);
+      assert.equal(r._mode, 1)
+    });
+  })
 })

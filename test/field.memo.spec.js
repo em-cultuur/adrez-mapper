@@ -90,6 +90,13 @@ describe('field.memo', () => {
       assert.isUndefined(r.useDescription, 'empty so removed');
     });
   });
-
+  describe('mode', async() => {
+    let f = new FieldMemo();
+    it('set', async () => {
+      let r = await f.convert('telephone', {description: '061234567', _mode:'add'}, logger);
+      assert.isDefined(r._mode);
+      assert.equal(r._mode, 1)
+    });
+  })
 
 });

@@ -69,6 +69,14 @@ describe('field.email', () => {
     });
 
   })
+  describe('mode', async() => {
+    let f = new FieldEmail();
+    it('set', async () => {
+      let r = await f.convert('email', {email:'info@emcultuur.nl', _mode:'add'}, logger);
+      assert.isDefined(r._mode);
+      assert.equal(r._mode, 1)
+    });
+  })
 
 
 });

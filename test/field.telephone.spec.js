@@ -84,5 +84,15 @@ describe('telephone',  () => {
     assert.equal(r.isDefault, true, 'makes it default');
     assert.equal(r.value, '772345678', 'makes it default');
     assert.equal(r.typeId, 113, 'raw telephone')
+  });
+
+
+  describe('mode', async() => {
+    let f = new FieldTelephone();
+    it('set', async () => {
+      let r = await f.convert('telephone', {mobile: '061234567', _mode:'add'}, logger);
+      assert.isDefined(r._mode);
+      assert.equal(r._mode, 1)
+    });
   })
 });

@@ -8,7 +8,7 @@ const FieldNumber = require('./field-text-number').FieldTextNumber;
 const FieldDate = require('./field-text-date').FieldTextDate;
 
 class FieldExtra extends FieldObject {
-  constructor(options) {
+  constructor(options= {}) {
     super(options);
     this.emptyValueAllowed = true;
     this.lookupFunctionName = 'extra';
@@ -149,6 +149,7 @@ class FieldExtra extends FieldObject {
     let cFields = this.remapFields(result);
 
     let aws = await super.processKeys(fieldName, cFields, result, logger); // .then( (aws) => {
+    delete result._mode;
     this.copyFieldsToResult(result, aws, ['fieldTypeGuid', 'fieldTypeId'])
     return result
   }

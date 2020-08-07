@@ -99,5 +99,14 @@ describe('field.campaign', () => {
       assert.isDefined(r.locator.guid, 'c.123');
     })
   })
+
+  describe('mode', async() => {
+    let f = new FieldCampaign();
+    it('set', async () => {
+      let r = await f.convert('email', {title:'emcultuur.nl', _mode:'add'}, logger);
+      assert.isDefined(r._mode);
+      assert.equal(r._mode, 1)
+    });
+  })
 });
 

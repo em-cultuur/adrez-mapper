@@ -99,4 +99,14 @@ describe('field.extra', () => {
     });
 
   })
+
+
+  describe('mode', async() => {
+    let f = new FieldExtra();
+    it('set', async () => {
+      let r = await f.convert('code', {text: 'Testing with key', _mode:'add'}, logger);
+      assert.isDefined(r._mode);
+      assert.equal(r._mode, 1)
+    });
+  })
 })

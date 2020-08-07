@@ -291,4 +291,13 @@ describe('field.location', () => {
 
   });
 
+
+  describe('mode', async() => {
+    let f = new FieldLocation();
+    it('set', async () => {
+      let r = await f.convert('code', {street: 'Testing with key', _mode:'add'}, logger);
+      assert.isDefined(r._mode);
+      assert.equal(r._mode, 1)
+    });
+  })
 });

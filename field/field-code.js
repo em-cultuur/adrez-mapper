@@ -60,8 +60,8 @@ class FieldCode extends FieldObject {
     // recalculate the available fields
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger).then((processed) => {
-      this.copyFieldsToResult(result, processed, ['parentCodeGuid', 'parentCodeId', 'parentCode']);
-      return result;
+      this.copyFieldsToResult(processed, result, ['parentCodeGuid', 'parentCodeId', 'parentCode']);
+      return processed;
     });
   }
 }
