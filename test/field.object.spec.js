@@ -72,15 +72,6 @@ describe('field.object', () => {
       }
     }
 
-    // it('type lookup', async () => {
-    //   logger.clear();
-    //   let r = await f.convert('object', {
-    //     type: 'John',
-    //     typeInsertOnly: 1
-    //   }, logger);
-    //   assert.equal(r.typeInsertOnly, true, 'translate the type');
-    // });
-
     it('lookup with the value', async() => {
       logger.clear();
       let field = new FieldObject({
@@ -165,5 +156,14 @@ describe('field.object', () => {
       _mode: 'add, inherit'
     }, logger);
     assert.equal(r._mode, 1+16);
-  })
+  });
+
+  it('empty _mode', async() => {
+    let field = new FieldObject({});
+    let r = await field.convert('object', {
+      type: '',
+      _mode: 'add'
+    }, logger);
+    assert.isEmpty(r);
+  });
 });

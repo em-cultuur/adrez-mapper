@@ -207,7 +207,6 @@ describe('record', () => {
   })
 
   describe('locker', () => {
-
     it('memo object to array', async () => {
       let rec = new Record({removeEmpty: true, logger});
       let result = await rec.convert('memo', {"contact": [ { "firstName": "Jack","locator": { "email": "info@doe.com" }, "_key": "main" }],
@@ -217,6 +216,31 @@ describe('record', () => {
       assert.equal(result.contact.length, 1);
       assert.equal(result.contact[0].firstName, 'Jack')
     });
+  });
+
+  describe('remove empty location._mode', async() => {
+    let rec = new Record({removeEmpty: true, logger});
+    let result = await rec.convert('_mode',
+      {
+        contact: [ { "name": "Jack"}],
+        telephone: [
+            {telephone: '0612345678', _mode: 'add'},
+            {telephone: '', _mode: 'add'}
+          ]
+        }
+    );
+    // console.log(result)
+    assert.equal(result.contact[0].name, 'Jack');
+    assert.equal(result.telephone.length, 1)
+    result = await rec.convert('_mode',
+      {
+        contact: [ { "name": "Jack"}],
+        telephone: [
+          {telephone: '', _mode: 'add'}
+        ]
+      }
+    );
+    assert.isFalse(result.hasOwnProperty('telephone'))
   })
 
 });

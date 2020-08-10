@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-08-10
+- fix: _mode stop removing empty objects
+
 2020-08-05
 - fix: type of extra field is not set in database
 - add: field-campaign-contact.actionDate

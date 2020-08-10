@@ -170,6 +170,9 @@ class FieldObject extends Field {
       result.typeId = await this.lookupCode(data, this.lookupFunctionName, 'type', '', this.baseTypeId, logger)
     }
     result = _.omit(result, ['typeGuid', 'type', 'type_', 'parentId', 'parentGuid', 'parentText', 'parentTypeId']);
+    if (Object.keys(result).length === 1 && result.hasOwnProperty('_mode')) {
+      return {}
+    }
     return result;
   }
 
