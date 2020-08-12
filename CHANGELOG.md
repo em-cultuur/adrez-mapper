@@ -1,6 +1,9 @@
 # adrez-mapper Revisions
 
 2020-08-10
+- fix: _allowMulti generates empty locators what creates empty contacts
+
+2020-08-10
 - fix: _mode stop removing empty objects
 
 2020-08-05

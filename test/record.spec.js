@@ -236,7 +236,7 @@ describe('record', () => {
       {
         contact: [ { "name": "Jack"}],
         telephone: [
-          {telephone: '', _mode: 'add'}
+          {telephone: '', _mode: 'add,update'}
         ]
       }
     );

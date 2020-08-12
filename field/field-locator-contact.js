@@ -22,7 +22,7 @@ class FieldLocatorContact extends FieldLocator {
       // do a lookup on the email adress
       email: new FieldLocatorText({emptyAllow: false}),
       // if true and there are multiple parents the first one is used
-      _allowMulti: new FieldTextBoolean(({emptyAllow: false}))
+      _allowMulti: new FieldTextBoolean(({emptyAllow: true}))
     });
   }
 }

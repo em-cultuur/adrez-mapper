@@ -60,7 +60,7 @@ class FieldContact extends FieldComposed {
       fullName: new FieldText({ emptyAllow: false}),
 
   //    _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
-      locator: new FieldLocatorContact({emptyAllow: false})
+      locator: new FieldLocatorContact({emptyAllow: true})
     });
     // the contact does not know about values
     delete this._fields.value;
