@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-08-13
+- add: _mode: kill to remove a code that has a delete flag set
+
 2020-08-10
 - fix: _allowMulti generates empty locators what creates empty contacts
 

@@ -88,4 +88,14 @@ describe('field.locator.contact', () => {
     assert.equal(r.contact[0].locator.email, 'info@test.com');
     assert.equal(r.contact[0].locator._allowMulti, 1);
   })
+
+  it('record - empty locator with _allowMulti', async ()=> {
+    let record = new Record();
+    let r = await record.convert('rec', { contact:[{name: 'John', locator: {email: '', _allowMulti: true}}]})
+    assert.equal(r.contact.length, 1)
+    assert.isUndefined(r.contact.locator);
+
+    r = await record.convert('rec', { contact:[{name: '', locator: {name: '', _allowMulti: true}}]})
+    assert.isUndefined(r.contact);
+  })
 });

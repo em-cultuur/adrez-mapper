@@ -36,7 +36,9 @@ class FieldObject extends Field {
           update: 2, modify: 2,
           delete: 4, remove: 4,
           skip: 8,      // if not found do nothing and no error
-          inherit: 16}   // if code / location has no mode use the one of the contact parent
+          inherit: 16,  // if code / location has no mode use the one of the contact parent
+          kill: 32,     // if code found it should be delete even if delete is set for the code
+        }
       }),
       // if set to true the code will not be delete by the sync
 

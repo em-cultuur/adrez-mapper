@@ -156,6 +156,11 @@ describe('field.object', () => {
       _mode: 'add, inherit'
     }, logger);
     assert.equal(r._mode, 1+16);
+    r = await field.convert('object', {
+      organisation: 'JohnX',
+      _mode: 'delete,kill'
+    }, logger);
+    assert.equal(r._mode, 4+32);
   });
 
   it('empty _mode', async() => {
