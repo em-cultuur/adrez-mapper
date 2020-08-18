@@ -2,6 +2,7 @@
 
 2020-08-18
 - fix: fullname can not be set by mapper
+- fix: remove namePrefix if name is given but no prefix
 
 2020-08-13
 - add: _mode: kill to remove a code that has a delete flag set

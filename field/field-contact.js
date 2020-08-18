@@ -161,6 +161,11 @@ class FieldContact extends FieldComposed {
       data.salutationId = await this.lookup.contactSalutation(fieldName, codeDef);
 
       this.copyFieldsToResult(result, data, ['fullName', 'function', 'salutation']);
+
+      // remove any trace of the prefix if we are changing the name
+      if (!result.hasOwnProperty('namePrefix') && result.name) {
+        result.namePrefix = ''
+      }
       // ------>> this does not work with a partial update. If name is undefined it results in 'undefined, Jay'
       // let later = result.middleName && result.middleName.length ? (result.firstName + ' ' + result.middleName) : result.firstName && result.firstName.length ? result.firstName : result.firstLetters;
       // if (result.namePrefix) {
