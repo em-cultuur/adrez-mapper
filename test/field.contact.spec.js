@@ -295,5 +295,12 @@ describe('field.contact', () => {
     })
   });
 
+  describe('v: 1.3.2', () => {
+    it ('remove name prefix if not givene', async () => {
+      let r = await f.convert('contact', {name: 'Working it'}, logger);
+      assert.isDefined(r.namePrefix);
+      assert.equal(r.namePrefix, '');
+    })
+  });
 });
 

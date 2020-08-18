@@ -35,5 +35,20 @@ class FieldText extends Field {
     }
   }
 }
+
+class FieldGuid extends FieldText {
+
+  _isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  }
+
+  async convert(fieldName, data, logger) {
+    let r = await super.convert(fieldName, data, logger);
+    if (this._isNumeric(r)) { // we could get "0" which is true
+        r = parseInt(r,10)
+    }
+    return r;
+  }
+}
 module.exports.FieldText = FieldText;
-module.exports.FieldTextGuid = FieldText;
+module.exports.FieldTextGuid = FieldGuid;

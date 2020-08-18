@@ -3,6 +3,7 @@
 2020-08-18
 - fix: fullname can not be set by mapper
 - fix: remove namePrefix if name is given but no prefix
+- fix: if guid is nummeric it's converted to number
 
 2020-08-13
 - add: _mode: kill to remove a code that has a delete flag set
