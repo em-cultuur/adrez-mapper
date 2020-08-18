@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-08-18
+- fix: fullname can not be set by mapper
+
 2020-08-13
 - add: _mode: kill to remove a code that has a delete flag set
 
