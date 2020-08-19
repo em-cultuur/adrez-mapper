@@ -89,11 +89,15 @@ describe('field.contact', () => {
     });
 
     it('set default', async () => {
-      let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
-      assert.isDefined(r.salutationId, 'got Id');
+      let r = await f.convert('contact', {fullName: 'Jan de Hond', salutationGuid: false}, logger);
+      assert.isDefined(r.salutationId, 'no salutation Id');
       assert.equal(r.salutationId, DEFAULT_SALUTATION, 'and set');
-
     });
+    it('missing if not set', async () => {
+      let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
+      assert.isUndefined(r.salutationId);
+    });
+
   });
 
   describe('fullname',  () => {
@@ -183,9 +187,8 @@ describe('field.contact', () => {
     });
     it('set default', async () => {
       let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
-      assert.isDefined(r.functionId, 'got functionId');
-      assert.equal(r.functionId, -1, 'and set');
-
+      assert.isUndefined(r.functionId, 'got functionId');
+//      assert.equal(r.functionId, -1, 'and set');
     });
   });
 

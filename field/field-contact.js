@@ -142,24 +142,29 @@ class FieldContact extends FieldComposed {
           typeGuid: data.typeGuid
         }, data.typeId ? data.typeId : 105, data);
       }
-      // version 0.5.2: use the same structure as for the type translation
-      let codeDef = {
-        // the code we want to find. Text is store in the result.type
-        id: data.functionId,
-        guid: data.functionGuid,
-        text: data.function,
-        parentIdDefault: DEFAULT_FUNCTION
-      };
-      data.functionId = await this.lookup.contactFunction(fieldName, codeDef);
-      codeDef = {
-        // the code we want to find. Text is store in the result.type
-        id: data.salutationId,
-        guid: data.salutationGuid,
-        text: data.salutation,
-        parentIdDefault: DEFAULT_SALUTATION
-      };
-      data.salutationId = await this.lookup.contactSalutation(fieldName, codeDef);
-
+      // should not set field, if they are not send from the api. Webhook updates only partial fields
+      let codeDef;
+      if (data.hasOwnProperty('functionId') || data.hasOwnProperty('functionGuid') || data.hasOwnProperty('function')) {
+        codeDef = {
+          // the code we want to find. Text is store in the result.type
+          // if functionId is set to false the default is used
+          id: data.functionId,
+          guid: data.functionGuid === false ? undefined : data.functionGuid,
+          text: data.function,
+          parentIdDefault: DEFAULT_FUNCTION
+        };
+        data.functionId = await this.lookup.contactFunction(fieldName, codeDef);
+      }
+      if (data.hasOwnProperty('salutationId') || data.hasOwnProperty('salutationGuid') || data.hasOwnProperty('salutation')) {
+        codeDef = {
+          // the code we want to find. Text is store in the result.type
+          id: data.salutationId,
+          guid: data.salutationGuid === false ? undefined : data.salutationGuid,
+          text: data.salutation,
+          parentIdDefault: DEFAULT_SALUTATION
+        };
+        data.salutationId = await this.lookup.contactSalutation(fieldName, codeDef);
+      }
       this.copyFieldsToResult(result, data, ['fullName', 'function', 'salutation']);
 
       // remove any trace of the prefix if we are changing the name

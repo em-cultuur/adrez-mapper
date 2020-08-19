@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-08-19
+- chg: webhook only updates partial fields, so functionId, salutationId are only set if a value is given, if guid set to false the default is loaded
+
 2020-08-18
 - fix: fullname can not be set by mapper
 - fix: remove namePrefix if name is given but no prefix

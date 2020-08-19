@@ -39,7 +39,7 @@ describe('field.code', () => {
     });
     it('select field', async () => {
       let r = await f.convert('code', {code: 'test', codeId: '1234', _source: 'master'}, logger);
-      assert(r.typeId === '1234', 'select code Id');
+      assert(r.typeId === 1234,  'convert to number because it\'s a guid');
     });
     it('add a new code', async () => {
       let f2 = new FieldCode({ lookup: new LookupCode(), removeEmpty : false});
