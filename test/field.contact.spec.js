@@ -27,7 +27,7 @@ describe('field.contact', () => {
       return super.contact(fieldName, value, defaults, data);
     }
 
-    async gender(fieldName, value, defaults, data) {
+    async gender(fieldName, value, data) {
       if (value.title === 'mevrouw') {
         delete data.title;
         return 103
@@ -38,7 +38,7 @@ describe('field.contact', () => {
       if (value.typeGuid === 'ADREZ_MALE') {
         return 101
       }
-      return super.gender(fieldName, value, defaults, data);
+      return super.gender(fieldName, value, data);
     }
 
     async contactFunction(fieldname, definition) {

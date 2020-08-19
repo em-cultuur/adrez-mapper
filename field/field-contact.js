@@ -134,13 +134,19 @@ class FieldContact extends FieldComposed {
       if (data.typeId) {
         result.typeId = data.typeId
       } else {
+        if (data.typeGuid === false
+          || data.hasOwnProperty('firstName')
+          || data.hasOwnProperty('title')
+          || data.hasOwnProperty('type')
+          || data.hasOwnProperty('typeGuid')
+        )
         result.typeId = await this.lookup.gender(fieldName, {
           firstName: data.firstName,
           title: data.title,
           // subName: data.subName,
           type: data.type,
           typeGuid: data.typeGuid
-        }, data.typeId ? data.typeId : 105, data);
+        }, data);
       }
       // should not set field, if they are not send from the api. Webhook updates only partial fields
       let codeDef;

@@ -247,13 +247,13 @@ describe('field',  () => {
         return super.contact(fieldName, value, defaults, data);
       }
 
-      async gender(fieldName, value, defaults, data) {
+      async gender(fieldName, value, data) {
         if (value.title === 'mevrouw') {
           delete data.title;
           return 103
         }
         if (value.type === 'man') {return 102}
-        return super.gender(fieldName, value, defaults, data);
+        return super.gender(fieldName, value, data);
       }
     }
 
