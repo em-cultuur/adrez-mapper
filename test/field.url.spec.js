@@ -36,6 +36,18 @@ describe('field.url', () => {
       assert.equal(r.value, 'test.com', 'nothing changed');
       assert.equal(r.typeId, 558, 'translate type to typeId');
     });
+    it('1. direct none changed values', async () => {
+      let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
+      let r = await f2.convert('url', {value: 'www.test.com', typeId: '123'}, logger);
+      assert.equal(r.value, 'www.test.com', 'nothing changed');
+      assert.equal(r.typeId, '123', 'nothing changed');
+    });
+    it('1. direct none changed values', async () => {
+      let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
+      let r = await f2.convert('url', {value: 'www.test.com/site/info.php', typeId: '123'}, logger);
+      assert.equal(r.value, 'www.test.com/site/info.php', 'nothing changed');
+      assert.equal(r.typeId, '123', 'nothing changed');
+    });
     it('3. use a predefined field type', async () => {
       let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
       let r = await f2.convert('url', {Facebook: 'emcultuur'}, logger);
