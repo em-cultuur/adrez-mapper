@@ -52,6 +52,10 @@ class FieldCode extends FieldObject {
       delete data.codeGuid
     }
 
+    if (!data.typeId && !data.typeGuid && !data.type) {
+      return {};
+    }
+
     if (data._remove) {
       result._remove = 1;
     }

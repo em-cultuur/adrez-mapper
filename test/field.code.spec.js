@@ -121,5 +121,14 @@ describe('field.code', () => {
       assert.isDefined(r._mode);
       assert.equal(r._mode, 1)
     });
+  });
+
+  describe('empty code', async() => {
+    let f = new FieldCode();
+    it('should return empty object', async () => {
+      let r = await f.convert('code', {_mode:'add'}, logger);
+      assert.isUndefined(r._mode);
+      assert.equal(Object.keys(r).length, 0)
+    });
   })
 })

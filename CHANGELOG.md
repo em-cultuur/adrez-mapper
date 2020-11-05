@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-10-05
+- chg: code if empty type, typeId and text it's removed
+
 2020-08-19
 - chg: webhook only updates partial fields, so functionId, salutationId are only set if a value is given, if guid set to false the default is loaded
 - chg: contact.type is only set if values are given or typeGuid is et
