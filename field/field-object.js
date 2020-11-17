@@ -31,13 +31,14 @@ class FieldObject extends Field {
       typeIsDefault: new FieldGuid({emptyAllow: this.emptyAllow}),   // set in the code table it's default
       typeInsertOnly: new FieldTextBoolean({emptyValueAllowed: this.emptyValueAllowed}),
       _mode: new FieldTextSet({emptyAllow: this.emptyValueAllowed, values:{
-          none: 0, blocked: 0,
+          none: 0,
           add: 1, create: 1, insert: 1,
           update: 2, modify: 2,
           delete: 4, remove: 4,
           skip: 8,      // if not found do nothing and no error
           inherit: 16,  // if code / location has no mode use the one of the contact parent
           kill: 32,     // if code found it should be delete even if delete is set for the code
+          blocked: 64,  // this element and any child are not update
         }
       }),
       // if set to true the code will not be delete by the sync

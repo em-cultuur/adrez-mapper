@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-11-17
+- add: _mode: blocked
+
 2020-10-05
 - chg: code if empty type, typeId and text it's removed
 
