@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-11-24
+- chg: empty telephone remove the definition
+
 2020-11-17
 - add: _mode: blocked
 

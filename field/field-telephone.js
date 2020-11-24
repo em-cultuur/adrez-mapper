@@ -60,7 +60,9 @@ class FieldTelephone extends FieldComposed {
         }
       }
     }
-
+    if (!data.value) {  // empty data skips the record
+      return {}
+    }
     this.copyFieldsToResult(result, data, this._skipName);
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);

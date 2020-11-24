@@ -109,4 +109,11 @@ describe('field.extra', () => {
       assert.equal(r._mode, 1)
     });
   })
+  describe('empty email', async() => {
+    let f = new FieldTelephone();
+    it('empty', async () => {
+      let r = await f.convert('email', {type: '1234', _mode: 'add'}, logger);
+      assert.equal(Object.keys(r).length, 0, 'has to remove everything');
+    })
+  })
 })
