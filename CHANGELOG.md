@@ -1,7 +1,9 @@
 # adrez-mapper Revisions
 
 2020-11-24
-- chg: empty telephone remove the definition
+- chg: empty telephone.type gets a default type
+- chg: empty email.type gets a default type
+- chg: if typeId is set, no lookup is done
 
 2020-11-17
 - add: _mode: blocked

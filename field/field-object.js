@@ -169,7 +169,9 @@ class FieldObject extends Field {
     }
     // clean the type definition
     if ((this.emptyValueAllowed || result.value !== undefined || result.type !== undefined || result.type_ !== undefined) &&
-      ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
+       ! result.typeId) {
+      // this blocks the missing typeId from getting the default value
+      // ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
       result.typeId = await this.lookupCode(data, this.lookupFunctionName, 'type', '', this.baseTypeId, logger)
     }
     result = _.omit(result, ['typeGuid', 'type', 'type_', 'parentId', 'parentGuid', 'parentText', 'parentTypeId']);

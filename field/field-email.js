@@ -39,6 +39,9 @@ class FieldEmail extends FieldComposed {
         data.type = 'Privé'
       }
     }
+    if (!data.value) {
+      return {}
+    }
     this.copyFieldsToResult(result, data, ['email', 'newsletter', 'prive']);
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);
