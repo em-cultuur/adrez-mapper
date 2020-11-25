@@ -305,5 +305,28 @@ describe('field.contact', () => {
       assert.equal(r.namePrefix, '');
     })
   });
+
+  describe('v:1.3.9 - sortName', () => {
+    it ('analyse sortName', async () => {
+      let r = await f.convert('contact', {sortName: 'McAnser, Jay'}, logger);
+      assert.isDefined(r.name);
+      assert.equal(r.name, 'McAnser');
+      assert.equal(r.firstName, 'Jay')
+    })
+
+    it('fullName overloads', async() => {
+      let r = await f.convert('contact', {fullName: 'John Doe', sortName: 'McAnser, Jay'}, logger);
+      assert.isDefined(r.name);
+      assert.equal(r.name, 'Doe');
+      assert.equal(r.firstName, 'John')
+    })
+
+    it('name overloads', async() => {
+      let r = await f.convert('contact', {name: 'Doe', sortName: 'McAnser, Jay'}, logger);
+      assert.isDefined(r.name);
+      assert.equal(r.name, 'Doe');
+    })
+
+  })
 });
 

@@ -58,6 +58,8 @@ class FieldContact extends FieldComposed {
 
       // used to for calculations
       fullName: new FieldText({ emptyAllow: false}),
+      // for alphabetical names
+      sortName: new FieldText({ emptyAllow: false}),
 
   //    _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
       locator: new FieldLocatorContact({emptyAllow: true})
@@ -98,6 +100,16 @@ class FieldContact extends FieldComposed {
       }
       result.fullName = result.name;
     } else {
+      if (fields.sortName && ! (fields.fullName || fields.name)) {
+        let p = data.sortName.indexOf(',');
+        if (p) {
+          data.fullName = data.sortName.substr(p + 1).trim() + ' ' + data.sortName.substr(0, p);
+        } else {
+          data.fullName = data.sortName;
+        }
+        // trick system into that we have the fields
+        fields.fullName = fields.sortName;
+      }
       if (fields.fullName && fields.name === undefined) {
         // parse the fullname only if there isn't already a name
         let parsed = this._parser.analyse(data.fullName);
