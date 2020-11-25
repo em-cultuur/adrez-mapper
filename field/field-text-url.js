@@ -27,10 +27,10 @@ class FieldTextUrl extends FieldText {
       switch (this._part) {
         case 'href':
           result = parsed.href;
-          if (parsed.protocol === null) {
+          if (!parsed.protocol) {
             parsed.protocol = '';
           }
-          if (result.substr(0, parsed.protocol.length) === parsed.protocol) {
+          if (parsed.protocol.length && result.substr(0, parsed.protocol.length) === parsed.protocol) {
             result = result.substr(parsed.protocol.length + 2);
           }
           // remove the irritating / on the end

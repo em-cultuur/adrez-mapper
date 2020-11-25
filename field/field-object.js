@@ -245,7 +245,7 @@ class FieldObject extends Field {
       for (let key in fields) {
         if (!fields.hasOwnProperty(key)) { continue }
         if (fields[key].emptyAllow === undefined || fields[key].emptyAllow === false) {
-          return this.processKeys(`${fieldName}`, fields, data, logger);
+          return await this.processKeys(`${fieldName}`, fields, data, logger);
           // .then((rec) => {
           //   return Promise.resolve(rec)
           // })

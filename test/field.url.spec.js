@@ -23,7 +23,7 @@ describe('field.url', () => {
   }
 
 
-  describe('type/typeId and value', () => {
+ // describe('type/typeId and value', () => {
     it('1. direct none changed values', async () => {
       let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
       let r = await f2.convert('url', {value: 'test.com', typeId: '123'}, logger);
@@ -83,12 +83,12 @@ describe('field.url', () => {
       assert.equal(r.typeId, 559, 'translated Instagram to typeId');
     });
 
-  });
+ // });
 
 
 
 
-  describe('url',  () => {
+ // describe('url',  () => {
     let f = new FieldUrl({lookup: new Lookup()});
     logger.clear();
     it('empty', async () => {
@@ -106,7 +106,7 @@ describe('field.url', () => {
       assert.equal(r.value,'www.em-cultuur.com', 'origin');
 
     });
-  });
+ // });
 
   it('leave empty', async () => {
     let f2 = new FieldUrl({ lookup: new Lookup(), removeEmpty : false});
@@ -151,4 +151,10 @@ describe('field.url', () => {
     assert.equal(r.typeId, '143', 'found type');
   });
 
+  it('bug: missing ww of www.example.com', async() => {
+    let f2 = new FieldUrl({ lookup: new Lookup(), removeEmpty: false});
+    let r = await f2.convert('url', {url: 'www.example.com'}, logger);
+    assert.equal(r.value, 'www.example.com', 'did leave it');
+
+  })
 });

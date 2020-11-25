@@ -2,6 +2,7 @@
 
 2020-11-25
 - add: contact.sortName where McAnser, Jay is translated to Jay McAnser
+- fix: part of url is removed
 
 2020-11-24
 - chg: empty telephone.type gets a default type
