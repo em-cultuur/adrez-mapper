@@ -300,4 +300,19 @@ describe('field.location', () => {
       assert.equal(r._mode, 1)
     });
   })
+
+  describe('isPrimary', async() => {
+    let f = new FieldLocation();
+    it('set - true', async () => {
+      let r = await f.convert('code', {street: 'Testing with key', _mode:'add', isPrimary: true}, logger);
+      assert.isDefined(r.isPrimary);
+      assert.isTrue(r.isPrimary)
+    });
+    it('set - false', async () => {
+      let r = await f.convert('code', {street: 'Testing with key', _mode:'add', isPrimary: false}, logger);
+      assert.isDefined(r.isPrimary);
+      assert.isFalse(r.isPrimary)
+    });
+
+  })
 });

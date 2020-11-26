@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2020-11-26
+- add: location.isPrimary 
+
 2020-11-25
 - add: contact.sortName where McAnser, Jay is translated to Jay McAnser
 - fix: part of url is removed

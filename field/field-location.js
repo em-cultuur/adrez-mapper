@@ -4,6 +4,7 @@
 
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldTextGuid;
+const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
 
 // const FieldObject = require('./field-object').FieldObject;
 const FieldComposed = require('./field-composed').FieldComposed;
@@ -28,6 +29,7 @@ class FieldLocation extends FieldComposed {
     this._fields.country = new FieldText({emptyAllow: true});
     this._fields.countryId = new FieldGuid({emptyAllow: true});
     this._fields.countryGuid = new FieldGuid({emptyValueAllowed: true})
+    this._fields.isPrimary = new FieldBoolean({emptyValueAllowed: true})
     delete this._fields.value;
  }
 
