@@ -5,9 +5,24 @@
 const Field = require('./field').Field;
 
 class FieldText extends Field {
+  /**
+   *
+   * @param options
+   *  - validValues an array of values the are allowed. if one it act as a boolean (value, undefined( field
+   *  - isCaseInsensitive - false - if true no case is used
+   */
   constructor(options = {}){
     super(options);
     this._name = 'text';
+    if (options.hasOwnProperty('validValues')) {
+      this.validValues = Array.isArray(options.validValues) ? options.validValues : [options.validValues];
+    } else {
+      this.validValues = [];
+    }
+    this.isCaseInsensitive = options.hasOwnProperty('isCaseInsensitive') ? options.isCaseInsensitive : false;
+    if (this.isCaseInsensitive) {
+      this.validValues.forEach( (v, index) => this.validValues[index] = typeof v === 'string' ?  v.toUpperCase() : v)
+    }
   }
 
   isEmpty(data) {
@@ -27,12 +42,26 @@ class FieldText extends Field {
    * @return {boolean} True: it can be handled, False: structure has an error
    */
   validate(fieldName, data, logger = false) {
-    if (data !== undefined && !(typeof data === 'string' || typeof data === 'number')) {
+    if (data !== undefined && !(typeof data === 'string' || typeof data === 'number' || typeof data === 'boolean')) {
       this.log(logger,'error', fieldName, `must be string or number ${typeof data}`);
       return false;
     } else {
       return true;
     }
+  }
+  async convert(fieldName, data, logger) {
+    let r = await super.convert(fieldName, data, logger);
+    if (this.isCaseInsensitive && r && typeof r === 'string') {
+      r = r.toUpperCase();
+    }
+    if (this.validValues.length && this.validValues.indexOf(r) < 0) {
+      if (this.validValues.length > 1) {
+        // act as a yes / undefined field
+        this.log(logger, 'warn', fieldName, `the value ${r} is not valid. allowed are ${this.validValues.join(', ')}`);
+      }
+      return undefined
+    }
+    return data;
   }
 }
 

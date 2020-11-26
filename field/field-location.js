@@ -29,7 +29,12 @@ class FieldLocation extends FieldComposed {
     this._fields.country = new FieldText({emptyAllow: true});
     this._fields.countryId = new FieldGuid({emptyAllow: true});
     this._fields.countryGuid = new FieldGuid({emptyValueAllowed: true})
-    this._fields.isPrimary = new FieldBoolean({emptyValueAllowed: true})
+    this._fields.isPrimary = new FieldText(
+      {
+        emptyValueAllowed: true,
+        validValues: [true, false, 'leave','useMaster', 'master'],
+        isCaseInsensitive: true
+      }) // can be true, false or leave
     delete this._fields.value;
  }
 
