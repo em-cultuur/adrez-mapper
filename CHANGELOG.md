@@ -1,7 +1,10 @@
 # adrez-mapper Revisions
 
+2020-11-27
+- add: contact.useParentLocation
+
 2020-11-26
-- add: location.isPrimary: true, false, master, useMaster, leave (case insensitive) 
+- add: location.isPrimary: true, false, leave, all, allLeave) 
 
 2020-11-25
 - add: contact.sortName where McAnser, Jay is translated to Jay McAnser

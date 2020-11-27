@@ -262,6 +262,19 @@ describe('field.contact', () => {
       assert.equal(r._parent, 'theKey', 'and set');
     })
   });
+  describe('useParentLocation', () => {
+    it('set', async () => {
+      let r = await f.convert('contact', {name: 'Working it', useParentLocation: true}, logger);
+      assert.isDefined(r.useParentLocation, 'got key');
+      assert.equal(r.useParentLocation, true);
+    })
+    it('unset', async () => {
+      let r = await f.convert('contact', {name: 'Working it', useParentLocation: false}, logger);
+      assert.isDefined(r.useParentLocation, 'got key');
+      assert.equal(r.useParentLocation, false);
+    })
+
+  })
 
   describe('locator', () =>  {
     it('parse', async () => {

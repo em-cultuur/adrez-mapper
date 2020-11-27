@@ -32,7 +32,7 @@ class FieldLocation extends FieldComposed {
     this._fields.isPrimary = new FieldText(
       {
         emptyValueAllowed: true,
-        validValues: [true, false, 'leave','useMaster', 'master'],
+        validValues: [true, false, 'leave','all', 'allLeave'],
         isCaseInsensitive: true
       }) // can be true, false or leave
     delete this._fields.value;

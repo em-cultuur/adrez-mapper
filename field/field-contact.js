@@ -51,6 +51,7 @@ class FieldContact extends FieldComposed {
 //      organizationId: new FieldGuid({emptyAllow: true}),
       // key should an other contacts key
       _key: new FieldText({emptyAllow: true}),
+      useParentLocation: new FieldBoolean({emptyAllow: true}),
       // _parent is defined in the object type
       // if _key is defined the contactId is automatic set
       contactId: new FieldGuid({emptyAllow: true}),

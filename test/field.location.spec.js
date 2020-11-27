@@ -318,14 +318,14 @@ describe('field.location', () => {
       assert.equal(r.isPrimary, 'leave')
     });
     it('set - useMaster', async () => {
-      let r = await f.convert('location', {street: 'Testing with key', _mode:'add', isPrimary: 'useMaster'}, logger);
+      let r = await f.convert('location', {street: 'Testing with key', _mode:'add', isPrimary: 'all'}, logger);
       assert.isDefined(r.isPrimary);
-      assert.equal(r.isPrimary, 'useMaster')
+      assert.equal(r.isPrimary, 'all')
     });
     it('set - master', async () => {
-      let r = await f.convert('location', {street: 'Testing with key', _mode:'add', isPrimary: 'MASTER'}, logger);
+      let r = await f.convert('location', {street: 'Testing with key', _mode:'add', isPrimary: 'allLEAVE'}, logger);
       assert.isDefined(r.isPrimary);
-      assert.equal(r.isPrimary, 'MASTER')
+      assert.equal(r.isPrimary, 'allLEAVE')
     });
 
     it('set - Error', async () => {
