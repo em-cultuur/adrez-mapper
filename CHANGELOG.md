@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2021-03-09 (1.6.1)
+- fix: campaignContact.typeGuid is not called
+
 2021-03-09 (1.6.0)
 - add: zipCity for netherlands and belgium
 

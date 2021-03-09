@@ -31,6 +31,8 @@ describe('field.campaign-contact', () => {
         return '123'
       } else if (def.text === 'test') {
         return 4;
+      } else if (def.guid === 'EB_GUEST') {
+        return 5;
       }
       return Promise.resolve(0);
     }
@@ -40,24 +42,39 @@ describe('field.campaign-contact', () => {
     lookup: new TypeLookup()
   });
 
-  describe('type/source',  () => {
+  // describe('type/source',  () => {
+  //   logger.clear();
+  //   it('translate default', async () => {
+  //     let r = await f.convert('campaigncontact', {type: 'test'}, logger);
+  //     assert.equal(r.typeId, 4, 'found default');
+  //   });
+  //   it('translate value', async () => {
+  //     let r = await f.convert('campaigncontact', {campaign: 'test', type: 'aangemeld', contact: 'user'}, logger);
+  //     assert.equal(r.typeId, '123', 'found default')
+  //     assert.equal(r.campaign, 'test')
+  //     assert.equal(r.contact, 'user')
+  //   });
+  //
+  //   it('empty value', async () => {
+  //     let r = await f.convert('campaigncontact', {campaign: 'test', contact: 'jan', code: undefined}, logger);
+  //     assert.isUndefined(r.typeId, 'no type');
+  //   });
+  // });
+
+  describe('typeGuid', () => {
     logger.clear();
     it('translate default', async () => {
-      let r = await f.convert('campaigncontact', {type: 'test'}, logger);
-      assert.equal(r.typeId, 4, 'found default');
-    });
-    it('translate value', async () => {
-      let r = await f.convert('campaigncontact', {campaign: 'test', type: 'aangemeld', contact: 'user'}, logger);
-      assert.equal(r.typeId, '123', 'found default')
-      assert.equal(r.campaign, 'test')
-      assert.equal(r.contact, 'user')
-    });
-
-    it('empty value', async () => {
-      let r = await f.convert('campaigncontact', {campaign: 'test', contact: 'jan', code: undefined}, logger);
-      assert.isUndefined(r.typeId, 'no type');
+      let r = await f.convert('campaigncontact', {
+        "campaign": "event",
+        "contact": "contact",
+        "typeGuid": "EB_GUEST",
+        "actionDate": "2020-11-13"
+      },
+        logger);
+      assert.equal(r.typeId, 5, 'found lookup value');
     });
 
-  });
+
+  })
 
 });
