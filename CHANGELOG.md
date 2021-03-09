@@ -1,5 +1,11 @@
 # adrez-mapper Revisions
 
+2021-03-09 (1.6.0)
+- add: zipCity for netherlands and belgium
+
+2020-12-15 v2.5
+- add: zipcity
+
 2020-11-27
 - add: contact.useParentLocation
 

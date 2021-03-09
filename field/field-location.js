@@ -9,6 +9,7 @@ const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
 // const FieldObject = require('./field-object').FieldObject;
 const FieldComposed = require('./field-composed').FieldComposed;
 const FieldZipcode = require('./field-text-zipcode').FieldTextZipcode;
+const FieldZipCity = require('./field-text-zip-city').FieldTextZipCity
 const _ = require('lodash');
 
 class FieldLocation extends FieldComposed {
@@ -25,6 +26,7 @@ class FieldLocation extends FieldComposed {
     this._fields.suffix = new FieldText();
     this._fields.streetNumber = new FieldText({ emptyAllow: false});
     this._fields.zipcode = new FieldZipcode(_.merge(options, {emptyAllow: false}));
+    this._fields.zipCity = new FieldZipCity(_.merge(options, {emptyAllow: false}))
     this._fields.city = new FieldText({ emptyAllow: false});
     this._fields.country = new FieldText({emptyAllow: true});
     this._fields.countryId = new FieldGuid({emptyAllow: true});
@@ -50,6 +52,13 @@ class FieldLocation extends FieldComposed {
     let result = {};
     let lookup = false;
 
+    if (data.zipCity) {
+      let r = await this._fields.zipCity.adjust(fieldName, data.zipCity, logger)
+      if (r) {
+        delete data.zipCity;
+        Object.assign(data, r)
+      }
+    }
     if (!data.countryId) {
       if (data.countryGuid) {
         result.countryId = await this.lookup.country(fieldName, {guid: data.countryGuid})

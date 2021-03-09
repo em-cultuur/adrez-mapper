@@ -62,6 +62,8 @@ class FieldText extends Field {
       return undefined
     }
     return data;
+    // ToDo: strange: we modify the data, but do NOT return it. It must be a bug
+    // return r
   }
 }
 

@@ -38,7 +38,7 @@ class FieldObject extends Field {
           skip: 8,      // if not found do nothing and no error
           inherit: 16,  // if code / location has no mode use the one of the contact parent
           kill: 32,     // if code found it should be delete even if delete is set for the code
-          blocked: 64,  // this element and any child are not update
+          blocked: 64,  // this element and any child are not update / added / deleted
         }
       }),
       // if set to true the code will not be delete by the sync

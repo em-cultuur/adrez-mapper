@@ -337,5 +337,29 @@ describe('field.location', () => {
 
   })
 
+  describe('zipcity', async() => {
+    let f = new FieldLocation();
+    it('split Netherlands', async () => {
+      let r = await f.convert('location', {streetNumber:'west 12', zipCity: '1001 AA Amsterdam'}, logger);
+      assert.equal(r.zipcode, '1001 AA');
+      assert.equal(r.city, 'Amsterdam');
+      assert.equal(r.street, 'west');
+      assert.equal(r.number, '12')
+      assert.equal(r.countryId, 500)
+    });
+
+    it('split Belgium', async () => {
+      let r = await f.convert('location', {streetNumber:'west 12', zipCity: 'B1232 Brussels'}, logger);
+      assert.equal(r.zipcode, 'B1232');
+      assert.equal(r.city, 'Brussels');
+      assert.equal(r.street, 'west');
+      assert.equal(r.number, '12')
+      assert.equal(r.countryId, 501)
+      r = await f.convert('location', {streetNumber:'west 12', zipCity: 'B-1232 Brussels'}, logger);
+      assert.equal(r.zipcode, 'B-1232');
+      assert.equal(r.city, 'Brussels');
+    });
+
+  })
 
 });
