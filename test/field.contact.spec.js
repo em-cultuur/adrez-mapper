@@ -339,7 +339,18 @@ describe('field.contact', () => {
       assert.isDefined(r.name);
       assert.equal(r.name, 'Doe');
     })
+  })
 
+  describe('v:1.6.2 - _source was removed', () => {
+    it ('analyse sortName', async () => {
+      let r = await f.convert('contact', {fullName: 'McAnser, Jay', _source: 'test'}, logger);
+      assert.isDefined(r.name);
+      assert.equal(r.name, 'McAnser');
+      assert.equal(r.firstName, 'Jay');
+      assert.isDefined(r._source);
+      assert.equal(r._source, 'test')
+
+    })
   })
 });
 

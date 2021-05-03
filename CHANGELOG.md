@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2021-04-03 (1.6.2)
+- fix: _source was removed from the contact
+
 2021-03-09 (1.6.1)
 - fix: campaignContact.typeGuid is not called
 

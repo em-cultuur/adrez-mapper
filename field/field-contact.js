@@ -62,7 +62,7 @@ class FieldContact extends FieldComposed {
       // for alphabetical names
       sortName: new FieldText({ emptyAllow: false}),
 
-  //    _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
+      _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
       locator: new FieldLocatorContact({emptyAllow: true})
     });
     // the contact does not know about values
