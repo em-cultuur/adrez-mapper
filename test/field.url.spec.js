@@ -95,6 +95,10 @@ describe('field.url', () => {
       let r = await f.convert('url', {url: '', _source: 'master'}, logger);
       assert.isEmpty(r, 'should clear a empty record')
     });
+    it('empty if isDefault', async () => {
+      let r = await f.convert('url', {url: '', _source: 'master', isDefault: true, _parent:'test', _mode: ['add']}, logger);
+      assert.isEmpty(r, 'should clear a empty record')
+    });
     it('select field', async () => {
       let r = await f.convert('url', {url: 'http://www.em-cultuur.com:81/test?x=2', _source: 'master'}, logger);
       assert.equal(r.value,'www.em-cultuur.com:81/test?x=2', 'select url en convert');
@@ -156,5 +160,7 @@ describe('field.url', () => {
     let r = await f2.convert('url', {url: 'www.example.com'}, logger);
     assert.equal(r.value, 'www.example.com', 'did leave it');
 
-  })
+  });
+
+
 });

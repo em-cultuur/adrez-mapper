@@ -1,5 +1,10 @@
 # adrez-mapper Revisions
 
+
+
+2021-05-15 (1.6.3)
+- fix: _mode makes a record forced to store
+
 2021-04-03 (1.6.2)
 - fix: _source was removed from the contact
 

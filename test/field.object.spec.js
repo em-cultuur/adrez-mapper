@@ -102,6 +102,7 @@ describe('field.object', () => {
 
   it('_mode values', async() => {
     let field = new FieldObject({
+      needMode: false
     });
     let r = await field.convert('object', {
       type: 'John',

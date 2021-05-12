@@ -13,6 +13,11 @@ const Lookup = require('../lib/lookup')
 
 class FieldObject extends Field {
 
+  /**
+   *
+   * @param options
+   *   - needMode if false the mode is copied anyway, otherwise it's not important for the empty check
+   */
   constructor(options = {}){
     super(options);
     // this should be set by the child object. Defines the parentId for new records
@@ -30,7 +35,8 @@ class FieldObject extends Field {
       typeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
       typeIsDefault: new FieldGuid({emptyAllow: this.emptyAllow}),   // set in the code table it's default
       typeInsertOnly: new FieldTextBoolean({emptyValueAllowed: this.emptyValueAllowed}),
-      _mode: new FieldTextSet({emptyAllow: this.emptyValueAllowed, values:{
+      // fix: _mode is NEVER a reason to store the record
+      _mode: new FieldTextSet({emptyAllow: options.hasOwnProperty('needMode') ? options.needMode: true , values:{
           none: 0,
           add: 1, create: 1, insert: 1,
           update: 2, modify: 2,
