@@ -135,6 +135,17 @@ describe('field.object', () => {
     }, logger);
     assert.equal(r._mode, 1+2+4+8+16);
     r = await field.convert('object', {
+      fieldTypeId: 12
+    }, logger);
+    assert.isUndefined(r.fieldTypeId)
+    r = await field.convert('object', {
+      fieldTypeId: 12,
+      _mode: ['force']
+    }, logger);
+    assert.equal(r.fieldTypeId, 12)
+
+
+    r = await field.convert('object', {
       type: 'John',
       _mode: 'add,inherit'
     }, logger);

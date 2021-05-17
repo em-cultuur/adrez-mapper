@@ -35,7 +35,7 @@ class FieldObject extends Field {
       typeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
       typeIsDefault: new FieldGuid({emptyAllow: this.emptyAllow}),   // set in the code table it's default
       typeInsertOnly: new FieldTextBoolean({emptyValueAllowed: this.emptyValueAllowed}),
-      // fix: _mode is NEVER a reason to store the record
+      // fix: _mode is "NEVER" a reason to store the record
       _mode: new FieldTextSet({emptyAllow: options.hasOwnProperty('needMode') ? options.needMode: true , values:{
           none: 0,
           add: 1, create: 1, insert: 1,
@@ -45,6 +45,7 @@ class FieldObject extends Field {
           inherit: 16,  // if code / location has no mode use the one of the contact parent
           kill: 32,     // if code found it should be delete even if delete is set for the code
           blocked: 64,  // this element and any child are not update / added / deleted
+          force: 128,   // even if all standard fields are empty, leave the record
         }
       }),
       // if set to true the code will not be delete by the sync
@@ -98,6 +99,9 @@ class FieldObject extends Field {
         if (!this._fields[key].isEmpty(data[key])) {
           return false;
         }
+      }
+      if (data._mode && data._mode & 128 === 128) {
+        return false;
       }
     }
     return true;
