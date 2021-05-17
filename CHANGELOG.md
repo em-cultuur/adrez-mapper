@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2021-05-17 (1.6.7)
+- add: added link to _mode to check/set the sync id for the record
+
 2021-05-17 (1.6.5 / 1.6.6)
 - add: added force to mode so empty record can be handled
 

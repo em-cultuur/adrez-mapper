@@ -46,6 +46,7 @@ class FieldObject extends Field {
           kill: 32,     // if code found it should be delete even if delete is set for the code
           blocked: 64,  // this element and any child are not update / added / deleted
           force: 128,   // even if all standard fields are empty, leave the record
+          link: 256,    // create the sync link for the contact
         }
       }),
       // if set to true the code will not be delete by the sync
