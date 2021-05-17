@@ -54,7 +54,7 @@ class AdrezRecord extends FieldObject {
     return this._lookup;
   }
 
-  convert(fieldName, data, logger = false, parent = false) {
+  async convert(fieldName, data, logger = false, parent = false) {
     // check every key is an array
     for (let key in data) {
       if (!data.hasOwnProperty(key)) { continue }
@@ -65,7 +65,7 @@ class AdrezRecord extends FieldObject {
         data[key] = [data[key]]
       }
     }
-    return super.convert(fieldName, data, logger, parent)
+    return await super.convert(fieldName, data, logger, parent)
   }
   }
 

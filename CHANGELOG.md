@@ -1,6 +1,6 @@
 # adrez-mapper Revisions
 
-2021-05-17 (1.6.4)
+2021-05-17 (1.6.5 / 1.6.6)
 - add: added force to mode so empty record can be handled
 
 2021-05-15 (1.6.3)

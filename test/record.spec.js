@@ -10,6 +10,19 @@ const Lookup = require('../lib/lookup');
 describe('record', () => {
   let logger = new Logger({toConsole: false});
 
+  it('force contact', async () => {
+    let rec = new Record({removeEmpty: true, logger});
+    let result = await rec.convert('_mode',
+      {
+        contact: [ { _parent: "main", _mode:['force']}]
+      }
+    );
+    // console.log(result)
+    assert.isDefined(result.contact);
+    assert.equal(result.contact.length, 1)
+    assert.equal(result.contact[0]._parent, 'main');
+  })
+
 
   describe('url load remote config', () => {
     it('load config with instagram', async () => {
@@ -241,6 +254,8 @@ describe('record', () => {
       }
     );
     assert.isFalse(result.hasOwnProperty('telephone'))
-  })
+  });
+
+
 
 });

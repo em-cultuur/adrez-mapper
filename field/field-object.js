@@ -261,6 +261,10 @@ class FieldObject extends Field {
           // })
         }
       }
+      if (fields['_mode']) {
+        // we can force the record by setting the mode
+        return await this.processKeys(`${fieldName}`, fields, data, logger);
+      }
       return {};
     }
   }

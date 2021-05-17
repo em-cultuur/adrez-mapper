@@ -134,7 +134,11 @@ class FieldUrl extends FieldComposed {
     }
     this.copyFieldsToResult(result, data, this._skipFields);
     let cFields = this.remapFields(result);
-    return super.processKeys(fieldName, cFields, result, logger);
+    let resultData = await super.processKeys(fieldName, cFields, result, logger);
+    if (resultData.value && resultData.value.length ) {
+      return resultData
+    }
+    return {}
   }
 }
 

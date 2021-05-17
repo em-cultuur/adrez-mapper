@@ -39,7 +39,7 @@ class ObjectMapper {
    * @param logger
    * @param options
    */
-  convert(obj, logger = {}, options = {}) {
+  async convert(obj, logger = {}, options = {}) {
     for (let fieldName in obj) {
       if (obj.hasOwnProperty(fieldName)) { continue }
       if (this._fieldnameMapper[fieldName] === undefined) {
@@ -49,10 +49,9 @@ class ObjectMapper {
         if (Array.isArray(field)) {
 
         }
-        this._fieldnameMapper[fieldName].convert(obj, logger, options);
+        await this._fieldnameMapper[fieldName].convert(obj, logger, options);
       }
     }
-
   }
 
 }
