@@ -6,6 +6,7 @@ const FieldText = require('./field-text').FieldText;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
 const FieldNumber = require('./field-text-number').FieldTextNumber;
 const FieldDate = require('./field-text-date').FieldTextDate;
+const _ = require('lodash');
 
 class FieldExtra extends FieldComposed {
   constructor(options= {}) {
@@ -14,13 +15,13 @@ class FieldExtra extends FieldComposed {
     this.lookupFunctionName = 'extra';
     // 201 is wrong value but there is no default extra field.
     this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 201;
-    this._fields.useDescription = new FieldBoolean({emptyAllow: true, returnNumeric: true})
+    this._fields.useDescription = new FieldBoolean({returnNumeric: true})
 
     this._controlTypes = {
-      boolean: new FieldBoolean({ emptyAllow: false}),
-      text: new FieldText({ emptyAllow: false}),
-      number: new FieldNumber({ emptyAllow: false}),
-      date: new FieldDate({ emptyAllow: false}),
+      boolean: new FieldBoolean(),
+      text: new FieldText(),
+      number: new FieldNumber(),
+      date: new FieldDate(),
     };
     this._fieldDef = {
       text: {
@@ -97,7 +98,7 @@ class FieldExtra extends FieldComposed {
       },
     };
     // the fields that are auto filled in must be skipped
-    this._skipFields = ['type', 'typeId', 'code', 'codeId'];
+    this._skipFields = ['code', 'codeId'];
     for (let name in this._fieldDef) {
       if (!this._fieldDef.hasOwnProperty(name)) { continue }
       this._fields[name] = this._fieldDef[name].field;
@@ -126,22 +127,26 @@ class FieldExtra extends FieldComposed {
    */
   async processKeys(fieldName, fields, data, logger) {
     let result = {};
-    // find the first occurence of an type
+    // find the first occurrence of an type
     for (let name in this._fieldDef) {
       if (!this._fieldDef.hasOwnProperty(name)) {
         continue
       }
       if (fields[name] && data[name] !== undefined) {
         // found the field
-        result[this._fieldDef[name].fieldName] = await this._fields[name].convert(fieldName, data[name], logger);
-        if (this._fieldDef[name].field === this._controlTypes.boolean) {
-          // booleans must be converted to Text
-          result[this._fieldDef[name].fieldName] = result[this._fieldDef[name].fieldName] ? '1' : '0'
+        if (this._fields[name].isEmpty(data[name])) {
+          delete data[name]
+        } else {
+          result[this._fieldDef[name].fieldName] = await this._fields[name].convert(fieldName, data[name], logger);
+          if (this._fieldDef[name].field === this._controlTypes.boolean) {
+            // booleans must be converted to Text
+            result[this._fieldDef[name].fieldName] = result[this._fieldDef[name].fieldName] ? '1' : '0'
+          }
+          result.fieldTypeGuid = this._fieldDef[name].fieldTypeGuid;
+          result.fieldTypeId = this._fieldDef[name].fieldTypeId;
+          result.useDescription = data.useDescription !== undefined ? data.useDescription : this._fieldDef[name].useDescription;
+          break;
         }
-        result.fieldTypeGuid = this._fieldDef[name].fieldTypeGuid;
-        result.fieldTypeId = this._fieldDef[name].fieldTypeId;
-        result.useDescription = data.useDescription !== undefined ? data.useDescription : this._fieldDef[name].useDescription;
-        break;
       }
     }
     // if (Object.keys(result).length === 0) {
@@ -153,8 +158,9 @@ class FieldExtra extends FieldComposed {
 
     let aws = await super.processKeys(fieldName, cFields, result, logger); // .then( (aws) => {
     // we need to remove our fieldType definitions
-    this.copyFieldsToResult(result, aws, ['fieldTypeGuid', 'fieldTypeId'])
-    return result
+    // this.copyFieldsToResult(result, aws, ['fieldTypeGuid', 'fieldTypeId'])
+    // return result
+    return _.omit(aws, ['fieldTypeGuid', 'fieldTypeId'])
   }
 }
 

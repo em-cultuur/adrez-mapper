@@ -14,10 +14,10 @@ class FieldMemo extends FieldComposed {
     this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 0;
 
     // if field is set, save it all
-    this._fields.text = this._fields.value;                        // map it to the value field // new FieldText({emptyAllow: false});
-    this._fields.description = new FieldText({emptyAllow: false});
+    this._fields.text = this._fields.value;
+    this._fields.description = new FieldText();
     // this is stored in the Code definition
-    this._fields.useDescription = new FieldTextBoolean({emptyAllow: false, returnNumeric: true})
+    this._fields.useDescription = new FieldTextBoolean({returnNumeric: true})
     this.addStoreGroup('text');
     this.addStoreGroup('description')
   }

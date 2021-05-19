@@ -22,9 +22,15 @@ describe('field.code', () => {
           return Promise.resolve(def.parentGuid === 'parentGuid' ? 'found.parentGuid': 'wrong parent');
         case 'parentId':
           return Promise.resolve(def.parentId === 'parentId' ? 'found.parentId': 'wrong parent')
-
+        case 'remove empty':
+          return 'some value';
+        case 'parent.none':
+          return '10';
+        case 'test in record':
+          return 'test.in.record'
       }
-      return Promise.resolve(def.parentIdDefault);
+      // code should return undefined as default value otherwise it will be stored
+      return Promise.resolve(undefined);
     }
 
   }

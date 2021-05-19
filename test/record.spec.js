@@ -234,28 +234,30 @@ describe('record', () => {
   });
 
   describe('remove empty location._mode', async() => {
-    let rec = new Record({removeEmpty: true, logger});
-    let result = await rec.convert('_mode',
-      {
-        contact: [ { "name": "Jack"}],
-        telephone: [
-            {telephone: '0612345678', _mode: 'add'},
-            {telephone: '', _mode: 'add'}
+    it('_mode', async() => {
+      let rec = new Record({removeEmpty: true, logger});
+      let result = await rec.convert('_mode',
+        {
+          contact: [ { "name": "Jack"}],
+          telephone: [
+              {telephone: '0612345678', _mode: 'add'},
+              {telephone: '', _mode: 'add'}
+            ]
+          }
+      );
+      // console.log(result)
+      assert.equal(result.contact[0].name, 'Jack');
+      assert.equal(result.telephone.length, 1)
+      result = await rec.convert('_mode',
+        {
+          contact: [ { "name": "Jack"}],
+          telephone: [
+            {telephone: '', _mode: 'add,update'}
           ]
         }
-    );
-    // console.log(result)
-    assert.equal(result.contact[0].name, 'Jack');
-    assert.equal(result.telephone.length, 1)
-    result = await rec.convert('_mode',
-      {
-        contact: [ { "name": "Jack"}],
-        telephone: [
-          {telephone: '', _mode: 'add,update'}
-        ]
-      }
-    );
-    assert.isFalse(result.hasOwnProperty('telephone'))
+      );
+      assert.isFalse(result.hasOwnProperty('telephone'));
+    })
   });
 
 

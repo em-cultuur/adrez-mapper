@@ -187,6 +187,9 @@ describe('field.is-empty', () => {
 
   it ('field.telephone', async() => {
     let f = new FieldTelephone({lookup: new TypeLookup()})
+    result = await f.convert('fieldTelephone', {telephone: undefined});
+    assert.isTrue(_.isEmpty(result));
+
     result = await f.convert('fieldTelephone', {telephone: VALUE});
     assert.equal(result.value, VALUE + ' #import');
     result = await f.convert('fieldTelephone', {telephoneInt: VALUE});
@@ -195,8 +198,7 @@ describe('field.is-empty', () => {
     assert.equal(result.value, VALUE + ' #import');
     result = await f.convert('fieldTelephone', {telephone10Int: VALUE});
     assert.equal(result.value, VALUE + ' #import');
-    result = await f.convert('fieldTelephone', {telephone: undefined});
-    assert.isTrue(_.isEmpty(result));
+
   });
 
   it ('field.url', async() => {

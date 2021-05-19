@@ -16,9 +16,9 @@ class FieldCampaignContact extends FieldCode {
 
     // add ours
    // this._fields.text = new FieldText();
-    this._fields.campaign = new FieldText({emptyAllow: false});
-    this._fields.contact = new FieldText({emptyAllow: false});
-    this._fields.actionDate = new FieldDate({emptyAllow: true})
+    this._fields.campaign = new FieldText();
+    this._fields.contact = new FieldText();
+    this._fields.actionDate = new FieldDate()
 
     this.lookupFunctionName = 'campaignContact';
 

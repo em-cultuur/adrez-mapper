@@ -4,7 +4,7 @@
 
 const Field = require('./field').Field;
 const FieldText = require('./field-text').FieldText;
-
+const _ = require('lodash');
 
 
 
@@ -15,7 +15,6 @@ class FieldArray extends Field {
     this._name = 'array';
     this._type = options.type ? options.type : new FieldText();
     this._removeEmpty = moreOptions.removeEmpty  !== undefined ? moreOptions.removeEmpty : true;
-    this.emptyAllow = false;
   }
 
 
@@ -69,9 +68,10 @@ class FieldArray extends Field {
       for (let l = 0; l < data.length; l++) {
         let subName = `${fieldName}[${l}]`;
         let elm = await fieldDefinition.convert(subName, data[l], logger);
-        if (this._removeEmpty === false || !fieldDefinition.isEmpty(elm)) {
+        if (!_.isEmpty(elm) || this._removeEmpty === false)
+ //       if (this._removeEmpty === false || !fieldDefinition.isEmpty(elm)) {
           result.push(elm);
-        }
+ //       }
       }
       if (result.length === 0) {
         return Promise.resolve(undefined)

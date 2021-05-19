@@ -21,25 +21,25 @@ class FieldCampaign extends FieldComposed {
     this.lookupFunctionName = 'campaign';
     // source / sourceId is stored in type / typeId
     this._fields.guid = new FieldGuid();
-    this._fields.title = new FieldText({emptyAllow: false});
+    this._fields.title = new FieldText();
     this._fields.campaignDate = new FieldDate();
     this._fields.isActive = new FieldBoolean();
-    this._fields.description = new FieldText({emptyAllow: false});
-    this._fields.group = new FieldText({emptyAllow: true});
+    this._fields.description = new FieldText();
+    this._fields.group = new FieldText();
     this._fields.groupId = new FieldGuid();
     this._fields.groupGuid = new FieldGuid();
     // the action that added to campaignContact
     // typeId is used for the sourceId in Adrez, so we need to call it twice
-    this._fields.actionId = new FieldText({emptyAllow: true});
-    this._fields.actionGuid = new FieldGuid({emptyAllow: true});
+    this._fields.actionId = new FieldText();
+    this._fields.actionGuid = new FieldGuid();
     this._fields.action = new FieldText();
     // this._fields.action = this._fields.type;
     // this._fields.actionId = this._fields.typeId;
     // this._fields.actionGuid = this._fields.typeGuid;
 
-    this._fields._key = new FieldText({emptyAllow: true});
+    this._fields._key = new FieldText();
 
-    this._fields.locator = new FieldLocatorCampaign({emptyAllow: false});
+    this._fields.locator = new FieldLocatorCampaign();
     this.emptyValueAllowed = true;
     this.addStoreGroup('title')
   }

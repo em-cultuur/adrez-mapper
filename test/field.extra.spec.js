@@ -31,12 +31,12 @@ describe('field.extra', () => {
     it('memo = auto description', async() => {
       let r = await f.convert('extra', {description: 'memo'}, logger);
       assert.equal(r.description, 'memo');
-      assert.isTrue(r.useDescription);
+      assert.equal(r.useDescription, 1);
     });
     it('memo = manual description', async() => {
       let r = await f.convert('extra', {description: 'memo', useDescription: false}, logger);
       assert.equal(r.description, 'memo');
-      assert.isFalse(r.useDescription);
+      assert.equal(r.useDescription, 0);
     })
 
   });
@@ -109,11 +109,5 @@ describe('field.extra', () => {
       assert.equal(r._mode, 1)
     });
   })
-  describe('empty email', async() => {
-    let f = new FieldTelephone();
-    it('empty', async () => {
-      let r = await f.convert('email', {type: '1234', _mode: 'add'}, logger);
-      assert.equal(Object.keys(r).length, 0, 'has to remove everything');
-    })
-  })
+
 })

@@ -9,7 +9,6 @@ class FieldLocatorCampaign extends FieldLocator {
 
   constructor(options = {}) {
     super(options);
-    this.emptyAllow = false;
     this._fields = _.merge(this._fields, {
       title: new FieldLocatorText(options),
       id: new FieldLocatorGuid(options),

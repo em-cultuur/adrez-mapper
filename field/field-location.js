@@ -21,16 +21,16 @@ class FieldLocation extends FieldComposed {
     this.lookupFunctionName = 'location';
     this.emptyValueAllowed = true;
 
-    this._fields.street = new FieldText({ emptyAllow: false});
+    this._fields.street = new FieldText();
     this._fields.number = new FieldText();
     this._fields.suffix = new FieldText();
-    this._fields.streetNumber = new FieldText({ emptyAllow: false});
-    this._fields.zipcode = new FieldZipcode(_.merge(options, {emptyAllow: false}));
-    this._fields.zipCity = new FieldZipCity(_.merge(options, {emptyAllow: false}))
-    this._fields.city = new FieldText({ emptyAllow: false});
-    this._fields.country = new FieldText({emptyAllow: true});
-    this._fields.countryId = new FieldGuid({emptyAllow: true});
-    this._fields.countryGuid = new FieldGuid({emptyValueAllowed: true})
+    this._fields.streetNumber = new FieldText();
+    this._fields.zipcode = new FieldZipcode(options);
+    this._fields.zipCity = new FieldZipCity(options)
+    this._fields.city = new FieldText();
+    this._fields.country = new FieldText();
+    this._fields.countryId = new FieldGuid();
+    this._fields.countryGuid = new FieldGuid()
     this._fields.isPrimary = new FieldText(
       {
         emptyValueAllowed: true,
@@ -134,9 +134,6 @@ class FieldLocation extends FieldComposed {
     this.copyFieldsToResult(result, data, ['country', 'streetNumber']);
 
     let cFields = this.remapFields(result);
-    if (this.isEmpty(result)) {
-      return {};
-    }
     return super.processKeys(fieldName, cFields, result, logger);
   }
 

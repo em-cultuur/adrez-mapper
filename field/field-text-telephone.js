@@ -78,7 +78,10 @@ class FieldTextTelephone extends FieldText {
       tel = this._phoneUtil.parse(telephone, this._country); // this._defaultCountryCode());
     } catch (err) {
       this.log(logger, 'warn', fieldName, `${telephone} => ${err.message}`);
-      return Promise.resolve(telephone + ' ' + ERROR_CODE);
+      if (telephone !== undefined) {
+        return Promise.resolve(telephone + ' ' + ERROR_CODE);
+      }
+      return undefined
     }
     let format = this._format;
     let countryCode = tel.getCountryCode();

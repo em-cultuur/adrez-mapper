@@ -37,11 +37,6 @@ class Field {
 
   constructor(options = {}) {
     this._name = 'field';
-    // if emptyAllow == true and isEmpty == true => do not store
-    // if emptyAllow == true and isEmpty == false => do store
-    // if emptyAllow == false and isEmpty == true => do store
-    // if emptyAllow == false ans isEmpty == false => do store
-    this.emptyAllow = options.emptyAllow === undefined ? true : options.emptyAllow
   }
 
   get name() {

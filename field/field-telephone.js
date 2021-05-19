@@ -20,13 +20,13 @@ class FieldTelephone extends FieldComposed {
     this._skipName = [];
     for (let l = 0; l < this._baseNames.length; l++) {
       let name = this._baseNames[l];
-      this._fields[name] = new FieldTextTelephone({ emptyAllow: false});
+      this._fields[name] = new FieldTextTelephone();
       this._skipName.push(name);
-      this._fields[name + 'Int'] = new FieldTextTelephone({countryCode: -1, emptyAllow: false}); // force to international
+      this._fields[name + 'Int'] = new FieldTextTelephone({countryCode: -1}); // force to international
       this._skipName.push(name + 'Int');
-      this._fields[name + '10'] = new FieldTextTelephone({ emptyAllow: false});
+      this._fields[name + '10'] = new FieldTextTelephone();
       this._skipName.push(name + '10');
-      this._fields[name + '10Int'] = new FieldTextTelephone({countryCode: -1, emptyAllow: false}); // force to international
+      this._fields[name + '10Int'] = new FieldTextTelephone({countryCode: -1}); // force to international
       this._skipName.push(name + '10int');
     }
     this.addStoreGroup('value')
@@ -47,13 +47,13 @@ class FieldTelephone extends FieldComposed {
       for (let l = 0; l < this._baseNames.length; l++) {
         let name = this._baseNames[l];
         if (fields[name + 'Int']) {
-          data.value = await this._fields[name + 'Int'].convert(fieldName, '' + data[name + 'Int'], logger)
+          data.value = await this._fields[name + 'Int'].convert(fieldName, data[name + 'Int'], logger)
         } else if (fields[name + '10']) {
-          data.value = await this._fields[name + '10'].convert(fieldName, ('' + data[name + '10']).padStart(10, '0'), logger)
+          data.value = await this._fields[name + '10'].convert(fieldName, (data[name + '10']).padStart(10, '0'), logger)
         } else if (fields[name + '10Int']) {
-          data.value = await this._fields[name + '10Int'].convert(fieldName, ('' + data[name + '10Int']).padStart(10, '0'), logger)
+          data.value = await this._fields[name + '10Int'].convert(fieldName, (data[name + '10Int']).padStart(10, '0'), logger)
         } else if (fields[name]) {
-          data.value = await this._fields[name].convert(fieldName, '' + data[name], logger)
+          data.value = await this._fields[name].convert(fieldName, data[name], logger)
         }
         if (data.value && data.typeId === undefined && data.type === undefined) {
           data.typeId = CODE_IDS[name];

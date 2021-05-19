@@ -17,14 +17,9 @@ class FieldComposed extends FieldObject {
     super(options);
     this.baseTypeId = undefined;
 
-    this._fields.value =  options.valueType ? options.valueType : new FieldText({ emptyAllow: false});
+    this._fields.value =  options.valueType ? options.valueType : new FieldText();
     this._fields.isDefault = new FieldBoolean();
-      // _type: new FieldText({emptyAllow: true}),
-      // _source: new FieldText({emptyAllow: true}),      // textual version of the sourceId. Overrulde if _sourceId is set
-      // _sourceId: new FieldText({emptyAllow: true}),    // the codeId to sync with. if not storage space, places in typeId
     this.addStoreGroup('value')
-
-    // this._lookup = options.lookup;
   }
 
 
@@ -59,8 +54,9 @@ class FieldComposed extends FieldObject {
       }
 
     }
-    data = _.omit(data, ['typeGuid', 'type', 'type_']);
-    return data;
+    data = _.omit(data, ['type', 'type_']);
+    return  data;
+//     return super.processKeys(fieldName, fields, data, logger)
   }
 }
 

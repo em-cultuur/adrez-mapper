@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2021-05-19 (1.7.0)
+- rebuild of empty checker. Remove emptyAllow and added addStoreGroup.
+
 2021-05-17 (1.6.7)
 - add: added link to _mode to check/set the sync id for the record
 

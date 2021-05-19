@@ -25,14 +25,14 @@ class FieldContact extends FieldComposed {
     super(options);
     this._fields = _.merge(this._fields, {
       // fields for the database
-      guid: new FieldGuid({ emptyAllow: false}),
-      firstName: new FieldText({ emptyAllow: false}),      // the id, overrules the type
-      middleName: new FieldText({ emptyAllow: false}),
+      guid: new FieldGuid(),
+      firstName: new FieldText(),      // the id, overrules the type
+      middleName: new FieldText(),
       title: new FieldText(),
       firstLetters : new FieldText(),
       nickName: new FieldText(),
       namePrefix: new FieldText(),
-      name: new FieldText({ emptyAllow: false}),
+      name: new FieldText(),
       nameSuffix: new FieldText(),
 
       functionId: new FieldGuid(),
@@ -45,25 +45,24 @@ class FieldContact extends FieldComposed {
 
       search: new FieldText(),
 
-      isOrganisation: new FieldBoolean({emptyAllow: true}),
-      organisation: new FieldText({ emptyAllow: false}),
+      isOrganisation: new FieldBoolean(),
+      organisation: new FieldText(),
       subName: new FieldText(),  // department etc
-//      organizationId: new FieldGuid({emptyAllow: true}),
       // key should an other contacts key
-      _key: new FieldText({emptyAllow: true}),
-      useParentLocation: new FieldBoolean({emptyAllow: true}),
+      _key: new FieldText(),
+      useParentLocation: new FieldBoolean(),
       // _parent is defined in the object type
       // if _key is defined the contactId is automatic set
-      contactId: new FieldGuid({emptyAllow: true}),
-      _campaign: new FieldText({emptyAllow: true}),
+      contactId: new FieldGuid(),
+      _campaign: new FieldText(),
 
       // used to for calculations
-      fullName: new FieldText({ emptyAllow: false}),
+      fullName: new FieldText(),
       // for alphabetical names
-      sortName: new FieldText({ emptyAllow: false}),
+      sortName: new FieldText(),
 
-      _source: new FieldText({emptyAllow: true}),      // the ref to only update our own info
-      locator: new FieldLocatorContact({emptyAllow: true})
+      _source: new FieldText(),      // the ref to only update our own info
+      locator: new FieldLocatorContact()
     });
     // the contact does not know about values
     delete this._fields.value;

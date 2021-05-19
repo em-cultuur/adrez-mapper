@@ -28,14 +28,14 @@ class FieldObject extends Field {
     // this._name = 'object';
     // add here the fieldName: fieldDefinition
     this._fields = options.fields !== undefined ? options.fields : {
-      type: new FieldText({emptyAllow:  this.emptyAllow }),          // the name of the code
-      type_: new FieldText({emptyAllow:  this.emptyAllow }),         // the name of the code but never used as lookup
-      typeId: new FieldGuid({emptyAllow:  this.emptyAllow }),        // the id, overrules the type
-      typeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
-      typeIsDefault: new FieldGuid({emptyAllow: this.emptyAllow}),   // set in the code table it's default
-      typeInsertOnly: new FieldTextBoolean({emptyValueAllowed: this.emptyValueAllowed}),
+      type: new FieldText(),          // the name of the code
+      type_: new FieldText(),         // the name of the code but never used as lookup
+      typeId: new FieldGuid(),        // the id, overrules the type
+      typeGuid: new FieldGuid(),      // the id, overrules the type
+      typeIsDefault: new FieldGuid(),   // set in the code table it's default
+      typeInsertOnly: new FieldTextBoolean(),
       // fix: _mode is "NEVER" a reason to store the record
-      _mode: new FieldTextSet({emptyAllow: options.hasOwnProperty('needMode') ? options.needMode: true , values:{
+      _mode: new FieldTextSet({values:{
           none: 0,
           add: 1, create: 1, insert: 1,
           update: 2, modify: 2,
@@ -50,16 +50,16 @@ class FieldObject extends Field {
       }),
       // if set to true the code will not be delete by the sync
 
-      fieldTypeId:  new FieldGuid({emptyAllow:  this.emptyAllow }),  // if set: set the code.typeId
-      fieldTypeGuid: new FieldGuid({emptyAllow:  this.emptyAllow }), // or find the code.guid => typeId
+      fieldTypeId:  new FieldGuid(),  // if set: set the code.typeId
+      fieldTypeGuid: new FieldGuid(), // or find the code.guid => typeId
 
-      parentId: new FieldGuid({emptyAllow:  this.emptyAllow }),      // the id, overrules the type
-      parentGuid: new FieldGuid({emptyAllow:  this.emptyAllow }),    // the id, overrules the type
-      parentText: new FieldText({emptyAllow:  this.emptyAllow }),    // the id, overrules the type
-      parentTypeId: new FieldGuid({emptyAllow:  this.emptyAllow }),  // the id, overrules the type
+      parentId: new FieldGuid(),      // the id, overrules the type
+      parentGuid: new FieldGuid(),    // the id, overrules the type
+      parentText: new FieldText(),    // the id, overrules the type
+      parentTypeId: new FieldGuid(),  // the id, overrules the type
 
-      _parent: new FieldText({emptyAllow:  this.emptyAllow }),       // where is this record linked to
-      _source: new FieldText({emptyAllow:  this.emptyAllow }),       // not used but should be!
+      _parent: new FieldText(),       // where is this record linked to
+      _source: new FieldText(),       // not used but should be!
     };
     // storeGroups define group of fields that must be none empty to get the object stored
     // example: this._storeGroups['telephone1'] = ['telephone'], this._storeGroups['telephone2'] = ['value']
@@ -140,10 +140,6 @@ class FieldObject extends Field {
   }
 
   /**
-   * test if any field in the object filled and that that field defines that the data
-   * should be stored.
-   * ex:
-   *   1. setting the typeId is never enough to store the entire record so emptyAllow =
    *
    * @param data
    * @return {boolean}
@@ -155,11 +151,7 @@ class FieldObject extends Field {
           continue
         }
         if (!this._fields[key].isEmpty(data[key])) {
-          // if emptyAllow than this field is not important to define if the data is stored
-          // so if false and the field has data => the object it belongs to should be stored
-          if (this._fields[key].emptyAllow === false) {
-            return false;
-          }
+          return false;
         }
       }
       if (data._mode && data._mode & 128 === 128) {
@@ -224,21 +216,38 @@ class FieldObject extends Field {
   async processKeys(fieldName, fields, data, logger) {
     // valid object: fields
     let result = {};
-    for (let name in fields) {
-      if (!fields.hasOwnProperty(name)) {
-        continue
-      }
+    for (let name in data) {
+      if (!data.hasOwnProperty(name)) { continue}
       let subName = fieldName + '.' + name;
       try {
-        let fieldDefinition = fields[name];
-        result[name] = await fieldDefinition.convert(subName, data[name], logger, data);
-        if (result[name] === undefined) { // remove keys that are empty
-          delete result[name];
+        let fieldDefinition = this._fields[name];
+        if (fieldDefinition) {
+          result[name] = await fieldDefinition.convert(subName, data[name], logger, data);
+          if (result[name] === undefined) { // remove keys that are empty
+            delete result[name];
+          }
+        } else {
+          this.log(logger, 'error', `missing field ${name}`)
         }
       } catch (e) {
         this.log(logger,'error', subName, e.message);
       }
     }
+    // for (let name in fields) {
+    //   if (!fields.hasOwnProperty(name)) {
+    //     continue
+    //   }
+    //   let subName = fieldName + '.' + name;
+    //   try {
+    //     let fieldDefinition = fields[name];
+    //     result[name] = await fieldDefinition.convert(subName, data[name], logger, data);
+    //     if (result[name] === undefined) { // remove keys that are empty
+    //       delete result[name];
+    //     }
+    //   } catch (e) {
+    //     this.log(logger,'error', subName, e.message);
+    //   }
+    // }
     // -- remove because of new empty check
     // // clean the type definition
     // if ((this.emptyValueAllowed || result.value !== undefined || result.type !== undefined || result.type_ !== undefined) &&
@@ -255,7 +264,7 @@ class FieldObject extends Field {
     // if (!result.typeId) {
     //   result.typeId = await this.lookupCode(data, this.lookupFunctionName, 'type', '', this.baseTypeId, logger)
     // }
-    result = _.omit(result, ['parentId', 'parentGuid', 'parentText', 'parentTypeId']);
+    // result = _.omit(result, ['parentId', 'parentGuid', 'parentText', 'parentTypeId']);
     return this.mustStoredRecord(result) ? result : {}
   }
 
@@ -310,34 +319,17 @@ class FieldObject extends Field {
       if (fieldDefinition === undefined) {
         this.log(logger, 'error', subName, 'field does not exist');
         isValid.push(name);
-      } else if (this._removeEmpty === false || !fieldDefinition.isEmpty(data[name])) {
+      } // else if (this._removeEmpty === false || !fieldDefinition.isEmpty(data[name])) {
         // empty fields are removed
         fields[name] = this._fields[name];
-      }
+      //}
     }
     if (isValid.length > 0) {
       return Promise.reject(new ErrorFieldNotAllowed(isValid));
-    } else if (this._removeEmpty && _.isEmpty(fields)) {
-      return {};
+    // } else if (this._removeEmpty && _.isEmpty(fields)) {
+    //   return {};
     } else {
       return  this.processKeys(`${fieldName}`, fields, data, logger);
-      // remove due to new empty checker
-      //
-      // // check the emptyAllow isn't set for all
-      // for (let key in fields) {
-      //   if (!fields.hasOwnProperty(key)) { continue }
-      //   if (fields[key].emptyAllow === undefined || fields[key].emptyAllow === false) {
-      //     return await this.processKeys(`${fieldName}`, fields, data, logger);
-      //     // .then((rec) => {
-      //     //   return Promise.resolve(rec)
-      //     // })
-      //   }
-      // }
-      // if (fields['_mode']) {
-      //   // we can force the record by setting the mode
-      //   return await this.processKeys(`${fieldName}`, fields, data, logger);
-      // }
-      // return {};
     }
   }
 }

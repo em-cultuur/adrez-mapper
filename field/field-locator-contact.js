@@ -10,20 +10,20 @@ class FieldLocatorContact extends FieldLocator {
   constructor(options = {}) {
     super(options);
     this._fields = _.merge(this._fields, {
-      id: new FieldLocatorGuid({ emptyAllow: false}),
-      fullName: new FieldLocatorText({ emptyAllow: false}),
-      firstName: new FieldLocatorText({emptyAllow: false}),
-      namePrefix: new FieldLocatorText({emptyAllow: false}),
-      name: new FieldLocatorGuid({emptyAllow: false}),
-      subName: new FieldLocatorText({emptyAllow: false}),
-      guid: new FieldLocatorGuid({ emptyAllow: false}),
-      search: new FieldLocatorText({ emptyAllow: false}),
-      typeId: new FieldLocatorText({ emptyAllow: false}),
-      type: new FieldLocatorText({ emptyAllow: false}),
+      id: new FieldLocatorGuid(),
+      fullName: new FieldLocatorText(),
+      firstName: new FieldLocatorText(),
+      namePrefix: new FieldLocatorText(),
+      name: new FieldLocatorGuid(),
+      subName: new FieldLocatorText(),
+      guid: new FieldLocatorGuid(),
+      search: new FieldLocatorText(),
+      typeId: new FieldLocatorText(),
+      type: new FieldLocatorText(),
       // do a lookup on the email adress
-      email: new FieldLocatorText({emptyAllow: false}),
+      email: new FieldLocatorText(),
       // if true and there are multiple parents the first one is used
-      _allowMulti: new FieldTextBoolean(({emptyAllow: true}))
+      _allowMulti: new FieldTextBoolean()
     });
     this._fields.organisation = this._fields.name;
     this.addStoreGroup('fullName');
