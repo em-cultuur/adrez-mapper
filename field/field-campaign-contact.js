@@ -21,6 +21,12 @@ class FieldCampaignContact extends FieldCode {
     this._fields.actionDate = new FieldDate({emptyAllow: true})
 
     this.lookupFunctionName = 'campaignContact';
+
+    this.removeStoreGroup('code');
+    this.removeStoreGroup('codeId');
+    this.removeStoreGroup('type');
+    this.removeStoreGroup('typeId');
+    this.addStoreGroup('contact')
   }
 }
 module.exports.FieldCampaignContact = FieldCampaignContact;

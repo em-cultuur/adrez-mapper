@@ -15,6 +15,9 @@ class FieldLocatorCampaign extends FieldLocator {
       id: new FieldLocatorGuid(options),
       guid: new FieldLocatorGuid(options)
     });
+    this.addStoreGroup('guid');
+    this.addStoreGroup('title');
+    this.addStoreGroup('id');
   }
 }
 

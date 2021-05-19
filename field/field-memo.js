@@ -18,6 +18,8 @@ class FieldMemo extends FieldComposed {
     this._fields.description = new FieldText({emptyAllow: false});
     // this is stored in the Code definition
     this._fields.useDescription = new FieldTextBoolean({emptyAllow: false, returnNumeric: true})
+    this.addStoreGroup('text');
+    this.addStoreGroup('description')
   }
 
   buildCodeDef(definition, data) {

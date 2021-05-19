@@ -38,6 +38,8 @@ class FieldLocation extends FieldComposed {
         isCaseInsensitive: true
       }) // can be true, false or leave
     delete this._fields.value;
+    this.addStoreGroup('street', ['street', 'city'])
+    this.addStoreGroup('zip', ['zipcode', 'number'])
  }
 
   /**
@@ -132,6 +134,9 @@ class FieldLocation extends FieldComposed {
     this.copyFieldsToResult(result, data, ['country', 'streetNumber']);
 
     let cFields = this.remapFields(result);
+    if (this.isEmpty(result)) {
+      return {};
+    }
     return super.processKeys(fieldName, cFields, result, logger);
   }
 

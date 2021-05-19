@@ -23,6 +23,39 @@ describe('field.object', () => {
     }
   }
 
+  describe('storeGroups', () => {
+    let f = new FieldObject({
+      lookupFunctionName: 'code',
+      lookup: new LookupObject(),
+      // must force otherwise the data is not parsed
+      emptyAllow: false,
+    });
+
+    it('wrong field name', () => {
+      try {
+        f.addStoreGroup('test', ['typeId', 'wrong'])
+        assert.fail('the field wrong does not exist')
+      } catch (e) {
+        assert.equal(e.message, 'field wrong is undefined')
+      }
+    });
+
+    it ('check one field, one rule', async() => {
+      f.addStoreGroup('type', ['typeId'])
+      assert.isTrue(f.mustStoredRecord({isDefault: true, typeId: 1}))
+      assert.isFalse(f.mustStoredRecord({isDefault: true}))
+      assert.isTrue(f.mustStoredRecord({typeId: 0}))
+      assert.isFalse(f.mustStoredRecord({typeId: undefined}))
+    });
+
+    it('check multi rule', async() => {
+      f.addStoreGroup('parent', ['_parent'])
+      assert.isFalse(f.mustStoredRecord({isDefault: true}))
+      assert.isTrue(f.mustStoredRecord({isDefault: true, _parent: 'main'}))
+    })
+  })
+
+
   let f = new FieldObject({
     lookupFunctionName: 'code',
     lookup: new LookupObject(),
@@ -57,48 +90,7 @@ describe('field.object', () => {
   //
   // });
 
-  describe('typeIsInsertOnly', () => {
-    class LookupInsertOnly extends Lookup {
-      async code(fieldName, def) {
-        let result;
-        if (!def.hasOwnProperty('fieldTypeInsertOnly')) {
-          result = -1 // it should ALWAYS have this property
-        } else if (def.fieldTypeInsertOnly) {
-          result = 1
-        } else {
-          result = 0;
-        }
-        return Promise.resolve(result);
-      }
-    }
 
-    it('lookup with the value', async() => {
-      logger.clear();
-      let field = new FieldObject({
-        lookupFunctionName: 'code',
-        lookup: new LookupInsertOnly(),
-        // must force otherwise the data is not parsed
-        emptyAllow: false,
-      });
-      let r = await field.convert('object', {
-        type: 'John',
-        typeInsertOnly: 1,
-        typeGuid: 'NoRealy'
-      }, logger);
-      assert.equal(r.typeId, 1)
-      r = await field.convert('object', {
-        type: 'John',
-        typeInsertOnly: 0,
-        typeGuid: 'NoRealy'
-      }, logger);
-      assert.equal(r.typeId, 0);
-      r = await field.convert('object', {
-        type: 'John',
-        typeGuid: 'NoRealy'
-      }, logger);
-      assert.equal(r.typeId, 0)
-    })
-  })
 
   it('_mode values', async() => {
     let field = new FieldObject({
@@ -106,32 +98,38 @@ describe('field.object', () => {
     });
     let r = await field.convert('object', {
       type: 'John',
-      _mode: 'add'
+      _mode: 'add',
+      typeInsertOnly: 1 // otherwise the data is not stored
     }, logger);
     assert.equal(r._mode, 1);
     r = await field.convert('object', {
       type: 'John',
-      _mode: 'update'
+      _mode: 'update',
+      typeInsertOnly: 1
     }, logger);
     assert.equal(r._mode, 2);
     r = await field.convert('object', {
       type: 'John',
-      _mode: 'delete'
+      _mode: 'delete',
+      typeInsertOnly: 1
     }, logger);
     assert.equal(r._mode, 4);
     r = await field.convert('object', {
       type: 'John',
-      _mode: 'skip'
+      _mode: 'skip',
+      typeInsertOnly: 1
     }, logger);
     assert.equal(r._mode, 8);
     r = await field.convert('object', {
       type: 'John',
-      _mode: 'inherit'
+      _mode: 'inherit',
+      typeInsertOnly: 1
     }, logger);
     assert.equal(r._mode, 16);
     r = await field.convert('object', {
       type: 'John',
-      _mode: ['add','update', 'delete','skip','inherit']
+      _mode: ['add','update', 'delete','skip','inherit'],
+      typeInsertOnly: 1
     }, logger);
     assert.equal(r._mode, 1+2+4+8+16);
     r = await field.convert('object', {
@@ -140,18 +138,20 @@ describe('field.object', () => {
     assert.isUndefined(r.fieldTypeId)
     r = await field.convert('object', {
       fieldTypeId: 12,
+      typeInsertOnly: 1,
       _mode: ['force']
     }, logger);
     assert.equal(r.fieldTypeId, 12)
 
-
     r = await field.convert('object', {
       type: 'John',
+      typeInsertOnly: 1,
       _mode: 'add,inherit'
     }, logger);
     assert.equal(r._mode, 1+16);
     r = await field.convert('object', {
       type: 'John',
+      typeInsertOnly: 1,
       _mode: 'add, inherit'
     }, logger);
     assert.equal(r._mode, 1+16);
@@ -159,17 +159,20 @@ describe('field.object', () => {
     field = new FieldContact();
     r = await field.convert('object', {
       name: 'John',
+      typeInsertOnly: 1,
       _mode: 'add, inherit'
     }, logger);
     assert.equal(r._mode, 1+16);
     field = new FieldContact();
     r = await field.convert('object', {
-      organisation: 'JohnX',
+      name: 'JohnX',
+      typeInsertOnly: 1,
       _mode: 'add, inherit'
     }, logger);
     assert.equal(r._mode, 1+16);
     r = await field.convert('object', {
-      organisation: 'JohnX',
+      name: 'JohnX',
+      typeInsertOnly: 1,
       _mode: 'delete,kill'
     }, logger);
     assert.equal(r._mode, 4+32);

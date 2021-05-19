@@ -10,18 +10,18 @@ const Lookup = require('../lib/lookup');
 describe('record', () => {
   let logger = new Logger({toConsole: false});
 
-  it('force contact', async () => {
-    let rec = new Record({removeEmpty: true, logger});
-    let result = await rec.convert('_mode',
-      {
-        contact: [ { _parent: "main", _mode:['force']}]
-      }
-    );
-    // console.log(result)
-    assert.isDefined(result.contact);
-    assert.equal(result.contact.length, 1)
-    assert.equal(result.contact[0]._parent, 'main');
-  })
+  // it('force contact', async () => {
+  //   let rec = new Record({removeEmpty: true, logger});
+  //   let result = await rec.convert('_mode',
+  //     {
+  //       contact: [ { _parent: "main", _mode:['force']}]
+  //     }
+  //   );
+  //   // console.log(result)
+  //   assert.isDefined(result.contact);
+  //   assert.equal(result.contact.length, 1)
+  //   assert.equal(result.contact[0]._parent, 'main');
+  // })
 
 
   describe('url load remote config', () => {
@@ -103,8 +103,9 @@ describe('record', () => {
     it('convert fields', async () => {
       let r = await rec.convert('rec', {email: [{email: 'info@test.com', type: 'work'}]}, logger);
       assert.equal(r.email[0].value,'info@test.com', 'did the convert');
-      assert.isUndefined(r.email[0].type, 'removed type');
       assert.equal(r.email[0].typeId, 1234, 'did read it');
+      assert.isUndefined(r.email[0].type, 'removed type');
+
     });
   });
 
@@ -222,12 +223,13 @@ describe('record', () => {
   describe('locker', () => {
     it('memo object to array', async () => {
       let rec = new Record({removeEmpty: true, logger});
-      let result = await rec.convert('memo', {"contact": [ { "firstName": "Jack","locator": { "email": "info@doe.com" }, "_key": "main" }],
+      let result = await rec.convert('memo', {
+        "contact": [ { "name": "Jack", "locator": { "email": "info@doe.com" }, "_key": "main" }],
         "telephone": [ {"telephone": "0123456789" } ]
       });
       assert.isDefined(result.contact);
       assert.equal(result.contact.length, 1);
-      assert.equal(result.contact[0].firstName, 'Jack')
+      assert.equal(result.contact[0].name, 'Jack')
     });
   });
 

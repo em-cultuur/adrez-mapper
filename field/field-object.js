@@ -21,8 +21,7 @@ class FieldObject extends Field {
   constructor(options = {}){
     super(options);
     // this should be set by the child object. Defines the parentId for new records
-    this.baseTypeId = undefined;
-    // this function is called when type has to be translated to typdId
+        // this function is called when type has to be translated to typdId
     this._lookup = options.hasOwnProperty('lookup') ? options.lookup : new Lookup();
     this.lookupFunctionName = options.lookupFunctionName ? options.lookupFunctionName : false;
     this.emptyValueAllowed = false;
@@ -62,8 +61,57 @@ class FieldObject extends Field {
       _parent: new FieldText({emptyAllow:  this.emptyAllow }),       // where is this record linked to
       _source: new FieldText({emptyAllow:  this.emptyAllow }),       // not used but should be!
     };
-
+    // storeGroups define group of fields that must be none empty to get the object stored
+    // example: this._storeGroups['telephone1'] = ['telephone'], this._storeGroups['telephone2'] = ['value']
+    this._storeGroups = {}
+    // dont know why we have this... but is't use in testing
+    this.addStoreGroup('typeInsertOnly', ['typeInsertOnly']);
     this._removeEmpty = options.removeEmpty !== undefined ? options.removeEmpty : true;
+  }
+
+  addStoreGroup(name, fieldNames) {
+    if (fieldNames === undefined) {
+      fieldNames = [name]
+    }
+    if (!Array.isArray(fieldNames)) {
+      fieldNames = [fieldNames]
+    }
+    for (let index = 0; index < fieldNames.length; index++) {
+      if (!this._fields.hasOwnProperty(fieldNames[index])) {
+        throw new Error(`field ${fieldNames[index]} is undefined`);
+      }
+    }
+    this._storeGroups[name] = fieldNames;
+  }
+  removeStoreGroup(name) {
+    delete this._storeGroups[name]
+  }
+
+  /**
+   * check if the data is set for a group
+   *
+   * @param data
+   */
+  mustStoredRecord(data) {
+    for (let name in this._storeGroups) {
+      if (!this._storeGroups.hasOwnProperty(name)) { continue };
+      let fieldNames = this._storeGroups[name];
+      // all fields in fieldNames must have isEmpty === false
+      let hasData = true;
+      for (let index = 0; index < fieldNames.length; index++) {
+        let fieldName = fieldNames[index]
+        if (!data.hasOwnProperty(fieldName) ||
+          this._fields[fieldName].isEmpty(data[fieldName])
+        ) {
+          hasData = false
+          break;
+        }
+      }
+      if (hasData) {
+        return true;
+      }
+    }
+    return false;
   }
 
   get lookup() {
@@ -91,6 +139,15 @@ class FieldObject extends Field {
     return isValid;
   }
 
+  /**
+   * test if any field in the object filled and that that field defines that the data
+   * should be stored.
+   * ex:
+   *   1. setting the typeId is never enough to store the entire record so emptyAllow =
+   *
+   * @param data
+   * @return {boolean}
+   */
   isEmpty(data) {
     if (data !== undefined && _.isObject(data)) {
       for (let key in this._fields) {
@@ -98,7 +155,11 @@ class FieldObject extends Field {
           continue
         }
         if (!this._fields[key].isEmpty(data[key])) {
-          return false;
+          // if emptyAllow than this field is not important to define if the data is stored
+          // so if false and the field has data => the object it belongs to should be stored
+          if (this._fields[key].emptyAllow === false) {
+            return false;
+          }
         }
       }
       if (data._mode && data._mode & 128 === 128) {
@@ -178,18 +239,24 @@ class FieldObject extends Field {
         this.log(logger,'error', subName, e.message);
       }
     }
-    // clean the type definition
-    if ((this.emptyValueAllowed || result.value !== undefined || result.type !== undefined || result.type_ !== undefined) &&
-       ! result.typeId) {
-      // this blocks the missing typeId from getting the default value
-      // ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
-      result.typeId = await this.lookupCode(data, this.lookupFunctionName, 'type', '', this.baseTypeId, logger)
-    }
-    result = _.omit(result, ['typeGuid', 'type', 'type_', 'parentId', 'parentGuid', 'parentText', 'parentTypeId']);
-    if (Object.keys(result).length === 1 && result.hasOwnProperty('_mode')) {
-      return {}
-    }
-    return result;
+    // -- remove because of new empty check
+    // // clean the type definition
+    // if ((this.emptyValueAllowed || result.value !== undefined || result.type !== undefined || result.type_ !== undefined) &&
+    //    ! result.typeId) {
+    //   // this blocks the missing typeId from getting the default value
+    //   // ! (fields['typeId'] && ! fields['typeId'].isEmpty(result['typeId']))) {
+    //   result.typeId = await this.lookupCode(data, this.lookupFunctionName, 'type', '', this.baseTypeId, logger)
+    // }
+    // result = _.omit(result, ['typeGuid', 'type', 'type_', 'parentId', 'parentGuid', 'parentText', 'parentTypeId']);
+    // if (Object.keys(result).length === 1 && result.hasOwnProperty('_mode')) {
+    //   return {}
+    // }
+    // return result;
+    // if (!result.typeId) {
+    //   result.typeId = await this.lookupCode(data, this.lookupFunctionName, 'type', '', this.baseTypeId, logger)
+    // }
+    result = _.omit(result, ['parentId', 'parentGuid', 'parentText', 'parentTypeId']);
+    return this.mustStoredRecord(result) ? result : {}
   }
 
   async lookupCode(data, functionName, fieldName = 'type', parentPrefix = '', baseTypeId, logger) {
@@ -219,12 +286,13 @@ class FieldObject extends Field {
       this.buildCodeDef(codeDef, data);
 
       return await this.lookup[functionName](fieldName, codeDef); //
-    // } else if (baseTypeId !== undefined) {
-    //   this.log(logger, 'error', fieldName, `no lookup function or lookupFunction ${functionName} name not defined for class "${this.constructor.name}" to translate type to typeId`);
+      // } else if (baseTypeId !== undefined) {
+      //   this.log(logger, 'error', fieldName, `no lookup function or lookupFunction ${functionName} name not defined for class "${this.constructor.name}" to translate type to typeId`);
     } else {
       return baseTypeId
     }
   }
+
   /**
    * adjust the object. if error or warnings use the logger
    * @param object
@@ -252,21 +320,24 @@ class FieldObject extends Field {
     } else if (this._removeEmpty && _.isEmpty(fields)) {
       return {};
     } else {
-      // check the emptyAllow isn't set for all
-      for (let key in fields) {
-        if (!fields.hasOwnProperty(key)) { continue }
-        if (fields[key].emptyAllow === undefined || fields[key].emptyAllow === false) {
-          return await this.processKeys(`${fieldName}`, fields, data, logger);
-          // .then((rec) => {
-          //   return Promise.resolve(rec)
-          // })
-        }
-      }
-      if (fields['_mode']) {
-        // we can force the record by setting the mode
-        return await this.processKeys(`${fieldName}`, fields, data, logger);
-      }
-      return {};
+      return  this.processKeys(`${fieldName}`, fields, data, logger);
+      // remove due to new empty checker
+      //
+      // // check the emptyAllow isn't set for all
+      // for (let key in fields) {
+      //   if (!fields.hasOwnProperty(key)) { continue }
+      //   if (fields[key].emptyAllow === undefined || fields[key].emptyAllow === false) {
+      //     return await this.processKeys(`${fieldName}`, fields, data, logger);
+      //     // .then((rec) => {
+      //     //   return Promise.resolve(rec)
+      //     // })
+      //   }
+      // }
+      // if (fields['_mode']) {
+      //   // we can force the record by setting the mode
+      //   return await this.processKeys(`${fieldName}`, fields, data, logger);
+      // }
+      // return {};
     }
   }
 }

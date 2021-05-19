@@ -1,7 +1,7 @@
 /**
  * array
  */
-
+// const Field = require('./field').Field;
 const FieldObject = require('./field-object').FieldObject;
 const FieldGuid = require('./field-text').FieldTextGuid;
 const FieldText = require('./field-text').FieldText;
@@ -50,6 +50,10 @@ class AdrezRecord extends FieldObject {
     }
   }
 
+  mustStoredRecord(data) {
+    return true; // even if its empty we store it
+  }
+
   get lookup() {
     return this._lookup;
   }
@@ -65,8 +69,8 @@ class AdrezRecord extends FieldObject {
         data[key] = [data[key]]
       }
     }
-    return await super.convert(fieldName, data, logger, parent)
+    return super.convert(fieldName, data, logger, parent)
   }
-  }
+}
 
 module.exports.AdrezRecord = AdrezRecord;

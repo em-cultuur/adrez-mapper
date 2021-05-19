@@ -60,7 +60,8 @@ class FieldArray extends Field {
    * @param logger Class logger
    * @return Promise (array || undefined if no element)
    */
-  async convert(fieldName, data, logger = false) {
+
+   async convert(fieldName, data, logger = false) {
     let result = [];
 
     if (Array.isArray(data)) {

@@ -64,7 +64,7 @@ class FieldTextUrl extends FieldText {
    * @param logger
    * @return {*}
    */
-  convert(fieldName, data, logger) {
+  async convert(fieldName, data, logger) {
     return this.adjust(fieldName, data, logger).then( (rec) => {
       if (this.validate(fieldName, rec, logger)) {
         return Promise.resolve(rec)

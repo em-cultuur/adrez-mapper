@@ -70,6 +70,22 @@ describe('field.contact', () => {
   });
 
 
+  describe('empty check', () => {
+    it('empty', async() => {
+      let r = await f.convert('contact', {type: 'echk', salutationId: 123}, logger);
+      assert.isTrue(_.isEmpty(r));
+    })
+    it('name', async() => {
+      let r = await f.convert('contact', {name: 'Jay', salutationId: 123}, logger);
+      assert.equal(r.name, 'Jay');
+    })
+    it('organisation', async() => {
+      let r = await f.convert('contact', {organisation: 'Leaper', salutationId: 123}, logger);
+      assert.equal(r.name, 'Leaper');
+    })
+
+  })
+
   describe('salutation',  () => {
     it('has salutationId', async() => {
       let r = await f.convert('contact', {fullName: 'Jan de Hond', salutationId: 123}, logger);

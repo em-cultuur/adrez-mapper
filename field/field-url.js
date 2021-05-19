@@ -62,6 +62,8 @@ class FieldUrl extends FieldComposed {
       this._fields[name] = new FieldText({ emptyAllow: false});
       this._skipField.push(name)
     }
+    this.addStoreGroup('value');
+    this.addStoreGroup('url');
   }
 
 
@@ -134,11 +136,13 @@ class FieldUrl extends FieldComposed {
     }
     this.copyFieldsToResult(result, data, this._skipFields);
     let cFields = this.remapFields(result);
-    let resultData = await super.processKeys(fieldName, cFields, result, logger);
-    if (resultData.value && resultData.value.length ) {
-      return resultData
-    }
-    return {}
+    return super.processKeys(fieldName, cFields, result, logger);
+
+    // let resultData = await super.processKeys(fieldName, cFields, result, logger);
+    // if (resultData.value && resultData.value.length ) {
+    //   return resultData
+    // }
+    // return {}
   }
 }
 

@@ -1,13 +1,13 @@
 
 
 const FieldGuid = require('./field-text').FieldTextGuid;
-const FieldObject = require('./field-object').FieldObject;
+const FieldComposed = require('./field-composed').FieldComposed;
 const FieldText = require('./field-text').FieldText;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
 const FieldNumber = require('./field-text-number').FieldTextNumber;
 const FieldDate = require('./field-text-date').FieldTextDate;
 
-class FieldExtra extends FieldObject {
+class FieldExtra extends FieldComposed {
   constructor(options= {}) {
     super(options);
     this.emptyValueAllowed = true;
@@ -96,7 +96,8 @@ class FieldExtra extends FieldObject {
         useDescription: false,
       },
     };
-    this._skipFields = [];
+    // the fields that are auto filled in must be skipped
+    this._skipFields = ['type', 'typeId', 'code', 'codeId'];
     for (let name in this._fieldDef) {
       if (!this._fieldDef.hasOwnProperty(name)) { continue }
       this._fields[name] = this._fieldDef[name].field;
@@ -104,6 +105,8 @@ class FieldExtra extends FieldObject {
         this._skipFields.push(name);
       }
     }
+    this.addStoreGroup('text');
+    this.addStoreGroup('description')
   }
 
   buildCodeDef(definition, data) {
@@ -141,15 +144,15 @@ class FieldExtra extends FieldObject {
         break;
       }
     }
-    if (Object.keys(result).length === 0) {
-      return {};
-    }
+    // if (Object.keys(result).length === 0) {
+    //   return {};
+    // }
 
     this.copyFieldsToResult(result, data, this._skipFields);
     let cFields = this.remapFields(result);
 
     let aws = await super.processKeys(fieldName, cFields, result, logger); // .then( (aws) => {
-    delete result._mode;
+    // we need to remove our fieldType definitions
     this.copyFieldsToResult(result, aws, ['fieldTypeGuid', 'fieldTypeId'])
     return result
   }

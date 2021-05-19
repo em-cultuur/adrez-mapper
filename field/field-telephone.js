@@ -29,6 +29,7 @@ class FieldTelephone extends FieldComposed {
       this._fields[name + '10Int'] = new FieldTextTelephone({countryCode: -1, emptyAllow: false}); // force to international
       this._skipName.push(name + '10int');
     }
+    this.addStoreGroup('value')
   }
 
 
@@ -60,9 +61,9 @@ class FieldTelephone extends FieldComposed {
         }
       }
     }
-    if (!data.value) {  // empty data skips the record
-      return {}
-    }
+    // if (!data.value) {  // empty data skips the record
+    //   return {}
+    // }
     this.copyFieldsToResult(result, data, this._skipName);
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);

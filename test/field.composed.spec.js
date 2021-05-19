@@ -36,6 +36,49 @@ describe('field.composed', () => {
     });
   });
 
+  describe('typeIsInsertOnly', () => {
+    class LookupInsertOnly extends Lookup {
+      async code(fieldName, def) {
+        let result;
+        if (!def.hasOwnProperty('fieldTypeInsertOnly')) {
+          result = -1 // it should ALWAYS have this property
+        } else if (def.fieldTypeInsertOnly) {
+          result = 1
+        } else {
+          result = 0;
+        }
+        return Promise.resolve(result);
+      }
+    }
+
+    it('lookup with the value', async() => {
+      logger.clear();
+      let field = new FieldComposed({
+        lookupFunctionName: 'code',
+        lookup: new LookupInsertOnly(),
+        // must force otherwise the data is not parsed
+        // 2021: emptyAllow: false,
+      });
+      let r = await field.convert('object', {
+        type: 'John',
+        typeInsertOnly: 1,
+        typeGuid: 'NoRealy'
+      }, logger);
+      assert.equal(r.typeId, 1)
+      r = await field.convert('object', {
+        type: 'John',
+        typeInsertOnly: 0,
+        typeGuid: 'NoRealy'
+      }, logger);
+      assert.equal(r.typeId, 0);
+      r = await field.convert('object', {
+        type: 'John',
+        typeGuid: 'NoRealy'
+      }, logger);
+      // assert.equal(r.typeId, 0)
+      assert.isTrue(_.isEmpty(r))
+    })
+  })
   describe('parent', () => {
     it('set', async () => {
       let r = await f.convert('composed', {type: '', value: 'some value', _parent: 'theKey'}, logger);

@@ -14,6 +14,7 @@ class FieldEmail extends FieldComposed {
     this._fields.email = new FieldTextEmail({emptyAllow: false});
     this._fields.newsletter = new FieldTextEmail({ emptyAllow: false});
     this._fields.prive = new FieldTextEmail({ emptyAllow: false});
+    this.addStoreGroup('value')
   }
 
 

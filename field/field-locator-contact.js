@@ -25,6 +25,23 @@ class FieldLocatorContact extends FieldLocator {
       // if true and there are multiple parents the first one is used
       _allowMulti: new FieldTextBoolean(({emptyAllow: true}))
     });
+    this._fields.organisation = this._fields.name;
+    this.addStoreGroup('fullName');
+    this.addStoreGroup('name');
+    this.addStoreGroup('guid');
+    this.addStoreGroup('email');
+    this.addStoreGroup('search');
+    this.addStoreGroup('id')
+  }
+
+
+  async processKeys(fieldName, fields, data, logger) {
+    // check for tha fake organisationn field
+    if (data.organisation) {
+      data.name = data.organisation
+      fields.name = fields.organisation
+    }
+    return super.processKeys(fieldName, fields, data, logger)
   }
 }
 

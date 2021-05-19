@@ -29,6 +29,10 @@ class FieldCode extends FieldObject {
     this._fields._remove = new FieldBoolean();                     // set to true to remove it
     this._fields._source = new FieldText({emptyAllow: true});      // textual version of the sourceId. Overrulde if _sourceId is set
     this._fields._parent = new FieldGuid({emptyAllow: true});
+    this.addStoreGroup('codeId');
+    this.addStoreGroup('typeId');
+    this.addStoreGroup('type');
+    this.addStoreGroup('code')
   }
 
 
@@ -52,21 +56,27 @@ class FieldCode extends FieldObject {
       delete data.codeGuid
     }
 
-    if (!data.typeId && !data.typeGuid && !data.type) {
-      return {};
-    }
+    // if (!data.typeId && !data.typeGuid && !data.type) {
+    //   return {};
+    // }
 
     if (data._remove) {
       result._remove = 1;
     }
-
+    if (!data.typeId) {
+      let typeId = await this.lookupCode(data, this.lookupFunctionName, 'type', '', this.baseTypeId, logger)
+      if (typeId) {
+        data.typeId = typeId
+      }
+    }
     this.copyFieldsToResult(result, data, ['code', 'codeId']);
     // recalculate the available fields
     let cFields = this.remapFields(result);
-    return super.processKeys(fieldName, cFields, result, logger).then((processed) => {
-      this.copyFieldsToResult(processed, result, ['parentCodeGuid', 'parentCodeId', 'parentCode']);
-      return processed;
-    });
+    return super.processKeys(fieldName, cFields, result, logger)
+    // return super.processKeys(fieldName, cFields, result, logger).then((processed) => {
+    //   this.copyFieldsToResult(processed, result, ['parentCodeGuid', 'parentCodeId', 'parentCode']);
+    //   return processed;
+    // });
   }
 }
 

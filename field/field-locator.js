@@ -3,11 +3,11 @@
  * @type {FieldObject}
  */
 
-const FieldObject = require('./field-object').FieldObject;
+const FieldComposed = require('./field-composed').FieldComposed;
 const FieldText = require('./field-text').FieldText;
 const FieldGuid = require('./field-text').FieldTextGuid;
 
-class FieldLocator extends FieldObject {
+class FieldLocator extends FieldComposed {
 
 }
 

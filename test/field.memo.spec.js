@@ -23,10 +23,36 @@ describe('field.memo', () => {
 
   describe('empty', async () => {
     let f = new FieldMemo({lookup: new LookupMemo()});
-    let r = await f.convert('memo', {}, logger);
-    assert.isUndefined(r.text, 'no text: so empty');
-    assert.isUndefined(r.description, 'no text');
-    assert.isUndefined(r.useDescription, 'empty so removed');
+
+    it('no data', async() => {
+      let r = await f.convert('memo', {}, logger);
+      assert.isUndefined(r.text, 'no text: so empty');
+      assert.isUndefined(r.description, 'no text');
+      assert.isUndefined(r.useDescription, 'empty so removed');
+    });
+
+    it('one filled', async() => {
+      let r = await f.convert('memo', {description: 'so what'}, logger);
+      assert.isDefined(r.description)
+      assert.equal(r.useDescription, 1)
+    })
+
+    it('no data', async() => {
+      let r = await f.convert('memo', {description: ''}, logger);
+      assert.isTrue(_.isEmpty(r))
+    });
+
+    it('one filled', async() => {
+      let r = await f.convert('memo', {text: 'so what'}, logger);
+      assert.isDefined(r.text)
+      assert.equal(r.useDescription, 0)
+    })
+
+    it('no data', async() => {
+      let r = await f.convert('memo', {text: ''}, logger);
+      assert.isTrue(_.isEmpty(r))
+    })
+
   });
 
   describe('text',  () => {

@@ -11,11 +11,36 @@ class ErrorNotValid extends Error {
   }
 }
 
+/**
+ * The empty value definition
+ * - every field can be empty
+ * - some fields define that the record should be stored if not empty
+ * - some fields can have data but the record is not forced to be stored
+ *
+ * -- Every base field has a function isEmpty that returns true if the data is empty
+ * what can be false, '', 0 or undefined. What every it is.
+ * -- If the field is empty it is NEVER stored
+ *
+ * Every complex field can set the fields that need to be set if the data should be stored.
+ * This can be one or multiple field
+ *
+ * There are 2 solutions to this problem.
+ *  - per field there is a flag. So we can not relate to other field
+ *  - there are field groups that define the data should be stored. So fields relate
+ * We should use the later, because location uses a group definition like street, number, city etc.
+ *
+ * The complex definition is defined in the FieldObject not in the Field
+ */
+
 
 class Field {
 
   constructor(options = {}) {
     this._name = 'field';
+    // if emptyAllow == true and isEmpty == true => do not store
+    // if emptyAllow == true and isEmpty == false => do store
+    // if emptyAllow == false and isEmpty == true => do store
+    // if emptyAllow == false ans isEmpty == false => do store
     this.emptyAllow = options.emptyAllow === undefined ? true : options.emptyAllow
   }
 

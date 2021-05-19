@@ -68,6 +68,8 @@ class FieldContact extends FieldComposed {
     // the contact does not know about values
     delete this._fields.value;
     this._parser = new NameParse();
+    this.addStoreGroup('name');
+    this.addStoreGroup('organisation')
   }
 
   /**

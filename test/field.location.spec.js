@@ -59,23 +59,23 @@ describe('field.location', () => {
 
     logger.clear();
     it('wrong number', async () => {
-      let r = await f.convert('location', {streetNumber: 'Guntersteinweg 377.1.22',}, logger);
+      let r = await f.convert('location', {streetNumber: 'Guntersteinweg 377.1.22', city: 'x'}, logger);
       assert.equal(r.street, 'Guntersteinweg 377.1.22', 'no change')
     });
     it('no number', async () => {
-      let r = await f.convert('location', {streetNumber: 'Jan De Louterpad',}, logger);
+      let r = await f.convert('location', {streetNumber: 'Jan De Louterpad', city: 'x'}, logger);
       assert.equal(r.street, 'Jan De Louterpad', 'remove all')
     });
     it('strange combination', async () => {
-      let r = await f.convert('location', {streetNumber: 'Postbus 12808/Frankemaheerd 2',}, logger);
+      let r = await f.convert('location', {streetNumber: 'Postbus 12808/Frankemaheerd 2', city: 'x'}, logger);
       assert.equal(r.street, 'Postbus 12808/Frankemaheerd', 'remove all')
     });
     it('strange combination', async () => {
-      let r = await f.convert('location', {streetNumber: 'Dr. Jan van Breemenstraat 1 – ruimte E5',}, logger);
+      let r = await f.convert('location', {streetNumber: 'Dr. Jan van Breemenstraat 1 – ruimte E5', city: 'x'}, logger);
       assert.equal(r.street, 'Dr. Jan van Breemenstraat 1 – ruimte E5', 'remove all')
     });
     it('strange combination', async () => {
-      let r = await f.convert('location', {streetNumber: 'Joubertstraat 15, 2e verdieping',}, logger);
+      let r = await f.convert('location', {streetNumber: 'Joubertstraat 15, 2e verdieping', city: 'x'}, logger);
       assert.equal(r.street, 'Joubertstraat 15', 'remove all')
     });
 
@@ -91,6 +91,21 @@ describe('field.location', () => {
     });
   });
 
+  describe('empty', () => {
+    logger.clear();
+    it('no street info', async() => {
+      let r = await f.convert('location', {
+        "countryId": 500,
+        "typeId": 111,
+        "isDefault": true,
+        "isPrimary": true,
+        "_parent": "contact",
+        "_mode": 1
+      }, logger);
+      assert.isTrue(_.isEmpty(r))
+    })
+  })
+
   describe('street', () => {
 
     logger.clear();
@@ -100,7 +115,7 @@ describe('field.location', () => {
     });
     it('find country', async () => {
       let r = await f.convert('location', {
-        street: '',
+        street: 'where',
         city: 'Amsterdam',
         zipcode: '',
         country: 'nederland',
@@ -108,7 +123,7 @@ describe('field.location', () => {
       }, logger);
       assert.equal(r.countryId, 500, 'found us');
       r = await f.convert('location', {
-        street: '',
+        street: 'namenroad',
         city: 'Brussel',
         zipcode: '',
         country: 'België',
@@ -224,52 +239,52 @@ describe('field.location', () => {
 
   describe('zipcode text', async() => {
     const street = [
-      {value: "Nieuwe gracht 224 2", street: 'Nieuwe gracht 224', number: '2', suffix: '', comment: 'number is not right'},
-      {value: "Plein 1945 1", street: 'Plein 1945', number: '1', suffix: ''},
-      {value: "Straat 12 '", street: 'Straat', number: '12', suffix: '\''},
-      {value: "Straat 12 '\"", street: 'Straat', number: '12', suffix: '\'"'},
-      {value: "Laan 1940-’45 66", street: 'Laan 1940-\'45', number: '66', suffix: ''},
-      {value: "Dr. J. Straat 12-14", street: 'Dr. J. Straat', number: '12', suffix: '-14'},
-      {value: "Plataanstraat 5", street: 'Plataanstraat', number: '5', suffix: ''},
-      {value: "Plataanstraat 5B", street: 'Plataanstraat', number: '5', suffix: 'B'},
-      {value: "Plataanstraat 5 B", street: 'Plataanstraat', number: '5', suffix: 'B'},
-      {value: "Straat 12", street: 'Straat', number: '12', suffix: ''},
-      {value: "Straat 12 II", street: 'Straat', number: '12', suffix: 'II'},
-      {value: "Dr. J. Straat   12", street: 'Dr. J. Straat', number: '12', suffix: ''},
-      {value: "Dr. J. Straat 12 a", street: 'Dr. J. Straat', number: '12', suffix: 'a'},
+      {value: "Nieuwe gracht 224 2", street: 'Nieuwe gracht 224', number: '2', city: 'Adam', suffix: '', comment: 'number is not right'},
+      {value: "Plein 1945 1", street: 'Plein 1945', number: '1', city: 'Adam', suffix: ''},
+      {value: "Straat 12 '", street: 'Straat', number: '12', city: 'Adam', suffix: '\''},
+      {value: "Straat 12 '\"", street: 'Straat', number: '12', city: 'Adam', suffix: '\'"'},
+      {value: "Laan 1940-’45 66", street: 'Laan 1940-\'45', number: '66', city: 'Adam', suffix: ''},
+      {value: "Dr. J. Straat 12-14", street: 'Dr. J. Straat', number: '12', city: 'Adam', suffix: '-14'},
+      {value: "Plataanstraat 5", street: 'Plataanstraat', number: '5', city: 'Adam', suffix: ''},
+      {value: "Plataanstraat 5B", street: 'Plataanstraat', number: '5', city: 'Adam', suffix: 'B'},
+      {value: "Plataanstraat 5 B", street: 'Plataanstraat', number: '5', city: 'Adam', suffix: 'B'},
+      {value: "Straat 12", street: 'Straat', number: '12', city: 'Adam', suffix: ''},
+      {value: "Straat 12 II", street: 'Straat', number: '12', city: 'Adam', suffix: 'II'},
+      {value: "Dr. J. Straat   12", street: 'Dr. J. Straat', number: '12', city: 'Adam', suffix: ''},
+      {value: "Dr. J. Straat 12 a", street: 'Dr. J. Straat', number: '12', city: 'Adam', suffix: 'a'},
 
-//       {value: "Laan 1940–1945 37", street: 'Laan 1940 – 1945', number: '37', suffix: ''},
-      {value: "Plein 1940 2", street: 'Plein 1940', number: '2', suffix: ''},
-      {value: "1213-laan 11", street: '1213-laan', number: '11', suffix: ''},
-      {value: "16 april 1944 Pad 1", street: '16 april 1944 Pad', number: '1', suffix: ''},
-      {value: "1e Kruisweg 36", street: '1e Kruisweg', number: '36', suffix: ''},
-      {value: "Boisotkade 2A", street: 'Boisotkade', number: '2', suffix: 'A'},
-      {value: "Laan '40-`45", street: 'Laan \'40-\'45', number: undefined, suffix: undefined},
-      {value: "Langeloërduinen 3 46", street: 'Langeloërduinen 3', number: '46', suffix: '', comment: 'suffix is wrong'},
-      {value: "Marienwaerdt 2e Dreef 2", street: 'Marienwaerdt 2e Dreef', number: '2', suffix: ''},
-      {value: "Provincialeweg N205 1", street: 'Provincialeweg N205', number: '1', suffix: ''},
-      {value: "Rivium 2e Straat 59.", street: 'Rivium 2e Straat 59.', number: undefined, suffix: undefined, comment: '. and the can not parsed' },
-      {value: "Nieuwe gracht 20rd", street: 'Nieuwe gracht', number: '20', suffix: 'rd'},
-      {value: "Nieuwe gracht 21rd 2", street: 'Nieuwe gracht 21rd', number: '2', suffix: '', comment: 'number is place with the street'},
-      {value: "Nieuwe gracht 20zw /2", street: 'Nieuwe gracht', number: '20', suffix: 'zw /2'},
-      {value: "Nieuwe gracht 20zw/3", street: 'Nieuwe gracht', number: '20', suffix: 'zw/3'},
-      {value: "Nieuwe gracht 20 zw/4", street: 'Nieuwe gracht', number: '20', suffix: 'zw/4'},
-      {value: "Nieuwe gracht 24 -2", street: 'Nieuwe gracht', number: '24', suffix: '-2'},
-      {value: "p/a Nieuwe gracht 24 -2", street: 'p/a Nieuwe gracht', number: '24', suffix: '-2'},
-      {value: "Nieuwe gracht 24 2hoog", street: 'Nieuwe gracht 24', number: '2', suffix: 'hoog', comment: 'number is on the street'},
-      {value: "Nieuwe gracht 24 2\"", street: 'Nieuwe gracht 24', number: '2', suffix: '"'},
-      {value: "Bahnhofstr. 4", street: 'Bahnhofstr.', number: '4', suffix: ''},
+//       {value: "Laan 1940–1945 37", street: 'Laan 1940 – 1945', number: '37', city: 'Adam', suffix: ''},
+      {value: "Plein 1940 2", street: 'Plein 1940', number: '2', city: 'Adam', suffix: ''},
+      {value: "1213-laan 11", street: '1213-laan', number: '11', city: 'Adam', suffix: ''},
+      {value: "16 april 1944 Pad 1", street: '16 april 1944 Pad', number: '1', city: 'Adam', suffix: ''},
+      {value: "1e Kruisweg 36", street: '1e Kruisweg', number: '36', city: 'Adam', suffix: ''},
+      {value: "Boisotkade 2A", street: 'Boisotkade', number: '2', city: 'Adam', suffix: 'A'},
+      {value: "Laan '40-`45", street: 'Laan \'40-\'45', number: undefined, city: 'Adam', suffix: undefined},
+      {value: "Langeloërduinen 3 46", street: 'Langeloërduinen 3', number: '46', city: 'Adam', suffix: '', comment: 'suffix is wrong'},
+      {value: "Marienwaerdt 2e Dreef 2", street: 'Marienwaerdt 2e Dreef', number: '2', city: 'Adam', suffix: ''},
+      {value: "Provincialeweg N205 1", street: 'Provincialeweg N205', number: '1', city: 'Adam', suffix: ''},
+      {value: "Rivium 2e Straat 59.", street: 'Rivium 2e Straat 59.', number: undefined, city: 'Adam', suffix: undefined, comment: '. and the can not parsed' },
+      {value: "Nieuwe gracht 20rd", street: 'Nieuwe gracht', number: '20', city: 'Adam', suffix: 'rd'},
+      {value: "Nieuwe gracht 21rd 2", street: 'Nieuwe gracht 21rd', number: '2', city: 'Adam', suffix: '', comment: 'number is place with the street'},
+      {value: "Nieuwe gracht 20zw /2", street: 'Nieuwe gracht', number: '20', city: 'Adam', suffix: 'zw /2'},
+      {value: "Nieuwe gracht 20zw/3", street: 'Nieuwe gracht', number: '20', city: 'Adam', suffix: 'zw/3'},
+      {value: "Nieuwe gracht 20 zw/4", street: 'Nieuwe gracht', number: '20', city: 'Adam', suffix: 'zw/4'},
+      {value: "Nieuwe gracht 24 -2", street: 'Nieuwe gracht', number: '24', city: 'Adam', suffix: '-2'},
+      {value: "p/a Nieuwe gracht 24 -2", street: 'p/a Nieuwe gracht', number: '24', city: 'Adam', suffix: '-2'},
+      {value: "Nieuwe gracht 24 2hoog", street: 'Nieuwe gracht 24', number: '2', city: 'Adam', suffix: 'hoog', comment: 'number is on the street'},
+      {value: "Nieuwe gracht 24 2\"", street: 'Nieuwe gracht 24', number: '2', city: 'Adam', suffix: '"'},
+      {value: "Bahnhofstr. 4", street: 'Bahnhofstr.', number: '4', city: 'Adam', suffix: ''},
 
-      {value: "p/a P.C. Hooftstraat 15", street: 'p/a P.C. Hooftstraat', number: '15', suffix: ''},
-      {value: "Graaf FLorisstraat 10 4- hoog", street: 'Graaf FLorisstraat 10', number: '4', suffix: '- hoog', comment: 'number moved to address (1945('},
-      {value: "Graaf FLorisstraat 10 /4", street: 'Graaf FLorisstraat', number: '10', suffix: '/4'},
-      {value: "Jacob van Lennepkade 153- I\"", street: 'Jacob van Lennepkade', number: '153', suffix: '- I"'},
-      {value: "1e Jan van der Heijdenstraat 44-2 A", street: '1e Jan van der Heijdenstraat', number: '44', suffix: '-2 A'},
-      {value: "Cornelis v/d Lindenstraat 1\"", street: 'Cornelis v/d Lindenstraat', number: '1', suffix: '"'},
-      {value: "Frans Halsstraat 46 - II\"", street: 'Frans Halsstraat', number: '46', suffix: '- II"'},
-      {value: "Lange Slachterijstraat 32 bus II\"", street: 'Lange Slachterijstraat', number: '32', suffix: 'bus II"'},
-      {value: "Hoogte Kadijk 49 - C\"", street: 'Hoogte Kadijk', number: '49', suffix: '- C"'},
-      {value: "Grevelingenstr 16 (2)", street: 'Grevelingenstr', number: '16', suffix: '(2)'}
+      {value: "p/a P.C. Hooftstraat 15", street: 'p/a P.C. Hooftstraat', number: '15', city: 'Adam', suffix: ''},
+      {value: "Graaf FLorisstraat 10 4- hoog", street: 'Graaf FLorisstraat 10', number: '4', city: 'Adam', suffix: '- hoog', comment: 'number moved to address (1945('},
+      {value: "Graaf FLorisstraat 10 /4", street: 'Graaf FLorisstraat', number: '10', city: 'Adam', suffix: '/4'},
+      {value: "Jacob van Lennepkade 153- I\"", street: 'Jacob van Lennepkade', number: '153', city: 'Adam', suffix: '- I"'},
+      {value: "1e Jan van der Heijdenstraat 44-2 A", street: '1e Jan van der Heijdenstraat', number: '44', city: 'Adam', suffix: '-2 A'},
+      {value: "Cornelis v/d Lindenstraat 1\"", street: 'Cornelis v/d Lindenstraat', number: '1', city: 'Adam', suffix: '"'},
+      {value: "Frans Halsstraat 46 - II\"", street: 'Frans Halsstraat', number: '46', city: 'Adam', suffix: '- II"'},
+      {value: "Lange Slachterijstraat 32 bus II\"", street: 'Lange Slachterijstraat', number: '32', city: 'Adam', suffix: 'bus II"'},
+      {value: "Hoogte Kadijk 49 - C\"", street: 'Hoogte Kadijk', number: '49', city: 'Adam', suffix: '- C"'},
+      {value: "Grevelingenstr 16 (2)", street: 'Grevelingenstr', number: '16', city: 'Adam', suffix: '(2)'}
 
 
     ]
@@ -278,6 +293,7 @@ describe('field.location', () => {
         logger.clear();
         let r = await f.convert('location', {
           "streetNumber": street[l].value,
+          city: street[l].city
         }, logger);
         assert.equal(r.street, street[l].street, street[l].value);
         assert.equal(r.number, street[l].number, street[l].value)
@@ -294,7 +310,7 @@ describe('field.location', () => {
   describe('mode', async() => {
     let f = new FieldLocation();
     it('set', async () => {
-      let r = await f.convert('code', {street: 'Testing with key', _mode:'add'}, logger);
+      let r = await f.convert('code', {street: 'Testing with key', city: 'Adam', _mode:'add'}, logger);
       assert.isDefined(r._mode);
       assert.equal(r._mode, 1)
     });
@@ -303,34 +319,34 @@ describe('field.location', () => {
   describe('isPrimary', async() => {
     let f = new FieldLocation();
     it('set - true', async () => {
-      let r = await f.convert('location', {street: 'Testing with key', _mode:'add', isPrimary: true}, logger);
+      let r = await f.convert('location', {street: 'Testing with key',  city: 'x',  _mode:'add', isPrimary: true}, logger);
       assert.isDefined(r.isPrimary);
       assert.isTrue(r.isPrimary)
     });
     it('set - false', async () => {
-      let r = await f.convert('location', {street: 'Testing with key', _mode:'add', isPrimary: false}, logger);
+      let r = await f.convert('location', {street: 'Testing with key', city: 'x', _mode:'add', isPrimary: false}, logger);
       assert.isDefined(r.isPrimary);
       assert.isFalse(r.isPrimary)
     });
     it('set - leave', async () => {
-      let r = await f.convert('location', {street: 'Testing with key', _mode:'add', isPrimary: 'leave'}, logger);
+      let r = await f.convert('location', {street: 'Testing with key', city: 'x', _mode:'add', isPrimary: 'leave'}, logger);
       assert.isDefined(r.isPrimary);
       assert.equal(r.isPrimary, 'leave')
     });
     it('set - useMaster', async () => {
-      let r = await f.convert('location', {street: 'Testing with key', _mode:'add', isPrimary: 'all'}, logger);
+      let r = await f.convert('location', {street: 'Testing with key', city: 'x', _mode:'add', isPrimary: 'all'}, logger);
       assert.isDefined(r.isPrimary);
       assert.equal(r.isPrimary, 'all')
     });
     it('set - master', async () => {
-      let r = await f.convert('location', {street: 'Testing with key', _mode:'add', isPrimary: 'allLEAVE'}, logger);
+      let r = await f.convert('location', {street: 'Testing with key', city: 'x', _mode:'add', isPrimary: 'allLEAVE'}, logger);
       assert.isDefined(r.isPrimary);
       assert.equal(r.isPrimary, 'allLEAVE')
     });
 
     it('set - Error', async () => {
       logger.clear();
-      let r = await f.convert('location', {street: 'Testing with key', _mode:'add', isPrimary: 'not-allowed'}, logger);
+      let r = await f.convert('location', {street: 'Testing with key', city: 'x', _mode:'add', isPrimary: 'not-allowed'}, logger);
       assert.isUndefined(r.isPrimary);
       assert.isTrue(logger.hasWarnings())
     });

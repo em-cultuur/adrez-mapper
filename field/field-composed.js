@@ -8,23 +8,25 @@ const FieldText = require('./field-text').FieldText;
 // const FieldGuid = require('./field-text').FieldTextGuid;
 const FieldObject = require('./field-object').FieldObject;
 const FieldBoolean = require('./field-text-boolean').FieldTextBoolean;
-
+const _ = require('lodash');
 
 
 class FieldComposed extends FieldObject {
 
   constructor(options = {}) {
     super(options);
+    this.baseTypeId = undefined;
 
     this._fields.value =  options.valueType ? options.valueType : new FieldText({ emptyAllow: false});
     this._fields.isDefault = new FieldBoolean();
       // _type: new FieldText({emptyAllow: true}),
       // _source: new FieldText({emptyAllow: true}),      // textual version of the sourceId. Overrulde if _sourceId is set
       // _sourceId: new FieldText({emptyAllow: true}),    // the codeId to sync with. if not storage space, places in typeId
-
+    this.addStoreGroup('value')
 
     // this._lookup = options.lookup;
   }
+
 
   /**
    * must translate type into typeId
@@ -48,6 +50,18 @@ class FieldComposed extends FieldObject {
   //   let cFields = this.remapFields(data);
   //   return super.processKeys(fieldName, cFields, data, logger);
   // }
+  async processKeys(fieldName, fields, data, logger) {
+    data = await super.processKeys(fieldName, fields, data, logger);
+    if (!_.isEmpty(data) && !data.typeId) {
+      let typeId = await this.lookupCode(data, this.lookupFunctionName, 'type', '', this.baseTypeId, logger)
+      if (typeId !== undefined) {
+        data.typeId = typeId
+      }
+
+    }
+    data = _.omit(data, ['typeGuid', 'type', 'type_']);
+    return data;
+  }
 }
 
 module.exports.FieldComposed = FieldComposed;

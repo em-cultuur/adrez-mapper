@@ -177,7 +177,7 @@ describe('field',  () => {
       assert(f.isEmpty({}), 'no fields is empty');
       // assert(f.isEmpty({test: ''}), 'no fields is empty');
     });
-    f = new FieldObject({fields: {name: new FieldText(), other: new FieldText()}});
+    f = new FieldObject({fields: {name: new FieldText(), other: new FieldText(), typeInsertOnly: new FieldTextBoolean()}});
     it('one field', () => {
       logger.clear();
       assert(f.validate('obj', {name: 'test'}, logger) === true, 'field available is valid');
@@ -188,7 +188,7 @@ describe('field',  () => {
     });
 
     it('remove empty allowed fields',async () => {
-      f = new FieldObject({fields: {bool: new FieldTextBoolean(), email: new FieldTextEmail(), _source: new FieldText({emptyAllow: true})}});
+      f = new FieldObject({fields: {bool: new FieldTextBoolean(), email: new FieldTextEmail(), _source: new FieldText({emptyAllow: true}), typeInsertOnly: new FieldTextBoolean()}});
       let r = await f.convert('obj', {bool: undefined, _source : '1234'}, logger);
       assert(_.isEmpty(r), '_source is flexible');
     })

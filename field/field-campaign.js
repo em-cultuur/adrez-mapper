@@ -16,6 +16,7 @@ const DEFAULT_CAMPAIGN_ACTION = 0;
 class FieldCampaign extends FieldComposed {
   constructor(options = {}) {
     super(options);
+    this.baseTypeId = DEFAULT_CAMPAIGN_TYPE;
     // the lookup is for the action because its the relation between the campaign an the contact
     this.lookupFunctionName = 'campaign';
     // source / sourceId is stored in type / typeId
@@ -40,6 +41,7 @@ class FieldCampaign extends FieldComposed {
 
     this._fields.locator = new FieldLocatorCampaign({emptyAllow: false});
     this.emptyValueAllowed = true;
+    this.addStoreGroup('title')
   }
 
 
@@ -53,32 +55,12 @@ class FieldCampaign extends FieldComposed {
    */
   async processKeys(fieldName, fields, data, logger) {
     let result = {};
-    // // translate the type of campaign
-    // if (data.typeId === undefined) {
-    //   result.typeId = await this.lookup.campaign(fieldName, data.type, DEFAULT_CAMPAIGN_TYPE, data)
-    //   data.typeId = result.typeId;
-    // } else {
-    //   result.typeId = data.typeId;
-    // }
-    // if (data.groupId === undefined) {
-    //   let codeDef = {
-    //     id: data.groupId,
-    //     text: data.group,
-    //   };
-    //   result.groupId = await this.lookup.campaignGroup(fieldName, codeDef)
-    //   data.groupId = result.groupId;
-    // } else {
-    //   result.groupId = data.groupId;
-    // }
     if (data.actionId === undefined) {
       let codeDef = {
         id: data.actionId,
         guid: data.actionGuid,
         text: data.action,
       };
-//      result.actionId = await this.lookup.campaignAction(fieldName, codeDef);
-    } else {
-//      result.actionId = data.actionId;
     }
 
     result.groupId = await this.lookupCode(data, 'campaignGroup', 'group', 'group', 0, logger);
@@ -96,7 +78,6 @@ class FieldCampaign extends FieldComposed {
         this.log(logger, 'error', `locator ${fieldName}.locator is empty`);
       }
     }
-
 
     let cFields = this.remapFields(result);
     return super.processKeys(fieldName, cFields, result, logger);
