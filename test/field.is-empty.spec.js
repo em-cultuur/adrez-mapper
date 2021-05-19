@@ -196,6 +196,9 @@ describe('field.is-empty', () => {
     assert.equal(result.value, VALUE + ' #import');
     result = await f.convert('fieldTelephone', {telephone10: VALUE});
     assert.equal(result.value, VALUE + ' #import');
+    result = await f.convert('fieldTelephone', {telephone10: 620633828});
+    assert.equal(result.value, '06-20633828');
+
     result = await f.convert('fieldTelephone', {telephone10Int: VALUE});
     assert.equal(result.value, VALUE + ' #import');
 

@@ -49,9 +49,13 @@ class FieldTelephone extends FieldComposed {
         if (fields[name + 'Int']) {
           data.value = await this._fields[name + 'Int'].convert(fieldName, data[name + 'Int'], logger)
         } else if (fields[name + '10']) {
-          data.value = await this._fields[name + '10'].convert(fieldName, (data[name + '10']).padStart(10, '0'), logger)
+          if (data[name + 10] !== undefined) {
+            data.value = await this._fields[name + '10'].convert(fieldName, String(data[name + '10']).padStart(10, '0'), logger)
+          }
         } else if (fields[name + '10Int']) {
-          data.value = await this._fields[name + '10Int'].convert(fieldName, (data[name + '10Int']).padStart(10, '0'), logger)
+          if (data[name + '10Int'] !== undefined) {
+            data.value = await this._fields[name + '10Int'].convert(fieldName, String(data[name + '10Int']).padStart(10, '0'), logger)
+          }
         } else if (fields[name]) {
           data.value = await this._fields[name].convert(fieldName, data[name], logger)
         }
