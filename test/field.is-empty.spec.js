@@ -92,6 +92,9 @@ describe('field.is-empty', () => {
     assert.equal(result.name, VALUE)
     result = await f.convert('fieldContact', {organisation: VALUE});
     assert.equal(result.name, VALUE)
+
+    result = await f.convert('fieldContact', {_mode: 'force', _parent: VALUE});
+    assert.equal(result._parent, VALUE)
     result = await f.convert('fieldContact', {firstName: VALUE});
     assert.isTrue(_.isEmpty(result))
   })

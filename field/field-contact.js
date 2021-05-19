@@ -19,6 +19,8 @@ const DEFAULT_FUNCTION = 0;
 const DEFAULT_SALUTATION = 890;
 const DEFAULT_ORGANISATION = 101;
 
+const MODE_FORCE = 128;
+
 class FieldContact extends FieldComposed {
 
   constructor(options = {}) {
@@ -71,6 +73,15 @@ class FieldContact extends FieldComposed {
     this.addStoreGroup('organisation')
   }
 
+  mustStoredRecord(data) {
+    if (!super.mustStoredRecord(data)) {
+      if (data['_mode'] && (data['_mode'] & MODE_FORCE)) {
+        return true
+      }
+      return false
+    }
+    return true;
+  }
   /**
    * just process all keys individual
    *
@@ -191,16 +202,6 @@ class FieldContact extends FieldComposed {
       if (!result.hasOwnProperty('namePrefix') && result.name) {
         result.namePrefix = ''
       }
-      // ------>> this does not work with a partial update. If name is undefined it results in 'undefined, Jay'
-      // let later = result.middleName && result.middleName.length ? (result.firstName + ' ' + result.middleName) : result.firstName && result.firstName.length ? result.firstName : result.firstLetters;
-      // if (result.namePrefix) {
-      //   later += ' ' + result.namePrefix;
-      // }
-      // if (later) {
-      //   result.fullName = result.name + ', ' + later;
-      // } else {
-      //   result.fullName = result.name;
-      // }
     }
 
     if (data.locator) {
