@@ -116,10 +116,10 @@ describe('field.contact', () => {
 
   });
 
-  describe('fullname',  () => {
+  describe('fullName',  () => {
     logger.clear();
     it('fullname', async () => {
-      let r = await f.convert('contact', {fullName: 'Jan de Hond'}, logger);
+      let r = await f.convert('contact', {fullName: 'Jan de Hond '}, logger);
       assert(r.firstName === 'Jan' && r.name === 'Hond' && r.namePrefix === 'de', 'got all');
       r = await f.convert('contact', {fullName: 'dr. J. de Hond'}, logger);
       assert(r.title === 'dr.' && r.firstName === undefined && r.firstLetters === 'J.' && r.name === 'Hond' && r.namePrefix === 'de', 'got all');
@@ -148,11 +148,16 @@ describe('field.contact', () => {
   });
 
 
-  describe('fullname', async () => {
+  describe('name', async () => {
     logger.clear();
     it('fullname', async () => {
       let r = await f.convert('contact', {fullName: 'Annemarie Manger- Havengildediner 2019'}, logger);
       assert.equal(r.name, '2019', 'got the name');
+    })
+    it('spaces', async() => {
+      let r = await f.convert('contact', {name: ' McAnser ', firstName: ' Jay '}, logger);
+      assert.equal(r.name, 'McAnser', 'got the name');
+      assert.equal(r.firstName, 'Jay', 'got the name');
     })
   });
 

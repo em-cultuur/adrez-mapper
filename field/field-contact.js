@@ -100,11 +100,11 @@ class FieldContact extends FieldComposed {
 
     if (data.isOrganisation || (data.organisation && data.organisation.length > 0)) {
       if (data.organisation) {
-        result.name = data.organisation;
+        result.name = data.organisation.trim();
       } else if (data.fullName) {
-        result.name = data.fullName;
+        result.name = data.fullName.trim();
       } else {
-        result.name = data.name;
+        result.name = data.name.trim();
       }
       if (!data.hasOwnProperty('typeId')) {
         result.typeId = await this.lookup.contact(fieldName, {type: data.type}, DEFAULT_ORGANISATION, data)
@@ -125,7 +125,7 @@ class FieldContact extends FieldComposed {
       }
       if (fields.fullName && fields.name === undefined) {
         // parse the fullname only if there isn't already a name
-        let parsed = this._parser.analyse(data.fullName);
+        let parsed = this._parser.analyse(data.fullName.trim());
         if (parsed.error.length) {
           this.log(logger, 'warn', fieldName + 'fullName', parsed.error.join(', '));
         }
@@ -141,7 +141,7 @@ class FieldContact extends FieldComposed {
         };
         for (let field in mapping) {
           if (parsed[field].length) {
-            data[mapping[field]] = parsed[field];
+            data[mapping[field]] = parsed[field].trim();
           }
         }
       }

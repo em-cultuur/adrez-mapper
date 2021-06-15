@@ -2,6 +2,7 @@
 
 2021-06-15
 - add: location.streetNumber can parse English numbers
+- chg: standard removes space from names
 
 2021-05-19 (1.7.0)
 - rebuild of empty checker. Remove emptyAllow and added addStoreGroup.

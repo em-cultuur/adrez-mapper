@@ -167,7 +167,11 @@ class FieldObject extends Field {
       if (result[key] === undefined && skip.indexOf(key) < 0) {
         // only overwrite if it does not exist
         if (this._removeEmpty === false || data[key] !== undefined )  {
-          result[key] = data[key]
+          if (data[key] && data[key].trim) {
+            result[key] = data[key].trim()
+          } else {
+            result[key] = data[key]
+          }
         }
       }
     }

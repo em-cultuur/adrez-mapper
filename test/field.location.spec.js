@@ -391,6 +391,14 @@ describe('field.location', () => {
       assert.equal(r.countryId, 500)
     });
 
+    it('Netherlands', async () => {
+      let r = await f.convert('location', {streetNumber: 'test street 12', city: 'Amsterdam', isPrimary: true}, logger);
+      assert.equal(r.city, 'Amsterdam');
+      assert.equal(r.street, 'test street');
+      assert.equal(r.number, '12')
+      assert.equal(r.countryId, 500)
+    });
+
     it('great britain', async() => {
       let r = await f.convert('location', {streetNumber:'10 Downing Street', zipCity: 'SW1A2 AA London', country: 'Engeland'}, logger);
       assert.isUndefined(r.zipcode);
