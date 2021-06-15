@@ -24,6 +24,7 @@ class FieldLocation extends FieldComposed {
     this._fields.street = new FieldText();
     this._fields.number = new FieldText();
     this._fields.suffix = new FieldText();
+    this._fields.suffix = new FieldText();
     this._fields.streetNumber = new FieldText();
     this._fields.zipcode = new FieldZipcode(options);
     this._fields.zipCity = new FieldZipCity(options)
@@ -59,13 +60,16 @@ class FieldLocation extends FieldComposed {
       if (r) {
         delete data.zipCity;
         Object.assign(data, r)
+      } else {
+        data.city = data.zipCity;
+        delete data.zipCity
       }
     }
     if (!data.countryId) {
       if (data.countryGuid) {
         result.countryId = await this.lookup.country(fieldName, {guid: data.countryGuid})
       } else if (data.country) {
-        result .countryId = await this.lookup.country(fieldName, {country: data.country})
+        result.countryId = await this.lookup.country(fieldName, {country: data.country})
       } else if (data.zipcode) {
         result.countryId = await this._fields.zipcode.countryId(data.zipcode, false);
         if (!result.countryId) {
@@ -85,7 +89,7 @@ class FieldLocation extends FieldComposed {
       result.countryId = this.defaultCountryId;
     }
 
-    let countryNumberRight = await this.lookup.countryStreetNumberRight(fieldName, data.countryId, true, data);
+    let countryNumberRight = await this.lookup.countryStreetNumberRight(fieldName, result.countryId, data);
 
     // streetNumber can be split if street and number do NOT exist
     if (data.street === undefined || data.number === undefined) {

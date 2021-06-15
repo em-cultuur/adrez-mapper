@@ -26,6 +26,7 @@ class FieldCampaignContact extends FieldCode {
     this.removeStoreGroup('codeId');
     this.removeStoreGroup('type');
     this.removeStoreGroup('typeId');
+
     this.addStoreGroup('contact')
   }
 }

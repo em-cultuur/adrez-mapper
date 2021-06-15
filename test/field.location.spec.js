@@ -21,14 +21,17 @@ describe('field.location', () => {
       if (data.country && data.country.toLowerCase() === 'belgië') {
         return 501
       }
-      if (data.guid && data.guid === 'ADREZ_CNT_GB') {
+      if (data.guid && data.guid === 'ADREZ_CNT_GB' ||
+         data.country === 'Engeland' ||
+        data.country === 'Verenigd Koninkrijk'
+      ) {
         return 502
       }
       return super.country(fieldname, data);
     }
 
-    async countryStreetNumberRight(fieldName, countryId, defaults, data) {
-      return (countryId === 502) ? true : defaults;
+    async countryStreetNumberRight(fieldName, countryId) {
+      return !! (countryId !== 502)
     }
 
     async street(fieldName, locationObj, defaults, data) {
@@ -375,7 +378,26 @@ describe('field.location', () => {
       assert.equal(r.zipcode, 'B-1232');
       assert.equal(r.city, 'Brussels');
     });
+  })
 
+  describe('streetNumber', async() => {
+
+    it('Netherlands', async () => {
+      let r = await f.convert('location', {streetNumber:'west 12', zipCity: '1001 AA Amsterdam'}, logger);
+      assert.equal(r.zipcode, '1001 AA');
+      assert.equal(r.city, 'Amsterdam');
+      assert.equal(r.street, 'west');
+      assert.equal(r.number, '12')
+      assert.equal(r.countryId, 500)
+    });
+
+    it('great britain', async() => {
+      let r = await f.convert('location', {streetNumber:'10 Downing Street', zipCity: 'SW1A2 AA London', country: 'Engeland'}, logger);
+      assert.isUndefined(r.zipcode);
+      assert.equal(r.city, 'SW1A2 AA London');
+      assert.equal(r.street, '10 Downing Street');
+      assert.equal(r.countryId, 502)
+    })
   })
 
 });

@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2021-06-15
+- add: location.streetNumber can parse English numbers
+
 2021-05-19 (1.7.0)
 - rebuild of empty checker. Remove emptyAllow and added addStoreGroup.
 
