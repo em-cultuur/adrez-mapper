@@ -87,6 +87,9 @@ class FieldObject extends Field {
     delete this._storeGroups[name]
   }
 
+  get storeGroups() {
+    return this._storeGroups
+  }
   /**
    * check if the data is set for a group
    *

@@ -50,7 +50,7 @@ describe('field.locator.contact', () => {
   it('contact - empty lookup', async () => {
     let field = new FieldContact({lookup: new ContactLookup()});
     let r = await field.convert('contact',   { name: 'John', locator: {name : ''}});
-    assert.isDefined(r.locator.name);
+    assert.isUndefined(r.locator);
   });
 
   it('record', async () => {
@@ -65,9 +65,7 @@ describe('field.locator.contact', () => {
     let record = new Record();
     let r = await record.convert('rec', { contact:[{name: 'John', locator: {name: '', fullName: undefined}}]})
     assert.equal(r.contact.length, 1)
-    assert.isDefined(r.contact[0].locator)
-    assert.equal(r.contact[0].locator.name, '');
-    assert.equal(r.contact[0].locator.fullName);
+    assert.isUndefined(r.contact[0].locator)
   })
 
 
@@ -93,7 +91,7 @@ describe('field.locator.contact', () => {
     let record = new Record();
     let r = await record.convert('rec', { contact:[{name: 'John', locator: {email: '', _allowMulti: true}}]})
     assert.equal(r.contact.length, 1)
-    assert.isUndefined(r.contact.locator);
+    assert.isUndefined(r.contact[0].locator);
 
     r = await record.convert('rec', { contact:[{name: '', locator: {name: '', _allowMulti: true}}]})
     assert.isUndefined(r.contact);
@@ -103,7 +101,7 @@ describe('field.locator.contact', () => {
     let record = new Record();
     let r = await record.convert('rec', { contact:[{name: 'John', locator: {_allowMulti: true}}]})
     assert.equal(r.contact.length, 1)
-    assert.isUndefined(r.contact.locator);
+    assert.isUndefined(r.contact[0].locator);
 
     r = await record.convert('rec', { contact:[{name: '', locator: { _allowMulti: true}}]})
     assert.isUndefined(r.contact);

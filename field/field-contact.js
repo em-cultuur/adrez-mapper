@@ -207,6 +207,9 @@ class FieldContact extends FieldComposed {
     if (data.locator) {
       if (fields.locator) {
         result.locator = await fields.locator.convert(fieldName + '.locator', data.locator, logger);
+        if (Object.keys(result.locator).length === 0) {
+          delete result.locator
+        }
       } else {
         // locator was removed because no valid field
         this.log(logger, 'error', `locator ${fieldName}.locator is empty`);

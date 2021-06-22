@@ -2,6 +2,7 @@
 
 2021-06-22
 - chg: locator without fields removes the locator
+- chg: locator with empty string fields, will remove locator 
 
 2021-06-15
 - add: location.streetNumber can parse English numbers
