@@ -98,4 +98,14 @@ describe('field.locator.contact', () => {
     r = await record.convert('rec', { contact:[{name: '', locator: {name: '', _allowMulti: true}}]})
     assert.isUndefined(r.contact);
   })
+
+  it('record - locator without fields but with _allowMulti', async ()=> {
+    let record = new Record();
+    let r = await record.convert('rec', { contact:[{name: 'John', locator: {_allowMulti: true}}]})
+    assert.equal(r.contact.length, 1)
+    assert.isUndefined(r.contact.locator);
+
+    r = await record.convert('rec', { contact:[{name: '', locator: { _allowMulti: true}}]})
+    assert.isUndefined(r.contact);
+  })
 });

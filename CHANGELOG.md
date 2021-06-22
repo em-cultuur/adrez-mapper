@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2021-06-22
+- chg: locator without fields removes the locator
+
 2021-06-15
 - add: location.streetNumber can parse English numbers
 - chg: standard removes space from names
