@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2021-07-20
+- chg: street number left moves number to number part (1.9.0)
+
 2021-06-22
 - chg: locator without fields removes the locator
 - chg: locator with empty string fields, will remove locator 

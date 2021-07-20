@@ -1,6 +1,6 @@
 {
   "name": "adrez-mapper",
-  "version": "1.8.3",
+  "version": "1.9.0",
   "description": "Map objects into the AdreZ format",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,7 @@
     "google-libphonenumber": "^3.2.18",
     "lodash": "^4.17.21",
     "logger": "git+https://github.com/jaymcanser/logger.git",
+    "parse-address": "^1.1.2",
     "parse-full-name": "github:em-cultuur/parse-full-name"
   },
   "devDependencies": {

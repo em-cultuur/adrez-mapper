@@ -399,11 +399,44 @@ describe('field.location', () => {
       assert.equal(r.countryId, 500)
     });
 
-    it('great britain', async() => {
-      let r = await f.convert('location', {streetNumber:'10 Downing Street', zipCity: 'SW1A2 AA London', country: 'Engeland'}, logger);
-      assert.isUndefined(r.zipcode);
+    it('left number, 10', async() => {
+      let r = await f.convert('location', {streetNumber:'10 Downing Street', city: 'SW1A2 AA London', country: 'Engeland'}, logger);
       assert.equal(r.city, 'SW1A2 AA London');
-      assert.equal(r.street, '10 Downing Street');
+      assert.equal(r.street, 'Downing Street');
+      assert.equal(r.number, '10')
+      assert.equal(r.countryId, 502)
+    })
+
+    it('left number, 10-A', async() => {
+      let r = await f.convert('location', {streetNumber:'10-A Downing Street', city: 'SW1A2 AA London', country: 'Engeland'}, logger);
+      assert.equal(r.city, 'SW1A2 AA London');
+      assert.equal(r.street, 'Downing Street');
+      assert.equal(r.number, '10-A')
+      assert.equal(r.countryId, 502)
+    })
+
+    it('left number, 10,', async() => {
+      let r = await f.convert('location', {streetNumber:'10 , Downing Street', city: 'SW1A2 AA London', country: 'Engeland'}, logger);
+      assert.equal(r.city, 'SW1A2 AA London');
+      assert.equal(r.street, 'Downing Street');
+      assert.equal(r.number, '10')
+      assert.equal(r.countryId, 502)
+    })
+
+    it('left number, 10-20', async() => {
+      let r = await f.convert('location', {streetNumber:'10-20 Downing Street', city: 'SW1A2 AA London', country: 'Engeland'}, logger);
+      assert.equal(r.city, 'SW1A2 AA London');
+      assert.equal(r.street, 'Downing Street');
+      assert.equal(r.number, '10-20')
+      assert.equal(r.countryId, 502)
+    })
+
+    it('Great Britain', async() => {
+      let r = await f.convert('location', {streetNumber:'10 Downing Street', zipCity: 'SW1A2 AA London', country: 'Engeland'}, logger);
+     // assert.isUndefined(r.zipcode);
+      assert.equal(r.city, 'SW1A2 AA London');
+      assert.equal(r.street, 'Downing Street');
+      assert.equal(r.number, '10')
       assert.equal(r.countryId, 502)
     })
   })

@@ -118,8 +118,10 @@ class FieldLocation extends FieldComposed {
             data.street = data.streetNumber;
           }
         } else {
-          // we do not parse other formats
-          data.street = data.streetNumber;
+          // v1.9.0: we do parse the street number on the left side
+          let streetNumber = this._parseLocal(data.streetNumber)
+          data.street =  streetNumber.street;
+          data.number = streetNumber.number;
         }
       }
     }
@@ -141,6 +143,73 @@ class FieldLocation extends FieldComposed {
     return super.processKeys(fieldName, cFields, result, logger);
   }
 
+
+
+  _isNumber(n) { return !isNaN(parseFloat(n)) && isFinite(n); }
+
+// Check if character is a fraction, e.g. ¼
+  _isFractionalChar(n) {
+    let c = n.charCodeAt();
+    return (c >= 188 && c <= 190) || (c >= 8531 && c <= 8542);
+  }
+
+// return the first fractional character in a string
+// return false if there is none
+// Could easily return the index of the character, but this creates a parallelism with RegExp.exec
+  _indexFractionalChar(m) {
+    var a = m.split(''), i;
+    for (i in a) {
+      if (this._isFractionalChar(a[i]))
+        return i;
+    }
+
+    return false;
+  }
+
+  _cleanComma(text) {
+    text = text.trim();
+    if (text.substr(0, 1) === ',') {
+      text = text.substr(1)
+    }
+    if (text.substr(text.length, 1) === ',') {
+      text = text.substr(0, text.length - 1)
+    }
+    return text.trim();
+  }
+  _parseLocal(streetNr) {
+// http://stackoverflow.com/questions/18082/validate-numbers-in-javascript-isnumeric/1830844#1830844
+  /**
+   * Splits an address into the number and street part.
+   * with input: "100 Main Street", outputs: {number: "100", space: ' ', street: "Main Street"}
+   * The special sauce is handling fractional addresses.
+   * With input "22½ Baker Street", outputs: {number: "22½", space: ' ', street: "Baker Street"}
+   *
+   * @param string x An address with leading number
+   * @return Object An object with the number, street and a space, for inserting between.
+   * The space parameter is useful for situations where you want to glue the pieces back together for a user.
+   * If user inputs "Main Street", without a number, .space is returned empty, so you don't have to bother testing
+   * and just glue it like: x.number + x.space + x.street
+   * while processing x.number and x.street separately on the back end.
+   */
+
+    let a = streetNr.trim().split(' ')
+    let number
+    let street;
+
+    if (a.length <= 1)
+      return {number: '', space: '', street: a.join('')};
+
+    if (this._isNumber(a[0].substr(0, 1)) || this._isFractionalChar(a[0].substr(0, 1))) {
+      number = a.shift();
+    } else {
+      // If there isn't a leading number, just return the trimmed input as the street
+      return {number: '', space: '', street: x.trim()}
+    }
+    if (/[0-9]\/[0-9]/.exec(a[0]) || this._indexFractionalChar(a[0]) !== false)
+      number += ' ' + a.shift();
+
+    return {number: this._cleanComma(number), space: ' ', street: this._cleanComma(a.join(' '))};
+  }
 }
 
 module.exports.FieldLocation = FieldLocation;
