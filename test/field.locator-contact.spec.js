@@ -35,6 +35,13 @@ describe('field.locator.contact', () => {
     assert.equal(r.guid, 'GUID');
   });
 
+  it('trueName', async() => {
+    let r = await f.convert('locatorContact',   { trueName: 'Erick de Boer'});
+    assert.equal(r.fullName, 'Boer, Erick de');
+    r = await f.convert('locatorContact',   { trueName: 'Jan Willem de Groot'});
+    assert.equal(r.fullName, 'Groot, Jan Willem de');
+  })
+
   it('empty locator', async () => {
     let r = await f.convert('locatorContact',   { });
     assert.equal(Object.keys(r).length, 0)

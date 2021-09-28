@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+2021-09-28
+- add: LocatorContact trueName to search on Erick de Boer in fullName
+
 2021-07-20
 - chg: street number left moves number to number part (1.9.0)
 
