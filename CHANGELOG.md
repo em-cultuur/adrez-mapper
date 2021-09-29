@@ -1,4 +1,6 @@
 # adrez-mapper Revisions
+20-09-29
+- add: code.typeGuid let the informatie be stored
 
 2021-09-28
 - add: LocatorContact trueName to search on Erick de Boer in fullName

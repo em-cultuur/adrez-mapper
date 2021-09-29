@@ -61,6 +61,20 @@ describe('field.code', () => {
       assert.equal(r._remove, 1, 'is true');
     });
   });
+
+  describe('only guid', () => {
+    let f = new FieldCode();
+    logger.clear();
+    it('guid', async () => {
+      let r = await f.convert('code', {
+        "typeGuid": "ML30_HL_110567",
+        "_mode": "add",
+        "_parent": "contact"
+      });
+      assert.equal(r.typeGuid, 'ML30_HL_110567')
+    })
+  })
+
   describe('code with parent', () => {
     it('add a new code parent', async () => {
       let f2 = new FieldCode({ lookup: new LookupCode()});

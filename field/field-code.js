@@ -31,7 +31,7 @@ class FieldCode extends FieldComposed {
 
     this.addStoreGroup('typeId');
     this.addStoreGroup('type');
-
+    this.addStoreGroup('typeGuid')
   }
 
 
