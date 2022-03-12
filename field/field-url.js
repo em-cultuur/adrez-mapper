@@ -22,16 +22,19 @@ class FieldUrl extends FieldComposed {
       Twitter: {
         url: new RegExp('twitter\.com'),
         typeId: 140,
+        name: 'twitter',
         textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?twitter\\.com\\/(?:(?:\\w)*#!\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
      },
      Facebook: {
        url: new RegExp('facebook\.com'),
        typeId: 142,
+       name: 'facebook',
        textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?facebook\\.com\\/(?:(?:\\w)*#!\\/)?(?:pages\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
      },
      LinkedIn: {
        url: new RegExp('linkedin\.com\/'),
        typeId: 143,
+       name: 'linkedin',
        // textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?linkedin.com(\\w+:{0,1}\\w*@)?(\\S+)(:([0-9])+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?')
        textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?linkedin\\.com\\/(?:(?:\\w)*#!\\/)?(?:in\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
      }
@@ -117,11 +120,13 @@ class FieldUrl extends FieldComposed {
           if (data.value.match(this._urls[name].url)) {
             // found the field, so set the type or typeId
             // default is typeId, but if not found, use the type
-            if (this._urls[name].typeId) {
-              data.typeId = this._urls[name].typeId;
-            } else if (this._urls[name].type) {
-              data.type = this._urls[name].type;
-            }
+            // -- the typeId can be configured per customer
+            data.typeId = await this.lookup.urlSubType(fieldName, this._urls[name].name, this._urls[name].typeId);
+            // if (this._urls[name].typeId) {
+            //   data.typeId = this._urls[name].typeId;
+            // } else if (this._urls[name].type) {
+            //   data.type = this._urls[name].type;
+            // }
             if (this._urls[name].textRegEx) {
               // parse the url
               let v = data.value.match(this._urls[name].textRegEx);

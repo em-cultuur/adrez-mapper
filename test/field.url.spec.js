@@ -8,7 +8,7 @@ const FieldUrl = require('../field/field-url').FieldUrl;
 describe('field.url', () => {
 
   let logger = new Logger({toConsole: false});
-  class LookupTypeUrl {
+  class LookupTypeUrl  extends Lookup {
     async url(fieldName, def) {
       if (def.guid === 'URL_WEB') {
         return Promise.resolve('web.guid')
@@ -73,6 +73,8 @@ describe('field.url', () => {
         urls: {
           Instagram: {
             url: new RegExp('instagram\.com'),
+            typeId: 123,
+            name: 'instagram',
             type: 'Instagram',
             textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?instagram\\.com\\/(?:(?:\\w)*#!\\/)?(?:pages\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
           }
@@ -80,7 +82,7 @@ describe('field.url', () => {
       });
       let r = await f2.convert('url', {url: 'http://www.instagram.com/emcultuur'}, logger);
       assert.equal(r.value, 'emcultuur', 'nothing changed');
-      assert.equal(r.typeId, 559, 'translated Instagram to typeId');
+      assert.equal(r.typeId, 123, 'translated Instagram to typeId');
     });
 
  // });
@@ -159,8 +161,21 @@ describe('field.url', () => {
     let f2 = new FieldUrl({ lookup: new Lookup(), removeEmpty: false});
     let r = await f2.convert('url', {url: 'www.example.com'}, logger);
     assert.equal(r.value, 'www.example.com', 'did leave it');
-
   });
 
+  class LookupTypeUrl2  extends Lookup {
+    async urlSubType(fieldname, typeName, defaultValue) {
+      if (typeName === 'linkedin') {
+        return 99;
+      }
+      return super.urlSubType(fieldname, typeName, defaultValue);
+    }
+  }
+  it('set type of url like Facebook by config', async() => {
+    let f3 = new FieldUrl({ lookup: new LookupTypeUrl2(), removeEmpty: false});
+    let r = await f3.convert('url', {url: 'http://www.linkedin.com/in/toxus'}, logger);
+    assert.equal(r.typeId, 99, 'did the lookup');
+
+  })
 
 });
