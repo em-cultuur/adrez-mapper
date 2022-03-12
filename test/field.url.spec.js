@@ -165,16 +165,31 @@ describe('field.url', () => {
 
   class LookupTypeUrl2  extends Lookup {
     async urlSubType(fieldname, typeName, defaultValue) {
-      if (typeName === 'linkedin') {
-        return 99;
+      switch(typeName) {
+        case 'facebook': return 99;
+        case 'twitter' : return 98;
+        case 'linkedin': return 97
       }
       return super.urlSubType(fieldname, typeName, defaultValue);
     }
   }
   it('set type of url like Facebook by config', async() => {
-    let f3 = new FieldUrl({ lookup: new LookupTypeUrl2(), removeEmpty: false});
-    let r = await f3.convert('url', {url: 'http://www.linkedin.com/in/toxus'}, logger);
-    assert.equal(r.typeId, 99, 'did the lookup');
+    let f2 = new FieldUrl({ lookup: new LookupTypeUrl2(), removeEmpty: false});
+    r = await f2.convert('url', {url: 'https://www.twitter.com/emcultuur'}, logger);
+    assert.equal(r.value, 'emcultuur', 'just the name');
+    assert.equal(r.typeId, '98', 'found type');
+
+    r = await f2.convert('url', {url: 'http://www.linkedin.com/in/emcultuur'}, logger);
+    assert.equal(r.value, 'emcultuur', 'just the name');
+    assert.equal(r.typeId, '97', 'found type');
+
+    r = await f2.convert('url', {url: 'http://www.facebook.com/emcultuur'}, logger);
+    assert.equal(r.value, 'emcultuur', 'just the name');
+    assert.equal(r.typeId, '99', 'found type');
+
+    r = await f2.convert('url', {"LinkedIn": "emcultuur"}, logger);
+    assert.equal(r.value, 'emcultuur', 'just the name');
+    assert.equal(r.typeId, '97', 'found type');
 
   })
 

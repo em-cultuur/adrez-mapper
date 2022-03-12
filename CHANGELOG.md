@@ -1,7 +1,8 @@
 # adrez-mapper Revisions
 2022-03-12
 - add: url lookup translator from Facebook to code id
-
+- fix: url link {linkedin: 'testing'} get the proper type id
+- 
 20-09-29
 - add: code.typeGuid let the informatie be stored
 

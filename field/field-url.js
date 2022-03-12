@@ -89,11 +89,12 @@ class FieldUrl extends FieldComposed {
         if (data[name]) {
           data.value = data[name];
           postScan = false;
-          if (this._urls[name].typeId) {
-            data.typeId = this._urls[name].typeId;
-          } else if (this._urls[name].type) {
-            data.type = this._urls[name].type;
-          }
+          data.typeId = await this.lookup.urlSubType(fieldName, this._urls[name].name, this._urls[name].typeId);
+          // if (this._urls[name].typeId) {
+          //   data.typeId = this._urls[name].typeId;
+          // } else if (this._urls[name].type) {
+          //   data.type = this._urls[name].type;
+          // }
         }
       }
       // if value wasn't set by the userType try the predefined fields
