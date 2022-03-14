@@ -1,5 +1,9 @@
 # adrez-mapper Revisions
-2022-03-12
+2022-03-14 (v1.12.0)
+- chg: the url is scanned. See documentation
+- chg: url properties are all in lowercase
+
+2022-03-12 (v1.11.1)
 - add: url lookup translator from Facebook to code id
 - fix: url link {linkedin: 'testing'} get the proper type id
 - 

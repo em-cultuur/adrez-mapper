@@ -19,21 +19,21 @@ class FieldUrl extends FieldComposed {
     // convert the auto loaded urls in regex
     // textRegEx is the part that holds the name of the account
     this._urls = {
-      Twitter: {
+     twitter: {
         url: new RegExp('twitter\.com'),
-        typeId: 140,
+        typeId: 117,
         name: 'twitter',
         textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?twitter\\.com\\/(?:(?:\\w)*#!\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
      },
-     Facebook: {
+     facebook: {
        url: new RegExp('facebook\.com'),
-       typeId: 142,
+       typeId: 117,
        name: 'facebook',
        textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?facebook\\.com\\/(?:(?:\\w)*#!\\/)?(?:pages\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
      },
-     LinkedIn: {
+     linkedin: {
        url: new RegExp('linkedin\.com\/'),
-       typeId: 143,
+       typeId: 117,
        name: 'linkedin',
        // textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?linkedin.com(\\w+:{0,1}\\w*@)?(\\S+)(:([0-9])+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?')
        textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?linkedin\\.com\\/(?:(?:\\w)*#!\\/)?(?:in\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
@@ -90,11 +90,6 @@ class FieldUrl extends FieldComposed {
           data.value = data[name];
           postScan = false;
           data.typeId = await this.lookup.urlSubType(fieldName, this._urls[name].name, this._urls[name].typeId);
-          // if (this._urls[name].typeId) {
-          //   data.typeId = this._urls[name].typeId;
-          // } else if (this._urls[name].type) {
-          //   data.type = this._urls[name].type;
-          // }
         }
       }
       // if value wasn't set by the userType try the predefined fields
@@ -123,12 +118,8 @@ class FieldUrl extends FieldComposed {
             // default is typeId, but if not found, use the type
             // -- the typeId can be configured per customer
             data.typeId = await this.lookup.urlSubType(fieldName, this._urls[name].name, this._urls[name].typeId);
-            // if (this._urls[name].typeId) {
-            //   data.typeId = this._urls[name].typeId;
-            // } else if (this._urls[name].type) {
-            //   data.type = this._urls[name].type;
-            // }
-            if (this._urls[name].textRegEx) {
+            if (this._urls[name].textRegEx && data.typeId !== this._urls[name].typeId) {
+              // only if there is a reg ex and we did not get the default type
               // parse the url
               let v = data.value.match(this._urls[name].textRegEx);
               if (v !== null && v.length > 1) {

@@ -50,9 +50,9 @@ describe('field.url', () => {
     });
     it('3. use a predefined field type', async () => {
       let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
-      let r = await f2.convert('url', {Facebook: 'emcultuur'}, logger);
+      let r = await f2.convert('url', {facebook: 'emcultuur'}, logger);
       assert.equal(r.value, 'emcultuur', 'nothing changed');
-      assert.equal(r.typeId, 142, 'translate type to typeId');
+      assert.equal(r.typeId, 117, 'translate type to typeId');
     });
     it('4. create / use a user defined type based on the guid', async () => {
       let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
@@ -65,15 +65,15 @@ describe('field.url', () => {
     it('6. translate from url', async () => {
       let f2 = new FieldUrl({ lookup: new LookupTypeUrl()});
       let r = await f2.convert('url', {url: 'http://www.facebook.com/emcultuur'}, logger);
-      assert.equal(r.value, 'emcultuur', 'nothing changed');
-      assert.equal(r.typeId, 142, 'translate type to typeId');
+      assert.equal(r.value, 'www.facebook.com/emcultuur', 'nothing should change because there is no type set, accept removing http');
+      assert.equal(r.typeId, 117, 'translate type the basetype');
     });
     it('7. translate from url with no typeId', async () => {
       let f2 = new FieldUrl({ lookup: new LookupTypeUrl(),
         urls: {
           Instagram: {
             url: new RegExp('instagram\.com'),
-            typeId: 123,
+            typeId: 117,
             name: 'instagram',
             type: 'Instagram',
             textRegEx: new RegExp('(?:https?:\\/\\/)?(?:www\\.)?instagram\\.com\\/(?:(?:\\w)*#!\\/)?(?:pages\\/)?(?:[\\w\\-]*\\/)*([\\w\\-\\.]*)')
@@ -81,8 +81,8 @@ describe('field.url', () => {
         }
       });
       let r = await f2.convert('url', {url: 'http://www.instagram.com/emcultuur'}, logger);
-      assert.equal(r.value, 'emcultuur', 'nothing changed');
-      assert.equal(r.typeId, 123, 'translated Instagram to typeId');
+      assert.equal(r.value, 'www.instagram.com/emcultuur', 'nothing changed');
+      assert.equal(r.typeId, 117, 'translated Instagram to typeId');
     });
 
  // });
@@ -123,25 +123,25 @@ describe('field.url', () => {
 
   it('load direct types', async () => {
     let f2 = new FieldUrl({lookup: new Lookup(), removeEmpty: false});
-    r = await f2.convert('url', {Twitter: 'emcultuur'}, logger);
+    r = await f2.convert('url', {twitter: 'emcultuur'}, logger);
     assert.equal(r.value, 'emcultuur', 'just the name');
-    assert.equal(r.typeId, '140', 'found type');
+    assert.equal(r.typeId, '117', 'found type');
   });
 
 
   it('load default types', async () => {
     let f2 = new FieldUrl({ lookup: new Lookup(), removeEmpty: false});
     r = await f2.convert('url', {url: 'http://www.twitter.com/emcultuur'}, logger);
-    assert.equal(r.value, 'emcultuur', 'just the name');
-    assert.equal(r.typeId, '140', 'found type');
+    assert.equal(r.value, 'www.twitter.com/emcultuur', 'just the name');
+    assert.equal(r.typeId, '117', 'found type');
 
     r = await f2.convert('url', {url: 'http://www.linkedin.com/in/emcultuur'}, logger);
-    assert.equal(r.value, 'emcultuur', 'just the name');
-    assert.equal(r.typeId, '143', 'found type');
+    assert.equal(r.value, 'www.linkedin.com/in/emcultuur', 'just the name');
+    assert.equal(r.typeId, '117', 'found type');
 
     r = await f2.convert('url', {url: 'http://www.facebook.com/emcultuur'}, logger);
-    assert.equal(r.value, 'emcultuur', 'just the name');
-    assert.equal(r.typeId, '142', 'found type');
+    assert.equal(r.value, 'www.facebook.com/emcultuur', 'just the name');
+    assert.equal(r.typeId, '117', 'found type');
 
   });
 
@@ -152,9 +152,9 @@ describe('field.url', () => {
         {name: 'Instagram', url: 'instagram\.com', typeId: 154},
       ]
     });
-    let r = await f2.convert('url', {url: 'http://www.linkedin.com/in/toxus'}, logger);
-    assert.equal(r.value, 'toxus', 'has url with name');
-    assert.equal(r.typeId, '143', 'found type');
+    let r = await f2.convert('url', {url: 'http://www.instagram.com/in/toxus'}, logger);
+    assert.equal(r.value, 'www.instagram.com/in/toxus', 'has url with name');
+    assert.equal(r.typeId, '154', 'found type');
   });
 
   it('bug: missing ww of www.example.com', async() => {
@@ -187,9 +187,13 @@ describe('field.url', () => {
     assert.equal(r.value, 'emcultuur', 'just the name');
     assert.equal(r.typeId, '99', 'found type');
 
-    r = await f2.convert('url', {"LinkedIn": "emcultuur"}, logger);
+    r = await f2.convert('url', {"linkedin": "emcultuur"}, logger);
     assert.equal(r.value, 'emcultuur', 'just the name');
     assert.equal(r.typeId, '97', 'found type');
+
+    r = await f2.convert('url', {"facebook": "emcultuur"}, logger);
+    assert.equal(r.value, 'emcultuur', 'just the name');
+    assert.equal(r.typeId, '99', 'found type');
 
   })
 

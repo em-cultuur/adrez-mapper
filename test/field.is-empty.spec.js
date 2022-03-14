@@ -211,9 +211,9 @@ describe('field.is-empty', () => {
     let f = new FieldUrl({lookup: new TypeLookup()})
     result = await f.convert('fieldUrl', {url: VALUE});
     assert.equal(result.value, VALUE);
-    result = await f.convert('fieldUrl', {Facebook: VALUE});
+    result = await f.convert('fieldUrl', {facebook: VALUE});
     assert.equal(result.value, VALUE);
-    result = await f.convert('fieldUrl', {Twitter: VALUE});
+    result = await f.convert('fieldUrl', {twitter: VALUE});
     assert.equal(result.value, VALUE);
     result = await f.convert('fieldUrl', {url: undefined});
     assert.isTrue(_.isEmpty(result));
