@@ -260,6 +260,53 @@ describe('record', () => {
     })
   });
 
+  describe('url scan', async() => {
+    const LINKED_IN = '55667'
+    const FACEBOOK = 668877;
+    class UrlLookup extends Lookup {
+      async urlSubType(fieldName, value, defaults, data) {
+        switch (value) {
+          case 'linkedin': return LINKED_IN;
+          case 'facebook': return FACEBOOK;
+        }
+        return 'no-found'
+        // return super.code(fieldName, value, defaults, data);
+      }
+    }
+    it('read urls', async() => {
+      let rec = new Record({removeEmpty: true, lookup: new UrlLookup()});
+      let data = {
+        "contact": [
+          {
+            "name": "Contact 01.001",
+            "typeGuid": false,
+            "salutationGuid": false,
+            "salutationId": 890
+          }
+        ],
+        "url": [
+          {
+            "linkedin": "emcultuur"
+          },
+          {
+            "url": "http://www.facebook.com/a/contact01",
+          },
+          {
+            "url": "http://www.emcultuur.nl"
+          }
+        ]
+      };
+      let result = await rec.convert('urlScan', data);
+      assert.isTrue(result.hasOwnProperty('url'));
+      assert.equal(result.url[0].value, 'emcultuur', 'the key of linked in');
+      assert.equal(result.url[0].typeId, LINKED_IN, 'did set the type' )
+      assert.equal(result.url[1].value, 'contact01');
+      assert.equal(result.url[1].typeId, FACEBOOK);
+      assert.equal(result.url[2].value, 'www.emcultuur.nl');
+      assert.equal(result.url[2].typeId, 117)  ;
+    })
+  });
+
 
 
 });
