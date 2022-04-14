@@ -1,4 +1,7 @@
 # adrez-mapper Revisions
+2022-04-14
+- upd: update all libraries
+
 2022-03-14 (v1.12.0)
 - chg: the url is scanned. See documentation
 - chg: url properties are all in lowercase

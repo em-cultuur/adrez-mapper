@@ -1,6 +1,6 @@
 {
   "name": "adrez-mapper",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "description": "Map objects into the AdreZ format",
   "main": "index.js",
   "scripts": {
@@ -9,17 +9,17 @@
   "author": "Jay Mc Anser",
   "license": "MIT",
   "dependencies": {
-    "config": "^3.3.6",
+    "config": "^3.3.7",
     "error-types": "git+https://github.com/jaymcanser/error-types.git",
-    "google-libphonenumber": "^3.2.22",
+    "google-libphonenumber": "^3.2.27",
     "lodash": "^4.17.21",
     "logger": "git+https://github.com/jaymcanser/logger.git",
     "parse-address": "^1.1.2",
     "parse-full-name": "github:em-cultuur/parse-full-name"
   },
   "devDependencies": {
-    "chai": "^4.3.4",
-    "mocha": "^9.0.2",
+    "chai": "^4.3.6",
+    "mocha": "^9.2.2",
     "nyc": "^15.1.0"
   },
   "repository": {
