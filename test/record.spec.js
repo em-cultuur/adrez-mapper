@@ -10,18 +10,18 @@ const Lookup = require('../lib/lookup');
 describe('record', () => {
   let logger = new Logger({toConsole: false});
 
-  // it('force contact', async () => {
-  //   let rec = new Record({removeEmpty: true, logger});
-  //   let result = await rec.convert('_mode',
-  //     {
-  //       contact: [ { _parent: "main", _mode:['force']}]
-  //     }
-  //   );
-  //   // console.log(result)
-  //   assert.isDefined(result.contact);
-  //   assert.equal(result.contact.length, 1)
-  //   assert.equal(result.contact[0]._parent, 'main');
-  // })
+  it('force contact', async () => {
+    let rec = new Record({removeEmpty: true, logger});
+    let result = await rec.convert('_mode',
+      {
+        contact: [ { _parent: "main", _mode:['force']}]
+      }
+    );
+    // console.log(result)
+    assert.isDefined(result.contact);
+    assert.equal(result.contact.length, 1)
+    assert.equal(result.contact[0]._parent, 'main');
+  })
 
 
   describe('url load remote config', () => {
@@ -307,6 +307,54 @@ describe('record', () => {
     })
   });
 
+  describe('parent key', async() => {
+    let rec = new Record({removeEmpty: true});
+    const keys = [ 'PARENT.1', 'PARENT.2', 'CLIENT.1']
+    const MULTI = 0
+    let data = {
+      "contact": [
+        {
+          "locator": {
+            "fullName": keys[MULTI + 0],
+            "subName": "Amsterdam"
+          },
+          "organisation": keys[MULTI + 0],
+          "subName": "Amsterdam",
+          "_key": "bestuur",
+          "isOrganisation": true,
+          "isDefault": false
+        },
+        {
+          "locator": {
+            "fullName": keys[MULTI + 1],
+          },
+          "organisation": keys[MULTI + 1],
+          "isOrganisation": true,
+          "isDefault": false,
+          "_parent": "bestuur",
+          "_key": "aanbieder",
+          "_source": "A"
+        },
+        {
+          "name": keys[MULTI + 2],
+          "typeId": 104,
+          "useParentLocation": false,
+          "isOrganisation": true,
+          "isDefault": false,
+          "_parent": "aanbieder",
+          "_key": "locatie",
+          "_source": "L"
+        }
+      ]
+    }
+    it('check master', async() => {
+      let result = await rec.convert('multiContact', data);
+      assert.isDefined(result)
+      assert.equal(result.contact.length, 3)
+      assert.isDefined(result.contact[1]._parent)
+      assert.isDefined(result.contact[2]._parent)
+    })
+  })
 
 
 });

@@ -94,8 +94,10 @@ class FieldContact extends FieldComposed {
     let result = {
       subName: data.subName,
       _key: data._key,
+      _parent: data._parent,
       _source: data._source,
       _mode: data._mode,
+
     };
 
     if (data.isOrganisation || (data.organisation && data.organisation.length > 0)) {
