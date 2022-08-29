@@ -1,6 +1,9 @@
 # adrez-mapper Revisions
-### 2022-04-14 V1.13.0 @jay 2022-04-14
 
+### 2022-08-29  v1.13.1
+add: check contact for _parent key
+
+### 2022-04-14 V1.13.0 @jay 2022-04-14
 - upd: update all libraries
 - fix: url scan does not work with case sensive 
 - add: test for url scan in records

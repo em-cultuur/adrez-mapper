@@ -370,7 +370,15 @@ describe('field.contact', () => {
       assert.equal(r.firstName, 'Jay');
       assert.isDefined(r._source);
       assert.equal(r._source, 'test')
+    })
+  })
 
+  describe('_parent key set', () => {
+    it ('check its in the record', async () => {
+      let r = await f.convert('contact', {fullName: 'McAnser, Jay', _source: 'test', _parent: 'parentKey'}, logger);
+      assert.isDefined(r.name);
+      assert.isDefined(r._parent)
+      assert.equal(r._parent, 'parentKey')
     })
   })
 });
