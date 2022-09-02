@@ -1,8 +1,11 @@
 # adrez-mapper Revisions
 
+### 2022-09-02 V.13.02
+- fix: contact.search is not returned if it's an organisation 
+
 ### 2022-08-29  v1.13.1
-add: check contact for _parent key
-fix: _parent gets lost for a record
+- add: check contact for _parent key
+- fix: _parent gets lost for a record
 
 ### 2022-04-14 V1.13.0 @jay 2022-04-14
 - upd: update all libraries

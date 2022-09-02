@@ -114,6 +114,7 @@ class FieldContact extends FieldComposed {
         result.typeId = data.typeId;
       }
       result.fullName = result.name;
+      result.search = data.search
     } else {
       if (fields.sortName && ! (fields.fullName || fields.name)) {
         let p = data.sortName.indexOf(',');
@@ -198,6 +199,7 @@ class FieldContact extends FieldComposed {
         };
         data.salutationId = await this.lookup.contactSalutation(fieldName, codeDef);
       }
+      // this will copy the search also !!
       this.copyFieldsToResult(result, data, ['fullName', 'function', 'salutation']);
 
       // remove any trace of the prefix if we are changing the name
