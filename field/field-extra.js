@@ -16,6 +16,7 @@ class FieldExtra extends FieldComposed {
     // 201 is wrong value but there is no default extra field.
     this.baseTypeId = options.baseTypeId !== undefined ? options.baseTypeId : 201;
     this._fields.useDescription = new FieldBoolean({returnNumeric: true})
+    this._fields._campaignContactParent = new FieldText();
 
     this._controlTypes = {
       boolean: new FieldBoolean(),

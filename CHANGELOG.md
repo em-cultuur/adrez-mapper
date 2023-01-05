@@ -1,5 +1,10 @@
 # adrez-mapper Revisions
 
+### 2023-01-05 v1.14.0 @jurgen 2023-01-05
+- add: _campaignContactParent to memo, code & extra
+- add: _key to campaignContact
+- add: sourceId to contact locator
+
 ### 2022-09-02 V.13.02
 - fix: contact.search is not returned if it's an organisation 
 

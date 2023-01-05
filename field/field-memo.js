@@ -16,6 +16,7 @@ class FieldMemo extends FieldComposed {
     // if field is set, save it all
     this._fields.text = this._fields.value;
     this._fields.description = new FieldText();
+    this._fields._campaignContactParent = new FieldText();
     // this is stored in the Code definition
     this._fields.useDescription = new FieldTextBoolean({returnNumeric: true})
     this.addStoreGroup('text');

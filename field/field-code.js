@@ -28,6 +28,7 @@ class FieldCode extends FieldComposed {
     this._fields._remove = new FieldBoolean();                     // set to true to remove it
     this._fields._source = new FieldText();      // textual version of the sourceId. Overrulde if _sourceId is set
     this._fields._parent = new FieldGuid();
+    this._fields._campaignContactParent = new FieldText();
 
     this.addStoreGroup('typeId');
     this.addStoreGroup('type');
