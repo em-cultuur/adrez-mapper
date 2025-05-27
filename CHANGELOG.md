@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+### 2025-05-27 v1.14.2 @jurgen
+- add: kvkNumber to mapper
+
 ### 2025-05-27 v1.14.1 @jurgen
 - add: kvkNumber to contact and contact locator
 

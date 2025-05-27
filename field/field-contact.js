@@ -94,6 +94,7 @@ class FieldContact extends FieldComposed {
   async processKeys(fieldName, fields, data, logger) {
     let result = {
       subName: data.subName,
+      kvkNumber: data.kvkNumber,
       _key: data._key,
       _parent: data._parent,
       _source: data._source,
