@@ -26,6 +26,8 @@ class FieldLocatorContact extends FieldLocator {
       email: new FieldLocatorText(),
       // do a lookup on the sourceId
       sourceId: new FieldLocatorText(),
+      // do a lookup on the kvkNumber
+      kvkNumber: new FieldLocatorText(),
       // if true and there are multiple parents the first one is used
       _allowMulti: new FieldTextBoolean()
     });
@@ -36,6 +38,7 @@ class FieldLocatorContact extends FieldLocator {
     this.addStoreGroup('guid');
     this.addStoreGroup('email');
     this.addStoreGroup('sourceId');
+    this.addStoreGroup('kvkNumber');
     this.addStoreGroup('search');
     this.addStoreGroup('id')
   }

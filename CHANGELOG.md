@@ -1,5 +1,8 @@
 # adrez-mapper Revisions
 
+### 2025-05-27 v1.14.1 @jurgen
+- add: kvkNumber to contact and contact locator
+
 ### 2023-01-05 v1.14.0 @jurgen 2023-01-05
 - add: _campaignContactParent to memo, code & extra
 - add: _key to campaignContact

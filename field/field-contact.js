@@ -43,6 +43,7 @@ class FieldContact extends FieldComposed {
       salutationId: new FieldGuid(),
       salutationGuid: new FieldGuid(),
       salutation: new FieldText(),
+      kvkNumber: new FieldText(),
    //   isDefault: new FieldBoolean(),
 
       search: new FieldText(),
